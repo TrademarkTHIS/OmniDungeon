@@ -6,7 +6,7 @@ import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.movement.MovementIntent;
 
 public class PlayerController implements Controller {
-    private static final float SPEED = 3f;
+    private static final float SPEED = 5f;
 
     @Override
     public MovementIntent getIntent(Entity entity) {

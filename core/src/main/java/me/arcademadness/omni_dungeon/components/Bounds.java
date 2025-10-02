@@ -1,4 +1,4 @@
-package me.arcademadness.omni_dungeon.attributes;
+package me.arcademadness.omni_dungeon.components;
 
 public class Bounds {
     public final float x, y, width, height;

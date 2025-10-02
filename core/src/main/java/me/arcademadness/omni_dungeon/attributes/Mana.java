@@ -1,7 +1,7 @@
 package me.arcademadness.omni_dungeon.attributes;
 
-public class Mana {
-    public Mana(int i) {
-
+public final class Mana extends SimpleAttribute{
+    public Mana(double baseValue) {
+        super(baseValue);
     }
 }

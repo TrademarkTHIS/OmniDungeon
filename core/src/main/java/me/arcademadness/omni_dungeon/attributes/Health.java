@@ -1,26 +1,23 @@
 package me.arcademadness.omni_dungeon.attributes;
 
-public class Health {
-    private int current;
-    private final int max;
+public final class Health extends SimpleAttribute {
 
-    public Health(int max) {
-        this.max = max;
-        this.current = max;
+    double currentHealth;
+
+    public Health(double baseValue) {
+        super(baseValue);
+        currentHealth = baseValue;
     }
 
-    public int getCurrent() { return current; }
-    public int getMax() { return max; }
-
-    public void damage(int amount) {
-        current = Math.max(0, current - amount);
+    public double getCurrentHealth() {
+        return currentHealth;
     }
 
-    public void heal(int amount) {
-        current = Math.min(max, current + amount);
+    public void setCurrentHealth(double currentHealth) {
+        this.currentHealth = Math.min(currentHealth, getFinalValue());
     }
 
-    public boolean isAlive() {
-        return current > 0;
+    public void damage(double amount) {
+        currentHealth = Math.max(0, currentHealth - amount);
     }
 }

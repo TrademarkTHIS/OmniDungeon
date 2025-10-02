@@ -2,6 +2,10 @@ package me.arcademadness.omni_dungeon.entities;
 
 import me.arcademadness.omni_dungeon.World;
 import me.arcademadness.omni_dungeon.attributes.*;
+import me.arcademadness.omni_dungeon.components.Bounds;
+import me.arcademadness.omni_dungeon.components.Equipment;
+import me.arcademadness.omni_dungeon.components.Inventory;
+import me.arcademadness.omni_dungeon.components.Location;
 import me.arcademadness.omni_dungeon.controllers.Controller;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
