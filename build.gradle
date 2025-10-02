@@ -1,0 +1,27 @@
+plugins {
+  id 'java'
+  id 'application'
+}
+
+group 'com.mygame.grid'
+version '1.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+  mavenCentral()
+}
+
+ext {
+  gdxVersion = '1.13.1'
+}
+
+dependencies {
+  implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+  implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+  implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+}
+
+application {
+  mainClass = 'com.mygame.grid.Main'
+}
