@@ -37,4 +37,22 @@ public abstract class SimpleAttribute implements Attribute {
     public void removeModifier(AttributeModifier modifier) {
         modifiers.remove(modifier);
     }
+
+    @Override
+    public void moveModifier(AttributeModifier modifier, int index) {
+        // This needs to be changed to move everything in the array around
+        // This supposed to insert, not replace.
+        modifiers.set(index, modifier);
+    }
+
+    @Override
+    public List<AttributeModifier> getModifiersByType(Class<AttributeModifier> modifierClass) {
+        List<AttributeModifier> targetModifiers = new ArrayList<>();
+        for (AttributeModifier modifier : modifiers) {
+            if (modifierClass.isInstance(modifier)) {
+                targetModifiers.add(modifier);
+            }
+        }
+        return targetModifiers;
+    }
 }
