@@ -1,5 +1,6 @@
 package me.arcademadness.omni_dungeon.menus;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
@@ -20,12 +21,18 @@ public class TabMenu extends Table {
     public TabMenu(Skin skin) {
         super();
         pad(10);
+        defaults().padBottom(10);
         defaults().expandX().fillX().top();
 
-        inventorySection = new SectionWidget("Inventory", COLUMNS, SLOT_SIZE, INVENTORY_VISIBLE_ROWS, true, skin);
-        armorSection     = new SectionWidget("Armor", COLUMNS, SLOT_SIZE, ARMOR_VISIBLE_ROWS, true, skin);
-        itemsSection     = new SectionWidget("Items", COLUMNS, SLOT_SIZE, ITEMS_VISIBLE_ROWS, true, skin);
-        actionsSection   = new SectionWidget("Actions", COLUMNS, SLOT_SIZE, ACTIONS_VISIBLE_ROWS, false, skin);
+        inventorySection = new SectionWidget(COLUMNS, SLOT_SIZE, Color.valueOf("#577590"), skin); // bluish
+        armorSection     = new SectionWidget(COLUMNS, SLOT_SIZE, Color.valueOf("#F9C74F"), skin); // yellow
+        itemsSection     = new SectionWidget(COLUMNS, SLOT_SIZE, Color.valueOf("#43AA8B"), skin); // teal
+        actionsSection   = new SectionWidget(COLUMNS, SLOT_SIZE, Color.valueOf("#FFADAD"), skin); // pink
+
+        inventorySection.setVisibleRows(INVENTORY_VISIBLE_ROWS);
+        armorSection.setVisibleRows(ARMOR_VISIBLE_ROWS);
+        itemsSection.setVisibleRows(ITEMS_VISIBLE_ROWS);
+        actionsSection.setVisibleRows(ACTIONS_VISIBLE_ROWS);
 
         add(inventorySection).growX().row();
         add(armorSection).growX().row();

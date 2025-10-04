@@ -22,9 +22,11 @@ public class SlotWidget extends Button {
         super(makeStyle(skin, initialState, slotSize));
         this.state = initialState;
 
-        filledDrawable = makeColorDrawable(Color.DARK_GRAY, slotSize);
-        emptyDrawable  = makeColorDrawable(Color.LIGHT_GRAY, slotSize);
-        lockedDrawable = makeColorDrawable(Color.DARK_GRAY.cpy().mul(0.5f), slotSize);
+        emptyDrawable  = makeColorDrawable(new Color(1, 1, 1, 0f), slotSize);
+
+        filledDrawable = makeColorDrawable(new Color(1, 1, 1, 0.15f), slotSize);
+
+        lockedDrawable = makeColorDrawable(new Color(0.2f, 0.2f, 0.2f, 0.6f), slotSize);
     }
 
     public void setState(State state) {
@@ -34,7 +36,7 @@ public class SlotWidget extends Button {
 
     private static ButtonStyle makeStyle(Skin skin, State state, int slotSize) {
         ButtonStyle style = new ButtonStyle();
-        style.up = getDrawableFor(state, slotSize);
+        style.up = getDrawableForStatic(state, slotSize);
         return style;
     }
 
@@ -47,13 +49,13 @@ public class SlotWidget extends Button {
         return emptyDrawable;
     }
 
-    private static Drawable getDrawableFor(State state, int slotSize) {
+    private static Drawable getDrawableForStatic(State state, int slotSize) {
         Color color;
         switch (state) {
-            case FILLED: color = Color.DARK_GRAY; break;
-            case EMPTY: color = Color.LIGHT_GRAY; break;
-            case LOCKED: color = Color.DARK_GRAY.cpy().mul(0.5f); break;
-            default: color = Color.LIGHT_GRAY;
+            case FILLED: color = new Color(1, 1, 1, 0.15f); break;
+            case EMPTY:  color = new Color(1, 1, 1, 0.10f); break;
+            case LOCKED: color = new Color(0.2f, 0.2f, 0.2f, 0.6f); break;
+            default: color = new Color(1, 1, 1, 0f);
         }
         return makeColorDrawable(color, slotSize);
     }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -46,33 +47,9 @@ public class GridGame extends ApplicationAdapter {
         Skin skin = new Skin(Gdx.files.absolute("assets/uiskin.json"));
 
         tabMenu = new TabMenu(skin);
-        Array<SlotWidget> inventorySlots = new Array<>();
-        Array<SlotWidget> armorSlots = new Array<>();
-        Array<SlotWidget> itemsSlots = new Array<>();
-        Array<SlotWidget> actionsSlots = new Array<>();
+        tabMenu.setColor(1f, 1f, 1f, 0.85f);
 
-        for (int i = 0; i < 54; i++) {
-            inventorySlots.add(new SlotWidget(skin, SlotWidget.State.EMPTY, 48));
-        }
-
-        for (int i = 0; i < 18; i++) {
-            armorSlots.add(new SlotWidget(skin, SlotWidget.State.LOCKED, 48));
-        }
-
-        for (int i = 0; i < 18; i++) {
-            itemsSlots.add(new SlotWidget(skin, SlotWidget.State.FILLED, 48));
-        }
-
-        for (int i = 0; i < 18; i++) {
-            actionsSlots.add(new SlotWidget(skin, SlotWidget.State.EMPTY, 48));
-        }
-
-        tabMenu.getInventorySection().setSlots(inventorySlots);
-        tabMenu.getArmorSection().setSlots(armorSlots);
-        tabMenu.getItemsSection().setSlots(itemsSlots);
-        tabMenu.getActionsSection().setSlots(actionsSlots);
-
-        tabMenu.pack();
+        populateTabMenu(tabMenu, skin);
 
         stage = new Stage(new ScreenViewport());
         Table root = new Table();
@@ -107,6 +84,14 @@ public class GridGame extends ApplicationAdapter {
         }
         shape.end();
 
+        shape.end();
+        Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        stage.getBatch().setColor(Color.WHITE);
+        stage.getRoot().setColor(Color.WHITE);
+
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
             playerController.toggleMenu();
             tabMenu.setVisible(playerController.isMenuOpen());
@@ -115,6 +100,50 @@ public class GridGame extends ApplicationAdapter {
         stage.act(delta);
         stage.draw();
     }
+
+    private void populateTabMenu(TabMenu tabMenu, Skin skin) {
+        // Helper to make slots easily
+        java.util.function.Function<Integer, Array<SlotWidget>> makeSlots = (count) -> {
+            Array<SlotWidget> arr = new Array<>();
+            for (int i = 0; i < count; i++) {
+                arr.add(new SlotWidget(skin, SlotWidget.State.EMPTY, 48));
+            }
+            return arr;
+        };
+
+        // Inventory: 54 empty
+        Array<SlotWidget> inventorySlots = makeSlots.apply(500);
+
+        // Armor: 6 empty, 6 filled, 6 locked
+        Array<SlotWidget> armorSlots = new Array<>();
+        for (int i = 0; i < 18; i++) {
+            SlotWidget.State state = i < 6 ? SlotWidget.State.EMPTY
+                : i < 12 ? SlotWidget.State.FILLED
+                : SlotWidget.State.LOCKED;
+            armorSlots.add(new SlotWidget(skin, state, 48));
+        }
+
+        // Items: 18 filled
+        Array<SlotWidget> itemsSlots = new Array<>();
+        for (int i = 0; i < 27; i++) {
+            itemsSlots.add(new SlotWidget(skin, SlotWidget.State.FILLED, 48));
+        }
+
+        // Actions: 18 empty
+        Array<SlotWidget> actionsSlots = makeSlots.apply(18);
+
+        // Assign to menu
+        tabMenu.getInventorySection().setSlots(inventorySlots);
+        tabMenu.getArmorSection().setSlots(armorSlots);
+        tabMenu.getItemsSection().setSlots(itemsSlots);
+        tabMenu.getActionsSection().setSlots(actionsSlots);
+
+        // Optionally space them out a bit more for visual clarity
+        tabMenu.pad(10).defaults().space(5);
+
+        tabMenu.pack();
+    }
+
 
     @Override
     public void dispose() {
