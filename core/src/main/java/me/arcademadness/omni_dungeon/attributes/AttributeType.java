@@ -1,5 +1,5 @@
 package me.arcademadness.omni_dungeon.attributes;
 
 public enum AttributeType {
-    MAX_HEALTH, ARMOR, MANA, ACTION_POINTS, NONE
+    MAX_HEALTH, ARMOR, MANA, ACTION_POINTS, ACCELERATION, FRICTION, MAX_SPEED, NONE
 }

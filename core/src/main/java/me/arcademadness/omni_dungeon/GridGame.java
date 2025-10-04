@@ -11,6 +11,7 @@ import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.entities.MobEntity;
 import me.arcademadness.omni_dungeon.entities.PlayerEntity;
 import me.arcademadness.omni_dungeon.controllers.PlayerController;
+import me.arcademadness.omni_dungeon.movement.MovementIntent;
 
 public class GridGame extends ApplicationAdapter {
     ShapeRenderer shape;
@@ -38,21 +39,23 @@ public class GridGame extends ApplicationAdapter {
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
 
-        for (Entity e : world.getEntities()) {
-            e.getController().update(e, world, delta);
-        }
+        // World tick
+        world.tick(delta);
 
         ScreenUtils.clear(Color.BLACK);
         shape.begin(ShapeRenderer.ShapeType.Filled);
 
+        // Draw tiles
         for (int x = 0; x < world.getMap().width; x++) {
             for (int y = 0; y < world.getMap().height; y++) {
                 Tile t = world.getMap().tiles[x][y];
                 shape.setColor(t.walkable ? Color.FOREST : Color.DARK_GRAY);
-                shape.rect(x * TileMap.TILE_SIZE, y * TileMap.TILE_SIZE, TileMap.TILE_SIZE, TileMap.TILE_SIZE);
+                shape.rect(x * TileMap.TILE_SIZE, y * TileMap.TILE_SIZE,
+                    TileMap.TILE_SIZE, TileMap.TILE_SIZE);
             }
         }
 
+        // Draw entities
         for (Entity e : world.getEntities()) {
             e.render(shape);
         }
@@ -60,5 +63,3 @@ public class GridGame extends ApplicationAdapter {
         shape.end();
     }
 }
-
-

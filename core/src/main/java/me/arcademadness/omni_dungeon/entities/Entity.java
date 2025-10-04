@@ -9,10 +9,22 @@ import me.arcademadness.omni_dungeon.components.Location;
 import me.arcademadness.omni_dungeon.controllers.Controller;
 
 public interface Entity {
+    // Primitives
+    float getVelocityX();
+    float getVelocityY();
+    void setVelocity(float x, float y);
+
+    // Attributes
     Health getHealth();
     Armor getArmor();
     Mana getMana();
     ActionPoints getActionPoints();
+
+    Acceleration getAcceleration();
+    Friction getFriction();
+    MaxSpeed getMaxSpeed();
+
+    // Components
     Inventory getInventory();
     Equipment getEquipment();
     Location getLocation();

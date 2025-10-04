@@ -1,12 +1,17 @@
 package me.arcademadness.omni_dungeon;
 
 import me.arcademadness.omni_dungeon.entities.Entity;
+import me.arcademadness.omni_dungeon.components.Bounds;
+import me.arcademadness.omni_dungeon.movement.MovementIntent;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class World {
     private final TileMap map;
-    private List<Entity> entities;
+    private final List<Entity> entities;
+
+    public static final float ENTITY_SIZE = 1f;
 
     public World(TileMap map) {
         this.map = map;
@@ -27,5 +32,116 @@ public class World {
 
     public void removeEntity(Entity e) {
         entities.remove(e);
+    }
+
+    public void tick(float delta) {
+        for (Entity e : entities) {
+            MovementIntent intent = e.getController().getIntent(e);
+            moveEntity(e, intent, delta);
+        }
+    }
+
+    public void moveEntity(Entity entity, MovementIntent intent, float delta) {
+        if (intent == null) return;
+
+        // Update velocity with acceleration, friction, max speed
+        updateVelocity(entity, intent, delta);
+
+        // Proposed new position
+        float newX = entity.getLocation().getX() + entity.getVelocityX() * delta;
+        float newY = entity.getLocation().getY() + entity.getVelocityY() * delta;
+
+        // Resolve collisions
+        float[] resolved = resolveCollisions(entity, newX, newY);
+        entity.getLocation().set(resolved[0], resolved[1]);
+    }
+
+    private void updateVelocity(Entity entity, MovementIntent intent, float delta) {
+        float vx = entity.getVelocityX();
+        float vy = entity.getVelocityY();
+
+        double accel = entity.getAcceleration().getFinalValue();
+        vx += intent.dx * accel * delta;
+        vy += intent.dy * accel * delta;
+
+        // Friction
+        double friction = entity.getFriction().getFinalValue();
+        vx *= (1 - friction * delta);
+        vy *= (1 - friction * delta);
+
+        // Clamp to max speed
+        double maxSpeed = entity.getMaxSpeed().getFinalValue();
+        double speed = Math.sqrt(vx * vx + vy * vy);
+        if (speed > maxSpeed) {
+            double scale = maxSpeed / speed;
+            vx *= scale;
+            vy *= scale;
+        }
+
+        entity.setVelocity(vx, vy);
+    }
+
+    private float[] resolveCollisions(Entity entity, float newX, float newY) {
+        float finalX = entity.getLocation().getX();
+        float finalY = entity.getLocation().getY();
+
+        // --- X axis collision ---
+        if (newX != finalX) {
+            if (newX > finalX) { // moving right
+                int rightTile = (int) (newX + ENTITY_SIZE);
+                int bottomTile = (int) finalY;
+                int topTile = (int) (finalY + ENTITY_SIZE - 0.001f);
+                if (map.tiles[rightTile][bottomTile].walkable && map.tiles[rightTile][topTile].walkable) {
+                    finalX = newX;
+                } else {
+                    finalX = rightTile - ENTITY_SIZE;
+                }
+            } else { // moving left
+                int leftTile = (int) newX;
+                int bottomTile = (int) finalY;
+                int topTile = (int) (finalY + ENTITY_SIZE - 0.001f);
+                if (map.tiles[leftTile][bottomTile].walkable && map.tiles[leftTile][topTile].walkable) {
+                    finalX = newX;
+                } else {
+                    finalX = leftTile + 1;
+                }
+            }
+        }
+
+        // --- Y axis collision ---
+        if (newY != finalY) {
+            if (newY > finalY) { // moving up
+                int topTile = (int) (newY + ENTITY_SIZE);
+                int leftTile = (int) finalX;
+                int rightTile = (int) (finalX + ENTITY_SIZE - 0.001f);
+                if (map.tiles[leftTile][topTile].walkable && map.tiles[rightTile][topTile].walkable) {
+                    finalY = newY;
+                } else {
+                    finalY = topTile - ENTITY_SIZE;
+                }
+            } else { // moving down
+                int bottomTile = (int) newY;
+                int leftTile = (int) finalX;
+                int rightTile = (int) (finalX + ENTITY_SIZE - 0.001f);
+                if (map.tiles[leftTile][bottomTile].walkable && map.tiles[rightTile][bottomTile].walkable) {
+                    finalY = newY;
+                } else {
+                    finalY = bottomTile + 1;
+                }
+            }
+        }
+
+        // Entity collision
+        Bounds newBounds = new Bounds(finalX, finalY, ENTITY_SIZE, ENTITY_SIZE);
+        for (Entity other : entities) {
+            if (other == entity) continue;
+            if (newBounds.intersects(other.getBounds())) {
+                finalX = entity.getLocation().getX();
+                finalY = entity.getLocation().getY();
+                break;
+            }
+        }
+
+        return new float[]{finalX, finalY};
     }
 }

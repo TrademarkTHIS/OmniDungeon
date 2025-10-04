@@ -2,7 +2,6 @@ package me.arcademadness.omni_dungeon.controllers;
 
 import me.arcademadness.omni_dungeon.World;
 import me.arcademadness.omni_dungeon.entities.Entity;
-import me.arcademadness.omni_dungeon.movement.MovementHelper;
 import me.arcademadness.omni_dungeon.movement.MovementIntent;
 
 public interface Controller {
@@ -10,6 +9,6 @@ public interface Controller {
 
     default void update(Entity entity, World world, float delta) {
         MovementIntent intent = getIntent(entity);
-        MovementHelper.applyMovement(entity, intent, delta, world);
+        world.moveEntity(entity, intent, delta);
     }
 }

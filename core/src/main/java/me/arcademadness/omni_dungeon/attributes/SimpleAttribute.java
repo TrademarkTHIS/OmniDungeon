@@ -30,7 +30,7 @@ public abstract class SimpleAttribute implements Attribute {
 
     @Override
     public void addModifier(AttributeModifier modifier) {
-        modifiers.addFirst(modifier);
+        modifiers.add(0, modifier);
     }
 
     @Override
@@ -40,9 +40,8 @@ public abstract class SimpleAttribute implements Attribute {
 
     @Override
     public void moveModifier(AttributeModifier modifier, int index) {
-        // This needs to be changed to move everything in the array around
-        // This supposed to insert, not replace.
-        modifiers.set(index, modifier);
+        modifiers.remove(modifier);
+        modifiers.add(index, modifier);
     }
 
     @Override
