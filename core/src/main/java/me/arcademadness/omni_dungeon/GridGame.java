@@ -1,38 +1,65 @@
 package me.arcademadness.omni_dungeon;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
-import me.arcademadness.omni_dungeon.controllers.MobController;
 import me.arcademadness.omni_dungeon.controllers.PlayerController;
-import me.arcademadness.omni_dungeon.entities.Entity;
+import me.arcademadness.omni_dungeon.controllers.MobController;
 import me.arcademadness.omni_dungeon.entities.MobEntity;
 import me.arcademadness.omni_dungeon.entities.PlayerEntity;
 import me.arcademadness.omni_dungeon.menus.SlotWidget;
 import me.arcademadness.omni_dungeon.menus.TabMenu;
+import me.arcademadness.omni_dungeon.ui.MenuManager;
+import me.arcademadness.omni_dungeon.ui.MenuScreen;
+import me.arcademadness.omni_dungeon.render.FogRenderer;
+import me.arcademadness.omni_dungeon.render.WorldRenderer;
 
 public class GridGame extends ApplicationAdapter {
     private ShapeRenderer shape;
     private World world;
     private PlayerEntity player;
     private PlayerController playerController;
+
+    // Rendering/camera
+    private OrthographicCamera worldCamera;
+    private Viewport worldViewport;
+
+    private OrthographicCamera uiCamera;
+    private Viewport uiViewport;
+    private Stage uiStage;
+
+    // Renderers
+    private WorldRenderer worldRenderer;
+    private FogRenderer fogRenderer;
+
+    // UI & menus
+    private MenuManager menuManager;
     private TabMenu tabMenu;
-    private Stage stage;
+
+    // Zoom
+    private float cameraZoom = 1f;
+    private float targetZoom = 1f;
+    private final float MIN_ZOOM = 0.5f;
+    private final float MAX_ZOOM = 5f;
+    private final float ZOOM_SPEED = 0.2f;
 
     @Override
     public void create() {
         shape = new ShapeRenderer();
-        TileMap map = new TileMap(10, 10);
+
+        // World setup
+        TileMap map = new TileMap(40, 30);
         world = new World(map);
 
         player = new PlayerEntity(map.width / 2, map.height / 2);
@@ -40,26 +67,67 @@ public class GridGame extends ApplicationAdapter {
         player.setController(playerController);
         world.addEntity(player);
 
+        // Example mob
         MobEntity redMob = new MobEntity(3, 3);
         redMob.setController(new MobController());
         world.addEntity(redMob);
 
+        // Cameras & viewports
+        worldCamera = new OrthographicCamera();
+
+        worldViewport = new ExtendViewport(
+            map.width * TileMap.TILE_SIZE,
+            map.height * TileMap.TILE_SIZE,
+            worldCamera
+        );
+
+        uiCamera = new OrthographicCamera();
+        uiViewport = new ScreenViewport(uiCamera);
+
+        uiStage = new Stage(uiViewport);
+
+        // Renderers
+        worldRenderer = new WorldRenderer(world, shape);
+        fogRenderer = new FogRenderer(world, shape, 12);
+
+        // UI & menus
+        menuManager = new MenuManager(uiStage);
         Skin skin = new Skin(Gdx.files.absolute("assets/uiskin.json"));
-
         tabMenu = new TabMenu(skin);
-        tabMenu.setColor(1f, 1f, 1f, 0.85f);
-
+        tabMenu.setColor(1f, 1f, 1f, 0.95f);
         populateTabMenu(tabMenu, skin);
 
-        stage = new Stage(new ScreenViewport());
         Table root = new Table();
         root.setFillParent(true);
         root.add(tabMenu).center();
-        stage.addActor(root);
+        uiStage.addActor(root);
 
-        tabMenu.setVisible(false);
+        menuManager.register("tab", (MenuScreen) tabMenu);
+        menuManager.hideAll();
 
-        Gdx.input.setInputProcessor(stage);
+        // Input handling
+        InputMultiplexer mux = new InputMultiplexer();
+        mux.addProcessor(uiStage);
+        mux.addProcessor(new InputAdapter() {
+            @Override
+            public boolean scrolled(float amountX, float amountY) {
+                if (!playerController.isMenuOpen()) {
+                    targetZoom += amountY * ZOOM_SPEED;
+                    targetZoom = MathUtils.clamp(targetZoom, MIN_ZOOM, MAX_ZOOM);
+                }
+                return true;
+            }
+        });
+        Gdx.input.setInputProcessor(mux);
+
+        centerCameraOnPlayer();
+    }
+
+    private void centerCameraOnPlayer() {
+        float px = player.getLocation().getX() * TileMap.TILE_SIZE + TileMap.TILE_SIZE / 2f;
+        float py = player.getLocation().getY() * TileMap.TILE_SIZE + TileMap.TILE_SIZE / 2f;
+        worldCamera.position.set(px, py, 0);
+        worldCamera.update();
     }
 
     @Override
@@ -68,54 +136,53 @@ public class GridGame extends ApplicationAdapter {
 
         world.tick(delta);
 
+        // Smooth camera zoom
+        cameraZoom += (targetZoom - cameraZoom) * 0.15f;
+        worldCamera.zoom = cameraZoom;
+
+        // Smooth camera follow
+        float px = player.getLocation().getX() * TileMap.TILE_SIZE + TileMap.TILE_SIZE / 2f;
+        float py = player.getLocation().getY() * TileMap.TILE_SIZE + TileMap.TILE_SIZE / 2f;
+        worldCamera.position.lerp(new Vector3(px, py, 0), 0.2f);
+        worldCamera.update();
+
+        // Clear screen
         ScreenUtils.clear(Color.BLACK);
 
-        shape.begin(ShapeRenderer.ShapeType.Filled);
-        for (int x = 0; x < world.getMap().width; x++) {
-            for (int y = 0; y < world.getMap().height; y++) {
-                Tile t = world.getMap().tiles[x][y];
-                shape.setColor(t.walkable ? Color.FOREST : Color.DARK_GRAY);
-                shape.rect(x * TileMap.TILE_SIZE, y * TileMap.TILE_SIZE,
-                    TileMap.TILE_SIZE, TileMap.TILE_SIZE);
-            }
-        }
-        for (Entity e : world.getEntities()) {
-            e.render(shape);
-        }
-        shape.end();
+        // Render world
+        worldViewport.apply();
+        worldRenderer.render(worldCamera);
 
-        shape.end();
-        Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        stage.getBatch().setColor(Color.WHITE);
-        stage.getRoot().setColor(Color.WHITE);
+        // Render fog
+        fogRenderer.render(worldCamera, player);
 
+        // Render UI
+        uiViewport.apply();
+        uiCamera.position.set(uiViewport.getWorldWidth() / 2f, uiViewport.getWorldHeight() / 2f, 0);
+        uiCamera.update();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
             playerController.toggleMenu();
-            tabMenu.setVisible(playerController.isMenuOpen());
+            if (playerController.isMenuOpen()) menuManager.show("tab");
+            else menuManager.hideAll();
         }
 
-        stage.act(delta);
-        stage.draw();
+        uiStage.act(delta);
+        uiStage.draw();
     }
 
     private void populateTabMenu(TabMenu tabMenu, Skin skin) {
-        // Helper to make slots easily
-        java.util.function.Function<Integer, Array<SlotWidget>> makeSlots = (count) -> {
-            Array<SlotWidget> arr = new Array<>();
+        java.util.function.Function<Integer, com.badlogic.gdx.utils.Array<SlotWidget>> makeSlots = (count) -> {
+            com.badlogic.gdx.utils.Array<SlotWidget> arr = new com.badlogic.gdx.utils.Array<>();
             for (int i = 0; i < count; i++) {
                 arr.add(new SlotWidget(skin, SlotWidget.State.EMPTY, 48));
             }
             return arr;
         };
 
-        // Inventory: 54 empty
-        Array<SlotWidget> inventorySlots = makeSlots.apply(500);
+        com.badlogic.gdx.utils.Array<SlotWidget> inventorySlots = makeSlots.apply(500);
 
-        // Armor: 6 empty, 6 filled, 6 locked
-        Array<SlotWidget> armorSlots = new Array<>();
+        com.badlogic.gdx.utils.Array<SlotWidget> armorSlots = new com.badlogic.gdx.utils.Array<>();
         for (int i = 0; i < 18; i++) {
             SlotWidget.State state = i < 6 ? SlotWidget.State.EMPTY
                 : i < 12 ? SlotWidget.State.FILLED
@@ -123,32 +190,31 @@ public class GridGame extends ApplicationAdapter {
             armorSlots.add(new SlotWidget(skin, state, 48));
         }
 
-        // Items: 18 filled
-        Array<SlotWidget> itemsSlots = new Array<>();
+        com.badlogic.gdx.utils.Array<SlotWidget> itemsSlots = new com.badlogic.gdx.utils.Array<>();
         for (int i = 0; i < 27; i++) {
             itemsSlots.add(new SlotWidget(skin, SlotWidget.State.FILLED, 48));
         }
 
-        // Actions: 18 empty
-        Array<SlotWidget> actionsSlots = makeSlots.apply(18);
+        com.badlogic.gdx.utils.Array<SlotWidget> actionsSlots = makeSlots.apply(18);
 
-        // Assign to menu
         tabMenu.getInventorySection().setSlots(inventorySlots);
         tabMenu.getArmorSection().setSlots(armorSlots);
         tabMenu.getItemsSection().setSlots(itemsSlots);
         tabMenu.getActionsSection().setSlots(actionsSlots);
 
-        // Optionally space them out a bit more for visual clarity
         tabMenu.pad(10).defaults().space(5);
-
         tabMenu.pack();
     }
 
+    @Override
+    public void resize(int width, int height) {
+        worldViewport.update(width, height, true);
+        uiViewport.update(width, height, true);
+    }
 
     @Override
     public void dispose() {
         shape.dispose();
-        stage.dispose();
-        tabMenu.clear();
+        uiStage.dispose();
     }
 }
