@@ -1,8 +1,7 @@
 package me.arcademadness.omni_dungeon;
 
 import me.arcademadness.omni_dungeon.entities.Entity;
-import me.arcademadness.omni_dungeon.components.Bounds;
-import me.arcademadness.omni_dungeon.movement.MovementIntent;
+import me.arcademadness.omni_dungeon.controllers.ControlIntent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +35,12 @@ public class World {
 
     public void tick(float delta) {
         for (Entity e : entities) {
-            MovementIntent intent = e.getController().getIntent(e);
+            ControlIntent intent = e.getController().getIntent(e);
             moveEntity(e, intent, delta);
         }
     }
 
-    public void moveEntity(Entity entity, MovementIntent intent, float delta) {
+    public void moveEntity(Entity entity, ControlIntent intent, float delta) {
         if (intent == null) return;
 
         updateVelocity(entity, intent, delta);
@@ -53,7 +52,7 @@ public class World {
         entity.getLocation().set(resolved[0], resolved[1]);
     }
 
-    private void updateVelocity(Entity entity, MovementIntent intent, float delta) {
+    private void updateVelocity(Entity entity, ControlIntent intent, float delta) {
         float vx = entity.getVelocityX();
         float vy = entity.getVelocityY();
 

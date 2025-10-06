@@ -3,7 +3,6 @@ package me.arcademadness.omni_dungeon.controllers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import me.arcademadness.omni_dungeon.entities.Entity;
-import me.arcademadness.omni_dungeon.movement.MovementIntent;
 import me.arcademadness.omni_dungeon.modifiers.SprintModifier;
 
 public class PlayerController implements Controller {
@@ -21,8 +20,8 @@ public class PlayerController implements Controller {
     }
 
     @Override
-    public MovementIntent getIntent(Entity entity) {
-        if (menuOpen) return new MovementIntent(0,0);
+    public ControlIntent getIntent(Entity entity) {
+        if (menuOpen) return new ControlIntent(0,0);
 
         float dx = 0;
         float dy = 0;
@@ -39,7 +38,7 @@ public class PlayerController implements Controller {
 
         handleSprint(entity);
 
-        return new MovementIntent(dx, dy);
+        return new ControlIntent(dx, dy);
     }
 
     private void handleSprint(Entity entity) {

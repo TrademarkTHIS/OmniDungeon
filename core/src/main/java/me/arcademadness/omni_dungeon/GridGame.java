@@ -109,8 +109,7 @@ public class GridGame extends ApplicationAdapter {
     private void setupUI() {
         Skin skin = new Skin(Gdx.files.absolute("assets/uiskin.json"));
         inventoryMenu = new InventoryMenu(skin, player);
-        inventoryMenu.setColor(1f, 1f, 1f, 0.95f);
-        populateInventoryMenu(inventoryMenu, skin);
+        inventoryMenu.populate();
 
         Table root = new Table();
         root.setFillParent(true);
@@ -179,37 +178,6 @@ public class GridGame extends ApplicationAdapter {
             if (playerController.isMenuOpen()) menuManager.show("inventory");
             else menuManager.hideAll();
         }
-    }
-
-    private void populateInventoryMenu(InventoryMenu menu, Skin skin) {
-        java.util.function.Function<Integer, com.badlogic.gdx.utils.Array<SlotWidget>> makeSlots = (count) -> {
-            com.badlogic.gdx.utils.Array<SlotWidget> slots = new com.badlogic.gdx.utils.Array<>();
-            for (int i = 0; i < count; i++) {
-                slots.add(new SlotWidget(skin, SlotWidget.State.EMPTY, 48));
-            }
-            return slots;
-        };
-
-        com.badlogic.gdx.utils.Array<SlotWidget> inventorySlots = makeSlots.apply(500);
-
-        com.badlogic.gdx.utils.Array<SlotWidget> armorSlots = new com.badlogic.gdx.utils.Array<>();
-        for (int i = 0; i < 18; i++) {
-            SlotWidget.State state = (i < 6) ? SlotWidget.State.EMPTY :
-                (i < 12) ? SlotWidget.State.FILLED :
-                    SlotWidget.State.LOCKED;
-            armorSlots.add(new SlotWidget(skin, state, 48));
-        }
-
-        com.badlogic.gdx.utils.Array<SlotWidget> itemSlots = makeSlots.apply(27);
-        com.badlogic.gdx.utils.Array<SlotWidget> actionSlots = makeSlots.apply(18);
-
-        menu.getInventorySection().setSlots(inventorySlots);
-        menu.getArmorSection().setSlots(armorSlots);
-        menu.getItemsSection().setSlots(itemSlots);
-        menu.getActionsSection().setSlots(actionSlots);
-
-        menu.pad(10).defaults().space(5);
-        menu.pack();
     }
 
     @Override

@@ -3,7 +3,6 @@ package me.arcademadness.omni_dungeon.controllers;
 import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import me.arcademadness.omni_dungeon.entities.Entity;
-import me.arcademadness.omni_dungeon.movement.MovementIntent;
 
 public class MobController implements Controller {
     private static final float SPEED = 2f;
@@ -15,7 +14,7 @@ public class MobController implements Controller {
     private float timer = 0;
 
     @Override
-    public MovementIntent getIntent(Entity entity) {
+    public ControlIntent getIntent(Entity entity) {
         float delta = Gdx.graphics.getDeltaTime();
         timer += delta;
 
@@ -47,6 +46,6 @@ public class MobController implements Controller {
             dirY *= 0.707f;
         }
 
-        return new MovementIntent(dirX * SPEED, dirY * SPEED);
+        return new ControlIntent(dirX * SPEED, dirY * SPEED);
     }
 }

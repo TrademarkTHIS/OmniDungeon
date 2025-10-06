@@ -50,6 +50,40 @@ public class InventoryMenu extends MenuScreen {
         container.add(actionsSection).growX().row();
 
         add(container).center().expand();
+
+        setColor(1f, 1f, 1f, 0.95f);
+    }
+
+    public void populate() {
+        Skin skin = this.getSkin();
+        java.util.function.Function<Integer, com.badlogic.gdx.utils.Array<SlotWidget>> makeSlots = (count) -> {
+            com.badlogic.gdx.utils.Array<SlotWidget> slots = new com.badlogic.gdx.utils.Array<>();
+            for (int i = 0; i < count; i++) {
+                slots.add(new SlotWidget(skin, SlotWidget.State.EMPTY, 48));
+            }
+            return slots;
+        };
+
+        com.badlogic.gdx.utils.Array<SlotWidget> inventorySlots = makeSlots.apply(500);
+
+        com.badlogic.gdx.utils.Array<SlotWidget> armorSlots = new com.badlogic.gdx.utils.Array<>();
+        for (int i = 0; i < 18; i++) {
+            SlotWidget.State state = (i < 6) ? SlotWidget.State.EMPTY :
+                (i < 12) ? SlotWidget.State.FILLED :
+                    SlotWidget.State.LOCKED;
+            armorSlots.add(new SlotWidget(skin, state, 48));
+        }
+
+        com.badlogic.gdx.utils.Array<SlotWidget> itemSlots = makeSlots.apply(27);
+        com.badlogic.gdx.utils.Array<SlotWidget> actionSlots = makeSlots.apply(18);
+
+        getInventorySection().setSlots(inventorySlots);
+        getArmorSection().setSlots(armorSlots);
+        getItemsSection().setSlots(itemSlots);
+        getActionsSection().setSlots(actionSlots);
+
+        pad(10).defaults().space(5);
+        pack();
     }
 
     public SectionWidget getInventorySection() { return inventorySection; }
