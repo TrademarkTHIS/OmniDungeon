@@ -7,9 +7,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import me.arcademadness.omni_dungeon.World;
 import me.arcademadness.omni_dungeon.TileMap;
-import me.arcademadness.omni_dungeon.entities.PlayerEntity;
+import me.arcademadness.omni_dungeon.entities.Entity;
 
-public class FogRenderer {
+public class FogRenderer implements RenderLayer {
     private final World world;
     private final ShapeRenderer shape;
     public final VisibilityState[][] visibility;
@@ -17,10 +17,13 @@ public class FogRenderer {
     private float unseenAlpha = 1.0f;
     private float seenAlpha = 0.05f;
 
-    public FogRenderer(World world, ShapeRenderer shape, int radiusTiles) {
+    private Entity player;
+
+    public FogRenderer(World world, Entity player, ShapeRenderer shape, int radiusTiles) {
         this.world = world;
         this.shape = shape;
         this.radiusTiles = radiusTiles;
+        this.player = player;
 
         TileMap map = world.getMap();
         visibility = new VisibilityState[map.width][map.height];
@@ -31,7 +34,7 @@ public class FogRenderer {
         }
     }
 
-    public void render(Camera camera, PlayerEntity player) {
+    public void render(Camera camera) {
         if (player == null) return;
         shape.setProjectionMatrix(camera.combined);
 

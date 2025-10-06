@@ -11,18 +11,20 @@ import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.entities.PlayerEntity;
 import me.arcademadness.omni_dungeon.visuals.Visual;
 
-public class EntityRenderer {
+public class EntityRenderer implements RenderLayer {
     private final World world;
     private final FogRenderer fog;
     private final ShapeRenderer shape;
+    private Entity player;
 
-    public EntityRenderer(World world, FogRenderer fog, ShapeRenderer shape) {
+    public EntityRenderer(World world, Entity player, FogRenderer fog, ShapeRenderer shape) {
         this.world = world;
         this.fog = fog;
         this.shape = shape;
+        this.player = player;
     }
 
-    public void render(Camera camera, PlayerEntity player) {
+    public void render(Camera camera) {
         if (player == null) return;
 
         shape.setProjectionMatrix(camera.combined);

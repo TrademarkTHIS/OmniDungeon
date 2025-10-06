@@ -7,7 +7,7 @@ import me.arcademadness.omni_dungeon.World;
 import me.arcademadness.omni_dungeon.Tile;
 import me.arcademadness.omni_dungeon.TileMap;
 
-public class WorldRenderer {
+public class WorldRenderer implements RenderLayer{
     private final World world;
     private final ShapeRenderer shape;
     private final FogRenderer fog;

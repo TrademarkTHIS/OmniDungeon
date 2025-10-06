@@ -1,11 +1,13 @@
-package me.arcademadness.omni_dungeon.menus;
+package me.arcademadness.omni_dungeon.ui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import me.arcademadness.omni_dungeon.ui.MenuScreen;
+import me.arcademadness.omni_dungeon.entities.Entity;
 
-public class TabMenu extends MenuScreen {
+public class InventoryMenu extends MenuScreen {
+
+    private Entity player;
 
     static final int SLOT_SIZE = 48;
     private static final int INVENTORY_VISIBLE_ROWS = 6;
@@ -19,8 +21,10 @@ public class TabMenu extends MenuScreen {
     private SectionWidget itemsSection;
     private SectionWidget actionsSection;
 
-    public TabMenu(Skin skin) {
+    public InventoryMenu(Skin skin, Entity player) {
         super(skin);
+
+        this.player = player;
 
         Table container = new Table();
         container.defaults().padBottom(10).expandX().fillX().top();
