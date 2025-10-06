@@ -4,6 +4,7 @@ import me.arcademadness.omni_dungeon.TileMap;
 import me.arcademadness.omni_dungeon.World;
 import me.arcademadness.omni_dungeon.attributes.*;
 import me.arcademadness.omni_dungeon.components.*;
+import me.arcademadness.omni_dungeon.controllers.AbstractController;
 import me.arcademadness.omni_dungeon.controllers.Controller;
 import me.arcademadness.omni_dungeon.visuals.Visual;
 
@@ -22,7 +23,7 @@ public abstract class BaseEntity implements Entity {
     protected float velocityY = 0;
 
     protected Acceleration acceleration = new Acceleration(10);
-    protected Friction friction = new Friction(8);
+    protected Friction friction = new Friction(10);
     protected MaxSpeed maxSpeed = new MaxSpeed(5);
 
     @Override
@@ -66,9 +67,18 @@ public abstract class BaseEntity implements Entity {
     }
 
     @Override
-    public void setController(Controller controller) {
-        this.controller = controller;
+    public void setController(Controller newController) {
+        if (this.controller instanceof AbstractController) {
+            AbstractController old = (AbstractController) this.controller;
+            old.unbind();
+        }
+        this.controller = newController;
+        if (newController instanceof AbstractController) {
+            AbstractController c = (AbstractController) newController;
+            c.bind(this);
+        }
     }
+
 
     public BaseEntity(int startX, int startY) {
         this.location = new Location(startX, startY);

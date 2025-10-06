@@ -1,15 +1,25 @@
 package me.arcademadness.omni_dungeon.controllers;
 
-public class ControlIntent {
-    public final float dx;
-    public final float dy;
+import me.arcademadness.omni_dungeon.actions.Action;
+import java.util.ArrayList;
+import java.util.List;
 
-    public ControlIntent(float dx, float dy) {
-        this.dx = dx;
-        this.dy = dy;
+public class ControlIntent {
+    private final List<Action> actions = new ArrayList<>();
+
+    public void addAction(Action action) {
+        actions.add(action);
+    }
+
+    public List<Action> getActions() {
+        return actions;
     }
 
     public static ControlIntent none() {
-        return new ControlIntent(0, 0);
+        return new ControlIntent();
+    }
+
+    public boolean isEmpty() {
+        return actions.isEmpty();
     }
 }

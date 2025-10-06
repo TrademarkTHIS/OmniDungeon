@@ -8,7 +8,6 @@ import me.arcademadness.omni_dungeon.World;
 import me.arcademadness.omni_dungeon.TileMap;
 import me.arcademadness.omni_dungeon.components.Bounds;
 import me.arcademadness.omni_dungeon.entities.Entity;
-import me.arcademadness.omni_dungeon.entities.PlayerEntity;
 import me.arcademadness.omni_dungeon.visuals.Visual;
 
 public class EntityRenderer implements RenderLayer {

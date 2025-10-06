@@ -1,28 +1,27 @@
 package me.arcademadness.omni_dungeon.attributes;
 
 import me.arcademadness.omni_dungeon.modifiers.AttributeModifier;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SimpleAttribute implements Attribute {
+public abstract class SimpleAttribute<T extends Number> implements Attribute<T> {
 
-    protected final List<AttributeModifier> modifiers = new ArrayList<>();
-    protected double baseValue;
+    protected final List<AttributeModifier<T>> modifiers = new ArrayList<>();
+    protected T baseValue;
 
-    public SimpleAttribute(double baseValue) {
+    public SimpleAttribute(T baseValue) {
         this.baseValue = baseValue;
     }
 
     @Override
-    public double getBaseValue() {
+    public T getBaseValue() {
         return baseValue;
     }
 
     @Override
-    public double getFinalValue() {
-        double finalVal = baseValue;
-        for (AttributeModifier modifier : modifiers) {
+    public T getFinalValue() {
+        T finalVal = baseValue;
+        for (AttributeModifier<T> modifier : modifiers) {
             finalVal = modifier.modify(finalVal);
         }
         return finalVal;
@@ -40,12 +39,13 @@ public abstract class SimpleAttribute implements Attribute {
 
     @Override
     public void moveModifier(AttributeModifier modifier, int index) {
-        modifiers.remove(modifier);
-        modifiers.add(index, modifier);
+        if (modifiers.remove(modifier)) {
+            modifiers.add(Math.max(0, Math.min(index, modifiers.size())), modifier);
+        }
     }
 
     @Override
-    public List<AttributeModifier> getModifiersByType(Class<AttributeModifier> modifierClass) {
+    public List<AttributeModifier> getModifiersByType(Class<? extends AttributeModifier> modifierClass) {
         List<AttributeModifier> targetModifiers = new ArrayList<>();
         for (AttributeModifier modifier : modifiers) {
             if (modifierClass.isInstance(modifier)) {
@@ -53,5 +53,14 @@ public abstract class SimpleAttribute implements Attribute {
             }
         }
         return targetModifiers;
+    }
+
+    public <M extends AttributeModifier> M getFirstModifier(Class<M> modifierClass) {
+        for (AttributeModifier modifier : modifiers) {
+            if (modifierClass.isInstance(modifier)) {
+                return modifierClass.cast(modifier);
+            }
+        }
+        return null;
     }
 }

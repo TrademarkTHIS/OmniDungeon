@@ -2,12 +2,7 @@ package me.arcademadness.omni_dungeon.modifiers;
 
 import me.arcademadness.omni_dungeon.attributes.AttributeType;
 
-public interface AttributeModifier {
-    double modify(double currentValue);
-    ModifierType getType();
+public interface AttributeModifier<T extends Number> {
+    T modify(T currentValue);
     AttributeType getAttributeType();
-
-    enum ModifierType {
-        FLAT, PERCENT, MULTIPLY
-    }
 }

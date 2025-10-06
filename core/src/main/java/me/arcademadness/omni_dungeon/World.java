@@ -1,5 +1,6 @@
 package me.arcademadness.omni_dungeon;
 
+import me.arcademadness.omni_dungeon.actions.Action;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.controllers.ControlIntent;
 
@@ -34,48 +35,19 @@ public class World {
     }
 
     public void tick(float delta) {
-        for (Entity e : entities) {
-            ControlIntent intent = e.getController().getIntent(e);
-            moveEntity(e, intent, delta);
+        for (Entity entity : entities) {
+            ControlIntent intent = entity.getController().getIntent();
+            if (intent == null || intent.isEmpty()) continue;
+
+            for (Action action : intent.getActions()) {
+                if (action.canExecute(this, entity)) {
+                    action.execute(this, entity, delta);
+                }
+            }
         }
     }
 
-    public void moveEntity(Entity entity, ControlIntent intent, float delta) {
-        if (intent == null) return;
-
-        updateVelocity(entity, intent, delta);
-
-        float newX = entity.getLocation().getX() + entity.getVelocityX() * delta;
-        float newY = entity.getLocation().getY() + entity.getVelocityY() * delta;
-
-        float[] resolved = resolveCollisions(entity, newX, newY);
-        entity.getLocation().set(resolved[0], resolved[1]);
-    }
-
-    private void updateVelocity(Entity entity, ControlIntent intent, float delta) {
-        float vx = entity.getVelocityX();
-        float vy = entity.getVelocityY();
-
-        double accel = entity.getAcceleration().getFinalValue();
-        vx += intent.dx * accel * delta;
-        vy += intent.dy * accel * delta;
-
-        double friction = entity.getFriction().getFinalValue();
-        vx *= (1 - friction * delta);
-        vy *= (1 - friction * delta);
-
-        double maxSpeed = entity.getMaxSpeed().getFinalValue();
-        double speed = Math.sqrt(vx * vx + vy * vy);
-        if (speed > maxSpeed) {
-            double scale = maxSpeed / speed;
-            vx *= scale;
-            vy *= scale;
-        }
-
-        entity.setVelocity(vx, vy);
-    }
-
-    private float[] resolveCollisions(Entity entity, float newX, float newY) {
+    public float[] resolveCollisions(Entity entity, float newX, float newY) {
         float finalX = entity.getLocation().getX();
         float finalY = entity.getLocation().getY();
 
