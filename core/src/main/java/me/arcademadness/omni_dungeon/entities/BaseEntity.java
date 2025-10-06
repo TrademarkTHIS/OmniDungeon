@@ -1,12 +1,11 @@
 package me.arcademadness.omni_dungeon.entities;
 
+import me.arcademadness.omni_dungeon.TileMap;
 import me.arcademadness.omni_dungeon.World;
 import me.arcademadness.omni_dungeon.attributes.*;
-import me.arcademadness.omni_dungeon.components.Bounds;
-import me.arcademadness.omni_dungeon.components.Equipment;
-import me.arcademadness.omni_dungeon.components.Inventory;
-import me.arcademadness.omni_dungeon.components.Location;
+import me.arcademadness.omni_dungeon.components.*;
 import me.arcademadness.omni_dungeon.controllers.Controller;
+import me.arcademadness.omni_dungeon.visuals.Visual;
 
 public abstract class BaseEntity implements Entity {
     protected Health health;
@@ -17,6 +16,7 @@ public abstract class BaseEntity implements Entity {
     protected Equipment equipment;
     protected Location location;
     protected Controller controller;
+    protected Visual visual;
 
     protected float velocityX = 0;
     protected float velocityY = 0;
@@ -110,14 +110,21 @@ public abstract class BaseEntity implements Entity {
         return maxSpeed;
     }
 
-    @Override public void update(float delta, World world) {
-        if (controller != null) {
-            controller.update(this, world, delta);
-        }
+    @Override
+    public Bounds getBounds() {
+        float x = location.getX() * TileMap.TILE_SIZE;
+        float y = location.getY() * TileMap.TILE_SIZE;
+        return new Bounds(x, y, TileMap.TILE_SIZE, TileMap.TILE_SIZE);
     }
 
-    @Override public Bounds getBounds() {
-        return new Bounds(location.getX(), location.getY(), World.ENTITY_SIZE, World.ENTITY_SIZE);
+    @Override
+    public Visual getVisual() {
+        return visual;
     }
+
+    public void setVisual(Visual visual) {
+        this.visual = visual;
+    }
+
 }
 

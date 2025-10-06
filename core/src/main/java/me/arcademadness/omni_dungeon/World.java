@@ -44,14 +44,11 @@ public class World {
     public void moveEntity(Entity entity, MovementIntent intent, float delta) {
         if (intent == null) return;
 
-        // Update velocity with acceleration, friction, max speed
         updateVelocity(entity, intent, delta);
 
-        // Proposed new position
         float newX = entity.getLocation().getX() + entity.getVelocityX() * delta;
         float newY = entity.getLocation().getY() + entity.getVelocityY() * delta;
 
-        // Resolve collisions
         float[] resolved = resolveCollisions(entity, newX, newY);
         entity.getLocation().set(resolved[0], resolved[1]);
     }
@@ -64,12 +61,10 @@ public class World {
         vx += intent.dx * accel * delta;
         vy += intent.dy * accel * delta;
 
-        // Friction
         double friction = entity.getFriction().getFinalValue();
         vx *= (1 - friction * delta);
         vy *= (1 - friction * delta);
 
-        // Clamp to max speed
         double maxSpeed = entity.getMaxSpeed().getFinalValue();
         double speed = Math.sqrt(vx * vx + vy * vy);
         if (speed > maxSpeed) {
@@ -85,9 +80,8 @@ public class World {
         float finalX = entity.getLocation().getX();
         float finalY = entity.getLocation().getY();
 
-        // --- X axis collision ---
         if (newX != finalX) {
-            if (newX > finalX) { // moving right
+            if (newX > finalX) {
                 int rightTile = (int) (newX + ENTITY_SIZE);
                 int bottomTile = (int) finalY;
                 int topTile = (int) (finalY + ENTITY_SIZE - 0.001f);
@@ -96,7 +90,7 @@ public class World {
                 } else {
                     finalX = rightTile - ENTITY_SIZE;
                 }
-            } else { // moving left
+            } else {
                 int leftTile = (int) newX;
                 int bottomTile = (int) finalY;
                 int topTile = (int) (finalY + ENTITY_SIZE - 0.001f);
@@ -108,9 +102,8 @@ public class World {
             }
         }
 
-        // --- Y axis collision ---
         if (newY != finalY) {
-            if (newY > finalY) { // moving up
+            if (newY > finalY) {
                 int topTile = (int) (newY + ENTITY_SIZE);
                 int leftTile = (int) finalX;
                 int rightTile = (int) (finalX + ENTITY_SIZE - 0.001f);
@@ -119,7 +112,7 @@ public class World {
                 } else {
                     finalY = topTile - ENTITY_SIZE;
                 }
-            } else { // moving down
+            } else {
                 int bottomTile = (int) newY;
                 int leftTile = (int) finalX;
                 int rightTile = (int) (finalX + ENTITY_SIZE - 0.001f);
@@ -131,11 +124,20 @@ public class World {
             }
         }
 
-        // Entity collision
-        Bounds newBounds = new Bounds(finalX, finalY, ENTITY_SIZE, ENTITY_SIZE);
+        float entLeft = finalX;
+        float entRight = finalX + ENTITY_SIZE;
+        float entBottom = finalY;
+        float entTop = finalY + ENTITY_SIZE;
+
         for (Entity other : entities) {
             if (other == entity) continue;
-            if (newBounds.intersects(other.getBounds())) {
+            float ox = other.getLocation().getX();
+            float oy = other.getLocation().getY();
+            float oRight = ox + ENTITY_SIZE;
+            float oTop = oy + ENTITY_SIZE;
+
+            boolean overlap = entRight > ox && entLeft < oRight && entTop > oy && entBottom < oTop;
+            if (overlap) {
                 finalX = entity.getLocation().getX();
                 finalY = entity.getLocation().getY();
                 break;
@@ -144,4 +146,5 @@ public class World {
 
         return new float[]{finalX, finalY};
     }
+
 }

@@ -12,10 +12,10 @@ import me.arcademadness.omni_dungeon.entities.PlayerEntity;
 public class FogRenderer {
     private final World world;
     private final ShapeRenderer shape;
-    private final int[][] visibility;
-    private int radiusTiles = 6;
+    public final VisibilityState[][] visibility;
+    private int radiusTiles;
     private float unseenAlpha = 1.0f;
-    private float seenAlpha = 0.6f;
+    private float seenAlpha = 0.05f;
 
     public FogRenderer(World world, ShapeRenderer shape, int radiusTiles) {
         this.world = world;
@@ -23,10 +23,10 @@ public class FogRenderer {
         this.radiusTiles = radiusTiles;
 
         TileMap map = world.getMap();
-        visibility = new int[map.width][map.height];
+        visibility = new VisibilityState[map.width][map.height];
         for (int x = 0; x < map.width; x++) {
             for (int y = 0; y < map.height; y++) {
-                visibility[x][y] = 0;
+                visibility[x][y] = VisibilityState.UNSEEN;
             }
         }
     }
@@ -39,19 +39,23 @@ public class FogRenderer {
         int playerTileX = (int) player.getLocation().getX();
         int playerTileY = (int) player.getLocation().getY();
 
+        // SEEN tiles
         for (int x = 0; x < map.width; x++) {
             for (int y = 0; y < map.height; y++) {
-                if (visibility[x][y] == 2) visibility[x][y] = 1;
+                if (visibility[x][y] == VisibilityState.VISIBLE) {
+                    visibility[x][y] = VisibilityState.SEEN;
+                }
             }
         }
 
+        // VISIBLE tiles
         for (int x = Math.max(0, playerTileX - radiusTiles); x <= Math.min(map.width - 1, playerTileX + radiusTiles); x++) {
             for (int y = Math.max(0, playerTileY - radiusTiles); y <= Math.min(map.height - 1, playerTileY + radiusTiles); y++) {
                 int dx = Math.abs(x - playerTileX);
                 int dy = Math.abs(y - playerTileY);
                 int dist = Math.max(dx, dy);
                 if (dist <= radiusTiles) {
-                    visibility[x][y] = 2;
+                    visibility[x][y] = VisibilityState.VISIBLE;
                 }
             }
         }
@@ -62,11 +66,11 @@ public class FogRenderer {
         shape.begin(ShapeRenderer.ShapeType.Filled);
         for (int x = 0; x < map.width; x++) {
             for (int y = 0; y < map.height; y++) {
-                int state = visibility[x][y];
-                if (state == 0) {
+                VisibilityState state = visibility[x][y];
+                if (state == VisibilityState.UNSEEN) {
                     shape.setColor(0, 0, 0, unseenAlpha);
                     shape.rect(x * TileMap.TILE_SIZE, y * TileMap.TILE_SIZE, TileMap.TILE_SIZE, TileMap.TILE_SIZE);
-                } else if (state == 1) {
+                } else if (state == VisibilityState.SEEN) {
                     shape.setColor(0, 0, 0, seenAlpha);
                     shape.rect(x * TileMap.TILE_SIZE, y * TileMap.TILE_SIZE, TileMap.TILE_SIZE, TileMap.TILE_SIZE);
                 }
@@ -75,11 +79,15 @@ public class FogRenderer {
         shape.end();
     }
 
+    public int getRadiusTiles() {
+        return radiusTiles;
+    }
+
     public void revealAll() {
         TileMap map = world.getMap();
         for (int x = 0; x < map.width; x++) {
             for (int y = 0; y < map.height; y++) {
-                visibility[x][y] = 2;
+                visibility[x][y] = VisibilityState.VISIBLE;
             }
         }
     }

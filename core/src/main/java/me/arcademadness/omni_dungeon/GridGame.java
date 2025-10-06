@@ -20,10 +20,12 @@ import me.arcademadness.omni_dungeon.entities.MobEntity;
 import me.arcademadness.omni_dungeon.entities.PlayerEntity;
 import me.arcademadness.omni_dungeon.menus.SlotWidget;
 import me.arcademadness.omni_dungeon.menus.TabMenu;
+import me.arcademadness.omni_dungeon.render.EntityRenderer;
 import me.arcademadness.omni_dungeon.ui.MenuManager;
 import me.arcademadness.omni_dungeon.ui.MenuScreen;
 import me.arcademadness.omni_dungeon.render.FogRenderer;
 import me.arcademadness.omni_dungeon.render.WorldRenderer;
+import me.arcademadness.omni_dungeon.visuals.ShapeVisual;
 
 public class GridGame extends ApplicationAdapter {
     private ShapeRenderer shape;
@@ -42,6 +44,7 @@ public class GridGame extends ApplicationAdapter {
     // Renderers
     private WorldRenderer worldRenderer;
     private FogRenderer fogRenderer;
+    private EntityRenderer entityRenderer;
 
     // UI & menus
     private MenuManager menuManager;
@@ -63,12 +66,14 @@ public class GridGame extends ApplicationAdapter {
         world = new World(map);
 
         player = new PlayerEntity(map.width / 2, map.height / 2);
+        player.setVisual(new ShapeVisual(Color.CYAN));
         playerController = new PlayerController();
         player.setController(playerController);
         world.addEntity(player);
 
         // Example mob
         MobEntity redMob = new MobEntity(3, 3);
+        redMob.setVisual(new ShapeVisual(Color.RED));
         redMob.setController(new MobController());
         world.addEntity(redMob);
 
@@ -87,8 +92,9 @@ public class GridGame extends ApplicationAdapter {
         uiStage = new Stage(uiViewport);
 
         // Renderers
-        worldRenderer = new WorldRenderer(world, shape);
         fogRenderer = new FogRenderer(world, shape, 12);
+        worldRenderer = new WorldRenderer(world, shape, fogRenderer);
+        entityRenderer = new EntityRenderer(world, fogRenderer, shape);
 
         // UI & menus
         menuManager = new MenuManager(uiStage);
@@ -149,12 +155,12 @@ public class GridGame extends ApplicationAdapter {
         // Clear screen
         ScreenUtils.clear(Color.BLACK);
 
-        // Render world
+
         worldViewport.apply();
         worldRenderer.render(worldCamera);
+        entityRenderer.render(worldCamera, player);
+        fogRenderer.render(worldCamera, player); // drawn last (overlay)
 
-        // Render fog
-        fogRenderer.render(worldCamera, player);
 
         // Render UI
         uiViewport.apply();

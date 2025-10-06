@@ -12,15 +12,4 @@ public class MobEntity extends BaseEntity {
         this.health = new Health(50);
         this.armor = new Armor(1);
     }
-
-    @Override
-    public void render(ShapeRenderer shape) {
-        shape.setColor(Color.RED);
-        shape.rect(
-            location.getX() * TileMap.TILE_SIZE,
-            location.getY() * TileMap.TILE_SIZE,
-            TileMap.TILE_SIZE,
-            TileMap.TILE_SIZE
-        );
-    }
 }

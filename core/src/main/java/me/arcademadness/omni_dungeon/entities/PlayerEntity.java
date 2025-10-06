@@ -17,16 +17,5 @@ public class PlayerEntity extends BaseEntity {
         this.maxSpeed = new MaxSpeed(50);
         this.acceleration = new Acceleration(50);
     }
-
-    @Override
-    public void render(ShapeRenderer shape) {
-        shape.setColor(Color.SKY);
-        shape.rect(
-            location.getX() * TileMap.TILE_SIZE,
-            location.getY() * TileMap.TILE_SIZE,
-            TileMap.TILE_SIZE,
-            TileMap.TILE_SIZE
-        );
-    }
 }
 
