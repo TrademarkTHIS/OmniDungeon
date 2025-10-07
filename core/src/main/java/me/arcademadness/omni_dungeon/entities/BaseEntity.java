@@ -14,7 +14,6 @@ public abstract class BaseEntity implements Entity {
     protected Mana mana;
     protected ActionPoints actionPoints;
     protected Inventory inventory;
-    protected Equipment equipment;
     protected Location location;
     protected Controller controller;
     protected Visual visual;
@@ -25,6 +24,15 @@ public abstract class BaseEntity implements Entity {
     protected Acceleration acceleration = new Acceleration(10);
     protected Friction friction = new Friction(10);
     protected MaxSpeed maxSpeed = new MaxSpeed(5);
+
+    public BaseEntity(int startX, int startY) {
+        this.location = new Location(startX, startY);
+        this.health = new Health(100);
+        this.armor = new Armor(0);
+        this.mana = new Mana(50);
+        this.actionPoints = new ActionPoints(10);
+        this.inventory = new Inventory(27,18,9);
+    }
 
     @Override
     public Health getHealth() {
@@ -52,11 +60,6 @@ public abstract class BaseEntity implements Entity {
     }
 
     @Override
-    public Equipment getEquipment() {
-        return equipment;
-    }
-
-    @Override
     public Location getLocation() {
         return location;
     }
@@ -77,17 +80,6 @@ public abstract class BaseEntity implements Entity {
             AbstractController c = (AbstractController) newController;
             c.bind(this);
         }
-    }
-
-
-    public BaseEntity(int startX, int startY) {
-        this.location = new Location(startX, startY);
-        this.health = new Health(100);
-        this.armor = new Armor(0);
-        this.mana = new Mana(50);
-        this.actionPoints = new ActionPoints(10);
-        this.inventory = new Inventory();
-        this.equipment = new Equipment();
     }
 
     @Override

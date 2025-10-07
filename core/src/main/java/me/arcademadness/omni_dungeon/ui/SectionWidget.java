@@ -15,10 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 
 public class SectionWidget extends Table {
-    protected Table grid;
-    protected int columns;
-    protected int slotSize;
-    protected ScrollPane scrollPane;
+    protected final Table grid;
+    protected final int columns;
+    protected final int slotSize;
+    protected final ScrollPane scrollPane;
     protected float visibleHeight = -1f;
     protected float slotPadding = 4f;
 
@@ -33,16 +33,20 @@ public class SectionWidget extends Table {
 
         ScrollPane.ScrollPaneStyle style = new ScrollPane.ScrollPaneStyle();
         style.background = null;
-        style.hScroll = null;
-        style.hScrollKnob = null;
-        style.vScroll = null;
-        style.vScrollKnob = null;
 
         scrollPane = new ScrollPane(grid, style);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setScrollbarsVisible(false);
+        scrollPane.setScrollingDisabled(true, false);
+        scrollPane.setOverscroll(false, false);
+        scrollPane.setSmoothScrolling(true);
+        scrollPane.setForceScroll(false, true);
+
+        // Handle mouse scroll
         scrollPane.addListener(new InputListener() {
             @Override
             public boolean scrolled(InputEvent event, float x, float y, float amountX, float amountY) {
-                scrollPane.setScrollY(scrollPane.getScrollY() + amountY * 20f);
+                scrollPane.setScrollY(scrollPane.getScrollY() + amountY * 40f);
                 return true;
             }
 
@@ -58,50 +62,35 @@ public class SectionWidget extends Table {
             }
         });
 
-        scrollPane.setFadeScrollBars(false);
-        scrollPane.setScrollbarsVisible(false);
-        scrollPane.setScrollingDisabled(true, false);
-        scrollPane.setOverscroll(false, false);
-        scrollPane.setSmoothScrolling(true);
-
-        add(scrollPane).growX();
+        add(scrollPane).growX().height(computeVisibleHeight());
     }
 
     public void setSlots(Array<SlotWidget> slots) {
         grid.clearChildren();
+
         for (int i = 0; i < slots.size; i++) {
             grid.add(slots.get(i));
             if ((i + 1) % columns == 0)
                 grid.row();
         }
+
+        grid.invalidateHierarchy();
+        scrollPane.layout();
     }
 
-    @Override
-    public float getPrefHeight() {
-        return computeVisibleHeight();
-    }
+    public void setVisibleRows(int visibleRows) {
+        float rowHeight = slotSize + slotPadding * 2;
+        this.visibleHeight = rowHeight * visibleRows;
 
-    @Override
-    public float getMinHeight() {
-        return computeVisibleHeight();
-    }
-
-    @Override
-    public float getMaxHeight() {
-        return computeVisibleHeight();
+        getCell(scrollPane).height(visibleHeight);
+        invalidateHierarchy();
+        scrollPane.layout();
     }
 
     private float computeVisibleHeight() {
         if (visibleHeight > 0) return visibleHeight;
         int totalRows = (int)Math.ceil((float)grid.getChildren().size / columns);
         return totalRows * (slotSize + slotPadding * 2);
-    }
-
-    public void setVisibleRows(int visibleRows) {
-        float rowHeight = slotSize + (slotPadding * 2);
-        this.visibleHeight = rowHeight * visibleRows;
-        scrollPane.setForceScroll(false, true);
-        scrollPane.invalidateHierarchy();
     }
 
     private Drawable makeColorDrawable(Color color) {

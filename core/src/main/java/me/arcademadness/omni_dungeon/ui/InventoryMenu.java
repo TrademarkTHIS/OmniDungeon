@@ -3,7 +3,9 @@ package me.arcademadness.omni_dungeon.ui;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import me.arcademadness.omni_dungeon.components.Inventory;
 import me.arcademadness.omni_dungeon.entities.Entity;
+import me.arcademadness.omni_dungeon.items.Item;
 
 public class InventoryMenu extends MenuScreen {
 
@@ -55,35 +57,83 @@ public class InventoryMenu extends MenuScreen {
     }
 
     public void populate() {
-        Skin skin = this.getSkin();
-        java.util.function.Function<Integer, com.badlogic.gdx.utils.Array<SlotWidget>> makeSlots = (count) -> {
-            com.badlogic.gdx.utils.Array<SlotWidget> slots = new com.badlogic.gdx.utils.Array<>();
-            for (int i = 0; i < count; i++) {
-                slots.add(new SlotWidget(skin, SlotWidget.State.EMPTY, 48));
-            }
-            return slots;
-        };
+        Skin skin = getSkin();
+        Inventory inv = player.getInventory();
 
-        com.badlogic.gdx.utils.Array<SlotWidget> inventorySlots = makeSlots.apply(500);
+        populateInventorySection(inv, 6);
 
-        com.badlogic.gdx.utils.Array<SlotWidget> armorSlots = new com.badlogic.gdx.utils.Array<>();
-        for (int i = 0; i < 18; i++) {
-            SlotWidget.State state = (i < 6) ? SlotWidget.State.EMPTY :
-                (i < 12) ? SlotWidget.State.FILLED :
-                    SlotWidget.State.LOCKED;
-            armorSlots.add(new SlotWidget(skin, state, 48));
-        }
+        populateCappedSection(
+            armorSection,
+            inv.getMaxArmorSlots().getFinalValue(),
+            ARMOR_VISIBLE_ROWS
+        );
 
-        com.badlogic.gdx.utils.Array<SlotWidget> itemSlots = makeSlots.apply(27);
-        com.badlogic.gdx.utils.Array<SlotWidget> actionSlots = makeSlots.apply(18);
+        populateCappedSection(
+            itemsSection,
+            inv.getMaxItemSlots().getFinalValue(),
+            ITEMS_VISIBLE_ROWS
+        );
 
-        getInventorySection().setSlots(inventorySlots);
-        getArmorSection().setSlots(armorSlots);
-        getItemsSection().setSlots(itemSlots);
-        getActionsSection().setSlots(actionSlots);
+        populateCappedSection(
+            actionsSection,
+            inv.getMaxActionSlots().getFinalValue(),
+            ACTIONS_VISIBLE_ROWS
+        );
 
         pad(10).defaults().space(5);
         pack();
+    }
+
+    private void populateInventorySection(Inventory inv, int visibleRows) {
+        Skin skin = getSkin();
+        com.badlogic.gdx.utils.Array<SlotWidget> slots = new com.badlogic.gdx.utils.Array<>();
+
+        int itemCount = inv.size();
+        int usedRows = (int) Math.ceil(itemCount / (float) COLUMNS);
+
+        int totalRows = Math.max(visibleRows, usedRows);
+        int totalSlots = totalRows * COLUMNS;
+
+        for (int i = 0; i < totalSlots; i++) {
+            if (i < itemCount) {
+                Item item = inv.get(i);
+                SlotWidget slot = new SlotWidget(skin, SlotWidget.State.FILLED, SLOT_SIZE);
+                slot.setItemTexture(item.getTexture());
+                slots.add(slot);
+            } else {
+                SlotWidget slot = new SlotWidget(skin, SlotWidget.State.EMPTY, SLOT_SIZE);
+                slots.add(slot);
+            }
+        }
+
+        inventorySection.setVisibleRows(visibleRows);
+        inventorySection.setSlots(slots);
+    }
+
+
+
+    private void populateCappedSection(SectionWidget section, int maxSlots, int visibleRows) {
+        Skin skin = getSkin();
+        com.badlogic.gdx.utils.Array<SlotWidget> slots = new com.badlogic.gdx.utils.Array<>();
+
+        // --- Compute how many total slots we need to fill complete rows ---
+        int totalSlots = Math.max(maxSlots, COLUMNS * visibleRows);
+        int remainder = totalSlots % COLUMNS;
+        if (remainder != 0) {
+            totalSlots += (COLUMNS - remainder); // pad to full row width
+        }
+
+        // --- Populate ---
+        for (int i = 0; i < totalSlots; i++) {
+            SlotWidget.State state = (i < maxSlots)
+                ? SlotWidget.State.EMPTY
+                : SlotWidget.State.LOCKED;
+            slots.add(new SlotWidget(skin, state, SLOT_SIZE));
+        }
+
+        // --- Apply fixed visible height (scrolls if overflow) ---
+        section.setVisibleRows(visibleRows);
+        section.setSlots(slots);
     }
 
     public SectionWidget getInventorySection() { return inventorySection; }

@@ -2,7 +2,6 @@ package me.arcademadness.omni_dungeon.actions;
 
 import me.arcademadness.omni_dungeon.World;
 import me.arcademadness.omni_dungeon.entities.Entity;
-import me.arcademadness.omni_dungeon.TileMap;
 
 public class MoveAction implements Action {
     private final float dx;
@@ -32,11 +31,11 @@ public class MoveAction implements Action {
         vx += dx * accel * delta;
         vy += dy * accel * delta;
 
-        float friction = (float) entity.getFriction().getFinalValue();
+        float friction = entity.getFriction().getFinalValue();
         vx *= (1 - friction * delta);
         vy *= (1 - friction * delta);
 
-        float maxSpeed = (float) entity.getMaxSpeed().getFinalValue();
+        float maxSpeed = entity.getMaxSpeed().getFinalValue();
         float speed = (float) Math.sqrt(vx * vx + vy * vy);
         if (speed > maxSpeed) {
             float scale = maxSpeed / speed;

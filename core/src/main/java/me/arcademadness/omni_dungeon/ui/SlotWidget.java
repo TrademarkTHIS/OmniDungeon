@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -17,16 +18,34 @@ public class SlotWidget extends Button {
     private final Drawable filledDrawable;
     private final Drawable emptyDrawable;
     private final Drawable lockedDrawable;
+    private final Image itemImage;
 
     public SlotWidget(Skin skin, State initialState, int slotSize) {
         super(makeStyle(skin, initialState, slotSize));
         this.state = initialState;
 
         emptyDrawable  = makeColorDrawable(new Color(1, 1, 1, 0f), slotSize);
-
         filledDrawable = makeColorDrawable(new Color(1, 1, 1, 0.15f), slotSize);
-
         lockedDrawable = makeColorDrawable(new Color(0.2f, 0.2f, 0.2f, 0.6f), slotSize);
+
+        itemImage = new Image();
+        itemImage.setSize(slotSize, slotSize);
+        add(itemImage).expand().center();
+    }
+
+    public void setItemTexture(TextureRegion texture) {
+        if (texture == null) {
+            itemImage.setDrawable(null);
+            setState(State.EMPTY);
+        } else {
+            itemImage.setDrawable(new TextureRegionDrawable(texture));
+            setState(State.FILLED);
+        }
+    }
+
+    public void clearItem() {
+        itemImage.setDrawable(null);
+        setState(State.EMPTY);
     }
 
     public void setState(State state) {
