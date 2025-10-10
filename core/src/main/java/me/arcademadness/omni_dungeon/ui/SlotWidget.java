@@ -30,7 +30,7 @@ public class SlotWidget extends Button {
 
         itemImage = new Image();
         itemImage.setSize(slotSize, slotSize);
-        add(itemImage).expand().center();
+        add(itemImage).center().expand();
     }
 
     public void setItemTexture(TextureRegion texture) {

@@ -6,8 +6,8 @@ import java.util.List;
 public interface Attribute<T extends Number> {
     T getBaseValue();
     T getFinalValue();
-    void addModifier(AttributeModifier modifier);
-    void removeModifier(AttributeModifier modifier);
-    void moveModifier(AttributeModifier modifier, int index);
-    List<AttributeModifier> getModifiersByType(Class<? extends AttributeModifier> modifierClass);
+    void addModifier(AttributeModifier<T> modifier);
+    void removeModifier(AttributeModifier<T> modifier);
+    void moveModifier(AttributeModifier<T> modifier, int index);
+    List<AttributeModifier<T>> getModifiersByType(Class<? extends AttributeModifier<T>> modifierClass);
 }

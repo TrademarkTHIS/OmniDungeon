@@ -8,7 +8,7 @@ public class PlayerEntity extends BaseEntity {
         super(x, y);
         this.health = new Health(150);
         this.armor = new Armor(5);
-        for (int i = 0; i < 550*10; i++) {
+        for (int i = 0; i < 7; i++) {
             this.inventory.addItem(new Sword());
         }
         this.maxSpeed = new MaxSpeed(50);

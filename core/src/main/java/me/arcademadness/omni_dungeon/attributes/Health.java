@@ -1,12 +1,12 @@
 package me.arcademadness.omni_dungeon.attributes;
 
-public final class Health extends SimpleAttribute<Double> {
+public final class Health extends SimpleAttribute<Float> {
 
     double currentHealth;
 
-    public Health(double baseValue) {
-        super(baseValue);
-        currentHealth = baseValue;
+    public Health(float baseHealth) {
+        super(baseHealth);
+        currentHealth = baseHealth;
     }
 
     public double getCurrentHealth() {
