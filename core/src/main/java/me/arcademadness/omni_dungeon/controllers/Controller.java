@@ -1,5 +1,7 @@
 package me.arcademadness.omni_dungeon.controllers;
 
+import java.util.Optional;
+
 public interface Controller {
-    ControlIntent getIntent();
+    Optional<ControlIntent> getIntent();
 }

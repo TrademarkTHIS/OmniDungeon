@@ -1,9 +1,13 @@
 package me.arcademadness.omni_dungeon.events;
 
+import me.arcademadness.omni_dungeon.entities.PlayerEntity;
+
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class EventBus {
+public final class EventBus {
 
     private final Map<Class<?>, List<Handler>> handlers = new HashMap<>();
 
@@ -47,13 +51,12 @@ public class EventBus {
             }
         }
 
-        /*
-        if (event instanceof BaseEvent baseEvent) {
+        if (event instanceof BaseEvent) {
             if (!event.isCanceled()) {
-                baseEvent.execute();
+                BaseEvent bEvent = (BaseEvent) event;
+                bEvent.execute();
             }
         }
-         */
     }
 
     private static class Handler {

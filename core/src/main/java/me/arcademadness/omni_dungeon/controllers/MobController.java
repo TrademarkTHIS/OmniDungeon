@@ -1,19 +1,20 @@
 package me.arcademadness.omni_dungeon.controllers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import me.arcademadness.omni_dungeon.actions.MoveAction;
 import me.arcademadness.omni_dungeon.entities.Entity;
 
+import java.util.Optional;
 import java.util.Random;
 
 public class MobController extends AbstractController {
     private static final float CHANGE_DIR_TIME = 2f;
 
     private final Entity entity;
-
     private final Random random = new Random();
-    private float dirX = 0;
-    private float dirY = 0;
+
+    private final Vector2 direction = new Vector2();
     private float timer = 0;
 
     public MobController(Entity entity) {
@@ -21,7 +22,7 @@ public class MobController extends AbstractController {
     }
 
     @Override
-    public ControlIntent getIntent() {
+    public Optional<ControlIntent> getIntent() {
         float delta = Gdx.graphics.getDeltaTime();
         timer += delta;
 
@@ -30,44 +31,28 @@ public class MobController extends AbstractController {
             pickNewDirection();
         }
 
-        ControlIntent intent = new ControlIntent();
-
-        if (dirX != 0 || dirY != 0) {
-            intent.addAction(new MoveAction(dirX, dirY));
+        if (direction.isZero()) {
+            return Optional.empty();
         }
 
-        return intent;
+        ControlIntent intent = new ControlIntent();
+        intent.addAction(new MoveAction(direction.cpy()));
+        return Optional.of(intent);
     }
 
     private void pickNewDirection() {
         int dir = random.nextInt(5);
+
         switch (dir) {
-            case 0:
-                dirX = 0;
-                dirY = 1;
-                break;
-            case 1:
-                dirX = 0;
-                dirY = -1;
-                break;
-            case 2:
-                dirX = -1;
-                dirY = 0;
-                break;
-            case 3:
-                dirX = 1;
-                dirY = 0;
-                break;
-            default:
-                dirX = 0;
-                dirY = 0;
-                break;
+            case 0: direction.set(0, 1);  break;
+            case 1: direction.set(0, -1); break;
+            case 2: direction.set(-1, 0); break;
+            case 3: direction.set(1, 0);  break;
+            default: direction.set(0, 0); break;
         }
 
-        if (dirX != 0 && dirY != 0) {
-            dirX *= 0.707f;
-            dirY *= 0.707f;
+        if (!direction.isZero()) {
+            direction.nor();
         }
     }
-
 }

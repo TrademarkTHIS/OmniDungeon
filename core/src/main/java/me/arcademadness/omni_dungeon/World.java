@@ -6,6 +6,7 @@ import me.arcademadness.omni_dungeon.controllers.ControlIntent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class World {
     private final TileMap map;
@@ -36,9 +37,10 @@ public class World {
 
     public void tick(float delta) {
         for (Entity entity : entities) {
-            ControlIntent intent = entity.getController().getIntent();
-            if (intent == null || intent.isEmpty()) continue;
+            Optional<ControlIntent> optional = entity.getController().getIntent();
+            if (!optional.isPresent()) continue;
 
+            ControlIntent intent = optional.get();
             for (Action action : intent.getActions()) {
                 if (action.canExecute(this, entity)) {
                     action.execute(this, entity, delta);
@@ -117,5 +119,4 @@ public class World {
 
         return new float[]{finalX, finalY};
     }
-
 }

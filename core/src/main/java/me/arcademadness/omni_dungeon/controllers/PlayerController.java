@@ -2,15 +2,17 @@ package me.arcademadness.omni_dungeon.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
 import me.arcademadness.omni_dungeon.actions.MoveAction;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.modifiers.AttributeModifier;
 import me.arcademadness.omni_dungeon.modifiers.SprintModifier;
 
+import java.util.Optional;
+
 public class PlayerController extends AbstractController {
     private final SprintModifier sprintModifier = new SprintModifier(5);
     private boolean menuOpen = false;
-
 
     public void toggleMenu() {
         menuOpen = !menuOpen;
@@ -21,25 +23,28 @@ public class PlayerController extends AbstractController {
     }
 
     @Override
-    public ControlIntent getIntent() {
+    public Optional<ControlIntent> getIntent() {
         Entity entity = getEntity();
-        ControlIntent intent = new ControlIntent();
-        if (menuOpen) return intent;
 
-        // handle movement
-        float dx = 0, dy = 0;
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) dy += 1;
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) dy -= 1;
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) dx -= 1;
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) dx += 1;
-        if (dx != 0 && dy != 0) { dx *= 0.707f; dy *= 0.707f; }
+        if (menuOpen) return Optional.empty();
+
+        Vector2 dir = new Vector2(0, 0);
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) dir.y += 1;
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) dir.y -= 1;
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) dir.x -= 1;
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) dir.x += 1;
 
         handleSprint(entity);
 
-        if (dx != 0 || dy != 0)
-            intent.addAction(new MoveAction(dx, dy));
+        // No movement, return early.
+        if (dir.x == 0 && dir.y == 0) {
+            return Optional.empty();
+        }
 
-        return intent;
+        // Otherwise create an intent
+        ControlIntent intent = new ControlIntent();
+        intent.addAction(new MoveAction(dir));
+        return Optional.of(intent);
     }
 
     private void handleSprint(Entity entity) {

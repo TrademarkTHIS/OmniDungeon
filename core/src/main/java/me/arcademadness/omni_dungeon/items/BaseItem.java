@@ -16,8 +16,7 @@ public abstract class BaseItem implements Item {
 
     private final List<AttributeModifier<?>> modifiers = new ArrayList<>();
     private final List<Action> actions = new ArrayList<>();
-
-
+    
     protected BaseItem(String name, String description, TextureRegion icon) {
         this.name = name;
         this.description = description;
