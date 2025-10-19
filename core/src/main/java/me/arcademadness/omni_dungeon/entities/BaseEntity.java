@@ -1,6 +1,6 @@
 package me.arcademadness.omni_dungeon.entities;
 
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import me.arcademadness.omni_dungeon.attributes.*;
 import me.arcademadness.omni_dungeon.components.*;
 import me.arcademadness.omni_dungeon.controllers.AbstractController;
@@ -21,8 +21,7 @@ public abstract class BaseEntity implements Entity {
     protected Controller controller;
     protected List<EntityPart> entityParts = new ArrayList<>();
 
-    protected float velocityX = 0;
-    protected float velocityY = 0;
+    protected Vector2 velocity = new Vector2();
 
     protected Acceleration acceleration = new Acceleration(10);
     protected Friction friction = new Friction(10);
@@ -93,18 +92,13 @@ public abstract class BaseEntity implements Entity {
     }
 
     @Override
-    public float getVelocityX() {
-        return velocityX;
+    public Vector2 getVelocity() {
+        return velocity;
     }
 
     @Override
-    public float getVelocityY() {
-        return velocityY;
-    }
-
-    @Override
-    public void setVelocity(float vx, float vy) {
-        this.velocityX = vx; this.velocityY = vy;
+    public void setVelocity(Vector2 velocity) {
+        this.velocity = velocity;
     }
 
     @Override

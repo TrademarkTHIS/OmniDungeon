@@ -20,8 +20,8 @@ public class EntityMoveEvent extends EntityEvent {
     @Override
     public void execute() {
         float accel = entity.getAcceleration().getFinalValue();
-        float vx = entity.getVelocityX() + direction.x * accel * delta;
-        float vy = entity.getVelocityY() + direction.y * accel * delta;
+        float vx = entity.getVelocity().x + direction.x * accel * delta;
+        float vy = entity.getVelocity().y + direction.y * accel * delta;
 
         float friction = entity.getFriction().getFinalValue();
         vx *= (1 - friction * delta);
@@ -36,7 +36,7 @@ public class EntityMoveEvent extends EntityEvent {
             vy *= scale;
         }
 
-        entity.setVelocity(vx, vy);
+        entity.setVelocity(new Vector2(vx, vy));
 
         float newX = collision.moveAxis(entity, entity.getLocation().x, entity.getLocation().y, vx * delta, true);
         float newY = collision.moveAxis(entity, newX, entity.getLocation().y, vy * delta, false);
