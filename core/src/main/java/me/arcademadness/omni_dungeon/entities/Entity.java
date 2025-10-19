@@ -3,7 +3,9 @@ package me.arcademadness.omni_dungeon.entities;
 import me.arcademadness.omni_dungeon.attributes.*;
 import me.arcademadness.omni_dungeon.components.*;
 import me.arcademadness.omni_dungeon.controllers.Controller;
-import me.arcademadness.omni_dungeon.visuals.Visual;
+
+import java.util.List;
+import java.util.Set;
 
 public interface Entity {
     // Primitives
@@ -20,12 +22,14 @@ public interface Entity {
     Acceleration getAcceleration();
     Friction getFriction();
     MaxSpeed getMaxSpeed();
+
     // Components
     Inventory getInventory();
     Location getLocation();
-    Bounds getBounds();
-    Visual getVisual();
+    List<EntityPart> getParts();
 
     Controller getController();
     void setController(Controller controller);
+
+    Set<TileCoordinate> getOccupiedTiles();
 }

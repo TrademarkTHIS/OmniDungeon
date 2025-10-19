@@ -15,9 +15,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import me.arcademadness.omni_dungeon.controllers.*;
 import me.arcademadness.omni_dungeon.entities.*;
+import me.arcademadness.omni_dungeon.environment.Environment;
 import me.arcademadness.omni_dungeon.render.*;
 import me.arcademadness.omni_dungeon.ui.*;
-import me.arcademadness.omni_dungeon.visuals.ShapeVisual;
 
 public class GridGame extends ApplicationAdapter {
 
@@ -28,7 +28,7 @@ public class GridGame extends ApplicationAdapter {
     private Stage uiStage;
 
     // World
-    private World world;
+    private Environment environment;
     private PlayerEntity player;
     private PlayerController playerController;
 
@@ -66,27 +66,26 @@ public class GridGame extends ApplicationAdapter {
 
     private void setupWorld() {
         TileMap map = new TileMap(40, 30);
-        world = new World(map);
+        environment = new Environment(map);
 
         // Player
         player = new PlayerEntity(map.width / 2, map.height / 2);
-        player.setVisual(new ShapeVisual(Color.CYAN));
         playerController = new PlayerController();
         player.setController(playerController);
-        world.addEntity(player);
+        environment.addEntity(player);
 
         // Example mob
-        MobEntity redMob = new MobEntity(3, 3);
-        redMob.setVisual(new ShapeVisual(Color.RED));
+        RedMobEntity redMob = new RedMobEntity(3, 3);
         redMob.setController(new MobController(redMob));
-        world.addEntity(redMob);
+        environment.addEntity(redMob);
     }
+
 
     private void setupCameras() {
         worldCamera = new OrthographicCamera();
         worldViewport = new ExtendViewport(
-            world.getMap().width * TileMap.TILE_SIZE,
-            world.getMap().height * TileMap.TILE_SIZE,
+            environment.getMap().width * TileMap.TILE_SIZE,
+            environment.getMap().height * TileMap.TILE_SIZE,
             worldCamera
         );
 
@@ -96,9 +95,9 @@ public class GridGame extends ApplicationAdapter {
     }
 
     private void setupRenderers() {
-        fogRenderer = new FogRenderer(world, player, shape, 12);
-        worldRenderer = new WorldRenderer(world, shape, fogRenderer);
-        entityRenderer = new EntityRenderer(world, player, fogRenderer, shape);
+        fogRenderer = new FogRenderer(environment, player, shape, 12);
+        worldRenderer = new WorldRenderer(environment, shape, fogRenderer);
+        entityRenderer = new EntityRenderer(environment, player, fogRenderer, shape);
 
         layerManager = new LayerManager();
         layerManager.addLayer(worldRenderer);
@@ -137,7 +136,7 @@ public class GridGame extends ApplicationAdapter {
     @Override
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
-        world.tick(delta);
+        environment.tick(delta);
 
         updateCamera(delta);
         handleMenuToggle();

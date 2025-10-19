@@ -1,12 +1,15 @@
 package me.arcademadness.omni_dungeon.entities;
 
-import me.arcademadness.omni_dungeon.TileMap;
-import me.arcademadness.omni_dungeon.World;
+import com.badlogic.gdx.math.Rectangle;
 import me.arcademadness.omni_dungeon.attributes.*;
 import me.arcademadness.omni_dungeon.components.*;
 import me.arcademadness.omni_dungeon.controllers.AbstractController;
 import me.arcademadness.omni_dungeon.controllers.Controller;
-import me.arcademadness.omni_dungeon.visuals.Visual;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public abstract class BaseEntity implements Entity {
     protected Health health;
@@ -16,7 +19,7 @@ public abstract class BaseEntity implements Entity {
     protected Inventory inventory;
     protected Location location;
     protected Controller controller;
-    protected Visual visual;
+    protected List<EntityPart> entityParts = new ArrayList<>();
 
     protected float velocityX = 0;
     protected float velocityY = 0;
@@ -25,6 +28,8 @@ public abstract class BaseEntity implements Entity {
     protected Friction friction = new Friction(10);
     protected MaxSpeed maxSpeed = new MaxSpeed(5);
 
+    protected final Set<TileCoordinate> tileCoordinates = new HashSet<>();
+
     public BaseEntity(int startX, int startY) {
         this.location = new Location(startX, startY);
         this.health = new Health(100);
@@ -32,6 +37,11 @@ public abstract class BaseEntity implements Entity {
         this.mana = new Mana(50);
         this.actionPoints = new ActionPoints(10);
         this.inventory = new Inventory(27,18,9);
+    }
+
+    @Override
+    public Set<TileCoordinate> getOccupiedTiles() {
+        return tileCoordinates;
     }
 
     @Override
@@ -113,20 +123,8 @@ public abstract class BaseEntity implements Entity {
     }
 
     @Override
-    public Bounds getBounds() {
-        float x = location.getX() * TileMap.TILE_SIZE;
-        float y = location.getY() * TileMap.TILE_SIZE;
-        return new Bounds(x, y, TileMap.TILE_SIZE, TileMap.TILE_SIZE);
+    public List<EntityPart> getParts() {
+        return entityParts;
     }
-
-    @Override
-    public Visual getVisual() {
-        return visual;
-    }
-
-    public void setVisual(Visual visual) {
-        this.visual = visual;
-    }
-
 }
 

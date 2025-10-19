@@ -5,27 +5,28 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-import me.arcademadness.omni_dungeon.World;
+import me.arcademadness.omni_dungeon.environment.Environment;
 import me.arcademadness.omni_dungeon.TileMap;
 import me.arcademadness.omni_dungeon.entities.Entity;
 
 public class FogRenderer implements RenderLayer {
-    private final World world;
+    private final Environment environment;
     private final ShapeRenderer shape;
     public final VisibilityState[][] visibility;
     private int radiusTiles;
+
     private float unseenAlpha = 1.0f;
     private float seenAlpha = 0.05f;
 
     private Entity player;
 
-    public FogRenderer(World world, Entity player, ShapeRenderer shape, int radiusTiles) {
-        this.world = world;
+    public FogRenderer(Environment environment, Entity player, ShapeRenderer shape, int radiusTiles) {
+        this.environment = environment;
         this.shape = shape;
         this.radiusTiles = radiusTiles;
         this.player = player;
 
-        TileMap map = world.getMap();
+        TileMap map = environment.getMap();
         visibility = new VisibilityState[map.width][map.height];
         for (int x = 0; x < map.width; x++) {
             for (int y = 0; y < map.height; y++) {
@@ -38,7 +39,7 @@ public class FogRenderer implements RenderLayer {
         if (player == null) return;
         shape.setProjectionMatrix(camera.combined);
 
-        TileMap map = world.getMap();
+        TileMap map = environment.getMap();
         int playerTileX = (int) player.getLocation().getX();
         int playerTileY = (int) player.getLocation().getY();
 
@@ -87,7 +88,7 @@ public class FogRenderer implements RenderLayer {
     }
 
     public void revealAll() {
-        TileMap map = world.getMap();
+        TileMap map = environment.getMap();
         for (int x = 0; x < map.width; x++) {
             for (int y = 0; y < map.height; y++) {
                 visibility[x][y] = VisibilityState.VISIBLE;

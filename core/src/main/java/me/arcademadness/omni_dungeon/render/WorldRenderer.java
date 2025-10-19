@@ -3,17 +3,17 @@ package me.arcademadness.omni_dungeon.render;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-import me.arcademadness.omni_dungeon.World;
+import me.arcademadness.omni_dungeon.environment.Environment;
 import me.arcademadness.omni_dungeon.Tile;
 import me.arcademadness.omni_dungeon.TileMap;
 
 public class WorldRenderer implements RenderLayer{
-    private final World world;
+    private final Environment environment;
     private final ShapeRenderer shape;
     private final FogRenderer fog;
 
-    public WorldRenderer(World world, ShapeRenderer shape, FogRenderer fog) {
-        this.world = world;
+    public WorldRenderer(Environment environment, ShapeRenderer shape, FogRenderer fog) {
+        this.environment = environment;
         this.shape = shape;
         this.fog = fog;
     }
@@ -22,11 +22,11 @@ public class WorldRenderer implements RenderLayer{
         shape.setProjectionMatrix(camera.combined);
         shape.begin(ShapeRenderer.ShapeType.Filled);
 
-        TileMap map = world.getMap();
+        TileMap map = environment.getMap();
         for (int x = 0; x < map.width; x++) {
             for (int y = 0; y < map.height; y++) {
                 VisibilityState vis = fog.visibility[x][y];
-                if (vis == VisibilityState.UNSEEN) continue; // Skip completely
+                if (vis == VisibilityState.UNSEEN) continue;
 
                 Tile t = map.tiles[x][y];
                 if (t.walkable) shape.setColor(0.13f, 0.55f, 0.13f, 1f);

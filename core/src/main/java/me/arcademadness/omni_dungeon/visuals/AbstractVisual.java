@@ -2,7 +2,7 @@ package me.arcademadness.omni_dungeon.visuals;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import me.arcademadness.omni_dungeon.components.Bounds;
+import com.badlogic.gdx.math.Rectangle;
 
 public abstract class AbstractVisual implements Visual {
     protected Color color;
@@ -20,8 +20,8 @@ public abstract class AbstractVisual implements Visual {
     }
 
     @Override
-    public abstract void render(ShapeRenderer shape, Bounds bounds);
+    public abstract void render(ShapeRenderer shape, Rectangle bounds, float rotation);
 
     @Override
-    public abstract void renderSlice(ShapeRenderer shape, Bounds slice);
+    public abstract void renderSlice(ShapeRenderer shape, Rectangle bounds, float rotation);
 }

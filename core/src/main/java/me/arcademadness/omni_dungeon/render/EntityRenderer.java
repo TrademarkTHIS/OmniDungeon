@@ -2,22 +2,21 @@ package me.arcademadness.omni_dungeon.render;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-
-
-import me.arcademadness.omni_dungeon.World;
+import com.badlogic.gdx.math.Rectangle;
+import me.arcademadness.omni_dungeon.environment.Environment;
 import me.arcademadness.omni_dungeon.TileMap;
-import me.arcademadness.omni_dungeon.components.Bounds;
+import me.arcademadness.omni_dungeon.components.EntityPart;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.visuals.Visual;
 
 public class EntityRenderer implements RenderLayer {
-    private final World world;
+    private final Environment environment;
     private final FogRenderer fog;
     private final ShapeRenderer shape;
     private Entity player;
 
-    public EntityRenderer(World world, Entity player, FogRenderer fog, ShapeRenderer shape) {
-        this.world = world;
+    public EntityRenderer(Environment environment, Entity player, FogRenderer fog, ShapeRenderer shape) {
+        this.environment = environment;
         this.fog = fog;
         this.shape = shape;
         this.player = player;
@@ -30,53 +29,58 @@ public class EntityRenderer implements RenderLayer {
         shape.begin(ShapeRenderer.ShapeType.Filled);
 
         int radius = fog.getRadiusTiles();
-        int px = (int) player.getLocation().getX();
-        int py = (int) player.getLocation().getY();
+        int pxTile = (int) Math.floor(player.getLocation().getX());
+        int pyTile = (int) Math.floor(player.getLocation().getY());
 
-        int minTileX = Math.max(0, px - radius);
-        int maxTileX = Math.min(world.getMap().width - 1, px + radius);
-        int minTileY = Math.max(0, py - radius);
-        int maxTileY = Math.min(world.getMap().height - 1, py + radius);
+        int minTileX = Math.max(0, pxTile - radius);
+        int maxTileX = Math.min(environment.getMap().width - 1, pxTile + radius);
+        int minTileY = Math.max(0, pyTile - radius);
+        int maxTileY = Math.min(environment.getMap().height - 1, pyTile + radius);
 
-        for (Entity e : world.getEntities()) {
-            Bounds b = e.getBounds();
-            Visual v = e.getVisual();
-            if (v == null) continue;
+        float minPixelX = minTileX * TileMap.TILE_SIZE;
+        float maxPixelX = (maxTileX + 1) * TileMap.TILE_SIZE;
+        float minPixelY = minTileY * TileMap.TILE_SIZE;
+        float maxPixelY = (maxTileY + 1) * TileMap.TILE_SIZE;
 
-            float tileX = b.x / TileMap.TILE_SIZE;
-            float tileY = b.y / TileMap.TILE_SIZE;
-            float tileW = b.width / TileMap.TILE_SIZE;
-            float tileH = b.height / TileMap.TILE_SIZE;
+        for (Entity e : environment.getEntities()) {
+            for (EntityPart part : e.getParts()) {
+                Visual v = part.getVisual();
+                Rectangle r = part.getCollider();
 
-            float tileRight = tileX + tileW;
-            float tileTop   = tileY + tileH;
+                if (v == null || r == null) continue;
 
-            if (tileRight < minTileX || tileX > maxTileX + 1 ||
-                tileTop < minTileY || tileY > maxTileY + 1)
-                continue;
+                float px = r.x * TileMap.TILE_SIZE;
+                float py = r.y * TileMap.TILE_SIZE;
+                float right = px + r.width;
+                float top = py + r.height;
 
-            if (tileX >= minTileX && tileRight <= maxTileX + 1 &&
-                tileY >= minTileY && tileTop <= maxTileY + 1) {
-                v.render(shape, b);
-                continue;
+                if (right < minPixelX || px > maxPixelX ||
+                    top < minPixelY || py > maxPixelY) {
+                    continue;
+                }
+
+                if (px >= minPixelX && right <= maxPixelX &&
+                    py >= minPixelY && top <= maxPixelY) {
+                    Rectangle pixelRect = new Rectangle(px, py, r.width, r.height);
+                    v.render(shape, pixelRect, part.getWorldRotation());
+                    continue;
+                }
+
+                float clippedMinX = Math.max(px, minPixelX);
+                float clippedMinY = Math.max(py, minPixelY);
+                float clippedMaxX = Math.min(right, maxPixelX);
+                float clippedMaxY = Math.min(top, maxPixelY);
+
+                Rectangle slice = new Rectangle(
+                    clippedMinX,
+                    clippedMinY,
+                    clippedMaxX - clippedMinX,
+                    clippedMaxY - clippedMinY
+                );
+                v.renderSlice(shape, slice, part.getWorldRotation());
             }
-
-            float clippedMinX = Math.max(tileX, minTileX);
-            float clippedMinY = Math.max(tileY, minTileY);
-            float clippedMaxX = Math.min(tileRight, maxTileX + 1);
-            float clippedMaxY = Math.min(tileTop, maxTileY + 1);
-
-            Bounds slice = new Bounds(
-                clippedMinX * TileMap.TILE_SIZE,
-                clippedMinY * TileMap.TILE_SIZE,
-                (clippedMaxX - clippedMinX) * TileMap.TILE_SIZE,
-                (clippedMaxY - clippedMinY) * TileMap.TILE_SIZE
-            );
-
-            v.renderSlice(shape, slice);
         }
 
         shape.end();
     }
 }
-
