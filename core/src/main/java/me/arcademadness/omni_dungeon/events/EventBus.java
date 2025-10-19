@@ -1,24 +1,14 @@
 package me.arcademadness.omni_dungeon.events;
 
-import me.arcademadness.omni_dungeon.entities.PlayerEntity;
-
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public final class EventBus {
+public class EventBus {
 
     private final Map<Class<?>, List<Handler>> handlers = new HashMap<>();
 
-    private EventBus() {}
-
-    private static class Holder {
-        private static final EventBus INSTANCE = new EventBus();
-    }
-
-    public static EventBus getInstance() {
-        return Holder.INSTANCE;
+    public EventBus() {
+        // No singleton — each Environment or system can create its own bus
     }
 
     public void register(EventListener listener) {
@@ -30,12 +20,19 @@ public final class EventBus {
                         "@Subscribe method must have exactly one parameter: " + method
                     );
                 }
+
                 Class<?> eventType = params[0];
                 method.setAccessible(true);
 
                 handlers.computeIfAbsent(eventType, k -> new ArrayList<>())
                     .add(new Handler(listener, method));
             }
+        }
+    }
+
+    public void unregister(EventListener listener) {
+        for (List<Handler> handlerList : handlers.values()) {
+            handlerList.removeIf(h -> h.listener == listener);
         }
     }
 
@@ -52,8 +49,8 @@ public final class EventBus {
         }
 
         if (event instanceof BaseEvent) {
-            if (!event.isCanceled()) {
-                BaseEvent bEvent = (BaseEvent) event;
+            BaseEvent bEvent = (BaseEvent) event;
+            if (!bEvent.isCanceled()) {
                 bEvent.execute();
             }
         }

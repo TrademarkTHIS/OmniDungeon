@@ -4,6 +4,7 @@ import me.arcademadness.omni_dungeon.TileMap;
 import me.arcademadness.omni_dungeon.actions.Action;
 import me.arcademadness.omni_dungeon.controllers.ControlIntent;
 import me.arcademadness.omni_dungeon.entities.Entity;
+import me.arcademadness.omni_dungeon.events.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,17 +13,23 @@ import java.util.Optional;
 public class Environment {
     private final TileMap map;
     private final List<Entity> entities = new ArrayList<>();
+    private final EventBus eventBus;
 
     private final CollisionSystem collisionSystem;
 
     public Environment(TileMap map) {
         this.map = map;
         this.collisionSystem = new CollisionSystem(this);
+        this.eventBus = new EventBus();
     }
 
     public TileMap getMap() { return map; }
     public List<Entity> getEntities() { return entities; }
     public CollisionSystem getCollisionSystem() { return collisionSystem; }
+
+    public EventBus getEventBus() {
+        return eventBus;
+    }
 
     public void addEntity(Entity e) {
         entities.add(e);

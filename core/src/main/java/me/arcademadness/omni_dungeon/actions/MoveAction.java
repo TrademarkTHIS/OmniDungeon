@@ -39,6 +39,6 @@ public class MoveAction implements Action {
     @Override
     public void execute(Environment environment, Entity entity, float delta) {
         EntityMoveEvent event = new EntityMoveEvent(environment, entity, direction, delta);
-        EventBus.getInstance().post(event);
+        environment.getEventBus().post(event);
     }
 }
