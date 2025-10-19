@@ -4,6 +4,7 @@ import me.arcademadness.omni_dungeon.TileMap;
 import me.arcademadness.omni_dungeon.actions.Action;
 import me.arcademadness.omni_dungeon.controllers.ControlIntent;
 import me.arcademadness.omni_dungeon.entities.Entity;
+import me.arcademadness.omni_dungeon.environment.services.CollisionSystem;
 import me.arcademadness.omni_dungeon.events.EventBus;
 
 import java.util.ArrayList;

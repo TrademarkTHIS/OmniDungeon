@@ -2,7 +2,7 @@ package me.arcademadness.omni_dungeon.events.entity;
 
 import com.badlogic.gdx.math.Vector2;
 import me.arcademadness.omni_dungeon.environment.Environment;
-import me.arcademadness.omni_dungeon.environment.CollisionSystem;
+import me.arcademadness.omni_dungeon.environment.services.CollisionSystem;
 import me.arcademadness.omni_dungeon.entities.Entity;
 
 public class EntityMoveEvent extends EntityEvent {

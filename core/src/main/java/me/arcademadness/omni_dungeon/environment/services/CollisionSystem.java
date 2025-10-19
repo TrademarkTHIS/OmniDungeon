@@ -1,10 +1,11 @@
-package me.arcademadness.omni_dungeon.environment;
+package me.arcademadness.omni_dungeon.environment.services;
 
 import com.badlogic.gdx.math.Rectangle;
 import me.arcademadness.omni_dungeon.TileMap;
 import me.arcademadness.omni_dungeon.components.EntityPart;
 import me.arcademadness.omni_dungeon.components.TileCoordinate;
 import me.arcademadness.omni_dungeon.entities.Entity;
+import me.arcademadness.omni_dungeon.environment.Environment;
 
 import java.util.HashSet;
 import java.util.Set;
