@@ -2,11 +2,11 @@ package me.arcademadness.omni_dungeon.events.entity;
 
 import com.badlogic.gdx.math.Vector2;
 import me.arcademadness.omni_dungeon.environment.Environment;
-import me.arcademadness.omni_dungeon.environment.services.CollisionSystem;
+import me.arcademadness.omni_dungeon.environment.services.CollisionService;
 import me.arcademadness.omni_dungeon.entities.Entity;
 
 public class EntityMoveEvent extends EntityEvent {
-    private final CollisionSystem collision;
+    private final CollisionService collision;
     private final Vector2 direction;
     private final float delta;
 
@@ -14,7 +14,7 @@ public class EntityMoveEvent extends EntityEvent {
         super(entity);
         this.direction = direction;
         this.delta = delta;
-        this.collision = new CollisionSystem(environment);
+        this.collision = new CollisionService(environment);
     }
 
     @Override

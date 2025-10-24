@@ -10,12 +10,12 @@ import me.arcademadness.omni_dungeon.environment.Environment;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CollisionSystem {
+public class CollisionService {
 
     private final TileMap map;
     private static final float EPS = 0.001f;
 
-    public CollisionSystem(Environment environment) {
+    public CollisionService(Environment environment) {
         this.map = environment.getMap();
     }
 

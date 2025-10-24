@@ -4,7 +4,7 @@ import me.arcademadness.omni_dungeon.TileMap;
 import me.arcademadness.omni_dungeon.actions.Action;
 import me.arcademadness.omni_dungeon.controllers.ControlIntent;
 import me.arcademadness.omni_dungeon.entities.Entity;
-import me.arcademadness.omni_dungeon.environment.services.CollisionSystem;
+import me.arcademadness.omni_dungeon.environment.services.CollisionService;
 import me.arcademadness.omni_dungeon.events.EventBus;
 
 import java.util.ArrayList;
@@ -16,17 +16,17 @@ public class Environment {
     private final List<Entity> entities = new ArrayList<>();
     private final EventBus eventBus;
 
-    private final CollisionSystem collisionSystem;
+    private final CollisionService collisionService;
 
     public Environment(TileMap map) {
         this.map = map;
-        this.collisionSystem = new CollisionSystem(this);
+        this.collisionService = new CollisionService(this);
         this.eventBus = new EventBus();
     }
 
     public TileMap getMap() { return map; }
     public List<Entity> getEntities() { return entities; }
-    public CollisionSystem getCollisionSystem() { return collisionSystem; }
+    public CollisionService getCollisionSystem() { return collisionService; }
 
     public EventBus getEventBus() {
         return eventBus;
@@ -34,7 +34,7 @@ public class Environment {
 
     public void addEntity(Entity e) {
         entities.add(e);
-        collisionSystem.updateEntityPartsInTiles(e);
+        collisionService.updateEntityPartsInTiles(e);
     }
 
     public void tick(float delta) {
