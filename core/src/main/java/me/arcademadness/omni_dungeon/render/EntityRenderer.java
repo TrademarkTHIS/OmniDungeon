@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import me.arcademadness.omni_dungeon.environment.Environment;
-import me.arcademadness.omni_dungeon.TileMap;
+import me.arcademadness.omni_dungeon.environment.EnvironmentConfig;
 import me.arcademadness.omni_dungeon.components.EntityPart;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.visuals.Visual;
@@ -37,10 +37,12 @@ public class EntityRenderer implements RenderLayer {
         int minTileY = Math.max(0, pyTile - radius);
         int maxTileY = Math.min(environment.getMap().height - 1, pyTile + radius);
 
-        float minPixelX = minTileX * TileMap.TILE_SIZE;
-        float maxPixelX = (maxTileX + 1) * TileMap.TILE_SIZE;
-        float minPixelY = minTileY * TileMap.TILE_SIZE;
-        float maxPixelY = (maxTileY + 1) * TileMap.TILE_SIZE;
+        int tileSize = EnvironmentConfig.get().getTileSize();
+
+        float minPixelX = minTileX * tileSize;
+        float maxPixelX = (maxTileX + 1) * tileSize;
+        float minPixelY = minTileY * tileSize;
+        float maxPixelY = (maxTileY + 1) * tileSize;
 
         for (Entity e : environment.getEntities()) {
             for (EntityPart part : e.getParts()) {
@@ -49,8 +51,8 @@ public class EntityRenderer implements RenderLayer {
 
                 if (v == null || r == null) continue;
 
-                float px = r.x * TileMap.TILE_SIZE;
-                float py = r.y * TileMap.TILE_SIZE;
+                float px = r.x * tileSize;
+                float py = r.y * tileSize;
                 float right = px + r.width;
                 float top = py + r.height;
 

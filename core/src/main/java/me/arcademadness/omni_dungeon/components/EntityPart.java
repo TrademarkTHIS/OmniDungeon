@@ -2,7 +2,6 @@ package me.arcademadness.omni_dungeon.components;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import me.arcademadness.omni_dungeon.TileMap;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.visuals.Visual;
 import org.jetbrains.annotations.Nullable;

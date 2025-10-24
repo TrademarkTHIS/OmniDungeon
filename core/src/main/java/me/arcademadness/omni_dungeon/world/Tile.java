@@ -1,4 +1,4 @@
-package me.arcademadness.omni_dungeon;
+package me.arcademadness.omni_dungeon.world;
 
 import me.arcademadness.omni_dungeon.components.EntityPart;
 

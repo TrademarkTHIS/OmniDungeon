@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import me.arcademadness.omni_dungeon.environment.Environment;
-import me.arcademadness.omni_dungeon.Tile;
-import me.arcademadness.omni_dungeon.TileMap;
+import me.arcademadness.omni_dungeon.world.Tile;
+import me.arcademadness.omni_dungeon.world.TileMap;
 
 public class WorldRenderer implements RenderLayer{
     private final Environment environment;
@@ -23,6 +23,7 @@ public class WorldRenderer implements RenderLayer{
         shape.begin(ShapeRenderer.ShapeType.Filled);
 
         TileMap map = environment.getMap();
+        int tileSize = map.getTileSize();
         for (int x = 0; x < map.width; x++) {
             for (int y = 0; y < map.height; y++) {
                 VisibilityState vis = fog.visibility[x][y];
@@ -34,7 +35,7 @@ public class WorldRenderer implements RenderLayer{
 
                 if (vis == VisibilityState.SEEN) shape.setColor(shape.getColor().r * 0.5f, shape.getColor().g * 0.5f, shape.getColor().b * 0.5f, 1f);
 
-                shape.rect(x * TileMap.TILE_SIZE, y * TileMap.TILE_SIZE, TileMap.TILE_SIZE, TileMap.TILE_SIZE);
+                shape.rect(x * tileSize, y * tileSize, tileSize, tileSize);
             }
         }
 

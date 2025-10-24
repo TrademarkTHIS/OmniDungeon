@@ -16,8 +16,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import me.arcademadness.omni_dungeon.controllers.*;
 import me.arcademadness.omni_dungeon.entities.*;
 import me.arcademadness.omni_dungeon.environment.Environment;
+import me.arcademadness.omni_dungeon.environment.EnvironmentConfig;
 import me.arcademadness.omni_dungeon.render.*;
 import me.arcademadness.omni_dungeon.ui.*;
+import me.arcademadness.omni_dungeon.world.TileMap;
 
 public class GridGame extends ApplicationAdapter {
 
@@ -65,6 +67,7 @@ public class GridGame extends ApplicationAdapter {
     }
 
     private void setupWorld() {
+        EnvironmentConfig.initialize(32);
         TileMap map = new TileMap(40, 30);
         environment = new Environment(map);
 
@@ -82,10 +85,11 @@ public class GridGame extends ApplicationAdapter {
 
 
     private void setupCameras() {
+        TileMap map = environment.getMap();
         worldCamera = new OrthographicCamera();
         worldViewport = new ExtendViewport(
-            environment.getMap().width * TileMap.TILE_SIZE,
-            environment.getMap().height * TileMap.TILE_SIZE,
+            map.width * map.getTileSize(),
+            map.height * map.getTileSize(),
             worldCamera
         );
 
@@ -155,18 +159,20 @@ public class GridGame extends ApplicationAdapter {
     }
 
     private void updateCamera(float delta) {
+        TileMap map = environment.getMap();
         cameraZoom += (targetZoom - cameraZoom) * ZOOM_LERP;
         worldCamera.zoom = cameraZoom;
 
-        float px = player.getLocation().getX() * TileMap.TILE_SIZE + TileMap.TILE_SIZE / 2f;
-        float py = player.getLocation().getY() * TileMap.TILE_SIZE + TileMap.TILE_SIZE / 2f;
+        float px = player.getLocation().getX() * (map.getTileSize()*2) / 2f;
+        float py = player.getLocation().getY() * (map.getTileSize()*2) / 2f;
         worldCamera.position.lerp(new Vector3(px, py, 0), CAMERA_LERP);
         worldCamera.update();
     }
 
     private void centerCameraOnPlayer() {
-        float px = player.getLocation().getX() * TileMap.TILE_SIZE + TileMap.TILE_SIZE / 2f;
-        float py = player.getLocation().getY() * TileMap.TILE_SIZE + TileMap.TILE_SIZE / 2f;
+        TileMap map = environment.getMap();
+        float px = player.getLocation().getX() * (map.getTileSize()*2) / 2f;
+        float py = player.getLocation().getY() * (map.getTileSize()*2) / 2f;
         worldCamera.position.set(px, py, 0);
         worldCamera.update();
     }

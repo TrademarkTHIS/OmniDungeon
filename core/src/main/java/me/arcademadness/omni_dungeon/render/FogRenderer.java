@@ -6,7 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import me.arcademadness.omni_dungeon.environment.Environment;
-import me.arcademadness.omni_dungeon.TileMap;
+import me.arcademadness.omni_dungeon.environment.EnvironmentConfig;
+import me.arcademadness.omni_dungeon.world.TileMap;
 import me.arcademadness.omni_dungeon.entities.Entity;
 
 public class FogRenderer implements RenderLayer {
@@ -36,6 +37,8 @@ public class FogRenderer implements RenderLayer {
     }
 
     public void render(Camera camera) {
+        int tileSize = EnvironmentConfig.get().getTileSize();
+
         if (player == null) return;
         shape.setProjectionMatrix(camera.combined);
 
@@ -73,10 +76,10 @@ public class FogRenderer implements RenderLayer {
                 VisibilityState state = visibility[x][y];
                 if (state == VisibilityState.UNSEEN) {
                     shape.setColor(0, 0, 0, unseenAlpha);
-                    shape.rect(x * TileMap.TILE_SIZE, y * TileMap.TILE_SIZE, TileMap.TILE_SIZE, TileMap.TILE_SIZE);
+                    shape.rect(x * tileSize, y * tileSize, tileSize, tileSize);
                 } else if (state == VisibilityState.SEEN) {
                     shape.setColor(0, 0, 0, seenAlpha);
-                    shape.rect(x * TileMap.TILE_SIZE, y * TileMap.TILE_SIZE, TileMap.TILE_SIZE, TileMap.TILE_SIZE);
+                    shape.rect(x * tileSize, y * tileSize, tileSize, tileSize);
                 }
             }
         }

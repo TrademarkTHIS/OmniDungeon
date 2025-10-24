@@ -2,7 +2,7 @@ package me.arcademadness.omni_dungeon.entities;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
-import me.arcademadness.omni_dungeon.TileMap;
+import me.arcademadness.omni_dungeon.environment.EnvironmentConfig;
 import me.arcademadness.omni_dungeon.components.EntityPart;
 import me.arcademadness.omni_dungeon.items.Sword;
 import me.arcademadness.omni_dungeon.visuals.ShapeVisual;
@@ -19,8 +19,10 @@ public class PlayerEntity extends BaseEntity {
         this.acceleration = new Acceleration(50);
         this.friction = new Friction(10);
 
+        int tileSize = EnvironmentConfig.get().getTileSize();
+
         ShapeVisual bodyVisual = new ShapeVisual(Color.CYAN);
-        Rectangle bodyCollider = new Rectangle(0, 0, TileMap.TILE_SIZE, TileMap.TILE_SIZE);
+        Rectangle bodyCollider = new Rectangle(0, 0, tileSize, tileSize);
         EntityPart bodyPart = new EntityPart(this, bodyVisual, bodyCollider);
 
         this.getParts().add(bodyPart);

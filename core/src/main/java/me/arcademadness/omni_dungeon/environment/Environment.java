@@ -1,6 +1,6 @@
 package me.arcademadness.omni_dungeon.environment;
 
-import me.arcademadness.omni_dungeon.TileMap;
+import me.arcademadness.omni_dungeon.world.TileMap;
 import me.arcademadness.omni_dungeon.actions.Action;
 import me.arcademadness.omni_dungeon.controllers.ControlIntent;
 import me.arcademadness.omni_dungeon.entities.Entity;
