@@ -5,6 +5,7 @@ import me.arcademadness.omni_dungeon.actions.Action;
 import me.arcademadness.omni_dungeon.controllers.ControlIntent;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.environment.services.CollisionService;
+import me.arcademadness.omni_dungeon.environment.services.MovementService;
 import me.arcademadness.omni_dungeon.events.EventBus;
 
 import java.util.ArrayList;
@@ -17,16 +18,19 @@ public class Environment {
     private final EventBus eventBus;
 
     private final CollisionService collisionService;
+    private final MovementService movementService;
 
     public Environment(TileMap map) {
         this.map = map;
         this.collisionService = new CollisionService(this);
+        this.movementService = new MovementService(this);
         this.eventBus = new EventBus();
     }
 
     public TileMap getMap() { return map; }
     public List<Entity> getEntities() { return entities; }
     public CollisionService getCollisionSystem() { return collisionService; }
+    public MovementService getMovementService() { return movementService; }
 
     public EventBus getEventBus() {
         return eventBus;
