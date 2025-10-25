@@ -1,4 +1,4 @@
-package me.arcademadness.omni_dungeon.ui;
+package me.arcademadness.omni_dungeon.ui.menu;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 

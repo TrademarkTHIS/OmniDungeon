@@ -9,16 +9,17 @@ public final class EnvironmentConfig {
         this.tileSize = tileSize;
     }
 
-    public static void initialize(int tileSize) {
+    public static EnvironmentConfig initialize(int tileSize) {
         if (instance != null) {
             throw new IllegalStateException("EnvironmentConfig has already been initialized");
         }
         instance = new EnvironmentConfig(tileSize);
+        return instance;
     }
 
     public static EnvironmentConfig get() {
         if (instance == null) {
-            throw new IllegalStateException("EnvironmentConfig not initialized");
+            return initialize(32); // Default to 32
         }
         return instance;
     }

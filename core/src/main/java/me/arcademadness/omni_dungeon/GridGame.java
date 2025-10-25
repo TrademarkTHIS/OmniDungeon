@@ -18,7 +18,8 @@ import me.arcademadness.omni_dungeon.entities.*;
 import me.arcademadness.omni_dungeon.environment.Environment;
 import me.arcademadness.omni_dungeon.environment.EnvironmentConfig;
 import me.arcademadness.omni_dungeon.render.*;
-import me.arcademadness.omni_dungeon.ui.*;
+import me.arcademadness.omni_dungeon.ui.menu.InventoryMenu;
+import me.arcademadness.omni_dungeon.ui.menu.MenuManager;
 import me.arcademadness.omni_dungeon.world.TileMap;
 
 public class GridGame extends ApplicationAdapter {
