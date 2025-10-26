@@ -10,8 +10,8 @@ import me.arcademadness.omni_dungeon.visuals.ShapeVisual;
 
 public class RedMobEntity extends MobEntity {
 
-    public RedMobEntity(int x, int y) {
-        super(x, y);
+    public RedMobEntity() {
+        super();
         this.maxSpeed = new MaxSpeed(50);
         this.acceleration = new Acceleration(50);
 
@@ -21,6 +21,6 @@ public class RedMobEntity extends MobEntity {
         Rectangle collider = new Rectangle(0, 0, tileSize, tileSize);
         EntityPart part = new EntityPart(this, visual, collider);
 
-        this.getParts().add(part);
+        setRootPart(part);
     }
 }

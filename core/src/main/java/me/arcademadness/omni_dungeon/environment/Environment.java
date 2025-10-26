@@ -1,18 +1,22 @@
 package me.arcademadness.omni_dungeon.environment;
 
-import me.arcademadness.omni_dungeon.world.TileMap;
 import me.arcademadness.omni_dungeon.actions.Action;
+import me.arcademadness.omni_dungeon.components.Location;
 import me.arcademadness.omni_dungeon.controllers.ControlIntent;
+import me.arcademadness.omni_dungeon.events.entity.EntitySpawnEvent;
+import me.arcademadness.omni_dungeon.world.TileMap;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.environment.services.CollisionService;
 import me.arcademadness.omni_dungeon.environment.services.MovementService;
 import me.arcademadness.omni_dungeon.events.EventBus;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class Environment {
+public class Environment implements EnvironmentView {
+
     private final TileMap map;
     private final List<Entity> entities = new ArrayList<>();
     private final EventBus eventBus;
@@ -27,13 +31,15 @@ public class Environment {
         this.eventBus = new EventBus();
     }
 
-    public TileMap getMap() { return map; }
-    public List<Entity> getEntities() { return entities; }
-    public CollisionService getCollisionSystem() { return collisionService; }
-    public MovementService getMovementService() { return movementService; }
+    @Override public TileMap getMap() { return map; }
+    @Override public List<Entity> getEntities() { return Collections.unmodifiableList(entities); }
+    @Override public CollisionService getCollisionService() { return collisionService; }
+    @Override public MovementService getMovementService() { return movementService; }
+    @Override public EventBus getEventBus() { return eventBus; }
 
-    public EventBus getEventBus() {
-        return eventBus;
+    @Override
+    public void spawn(Entity entity, Location location) {
+        eventBus.post(new EntitySpawnEvent(entity, location, this));
     }
 
     public void addEntity(Entity e) {

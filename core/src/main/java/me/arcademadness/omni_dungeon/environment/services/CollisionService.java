@@ -10,6 +10,13 @@ import me.arcademadness.omni_dungeon.environment.Environment;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Handles entity–tile and entity–entity collision resolution.
+ * <p>
+ * This version is fully hierarchy-aware: every {@link EntityPart}, including nested
+ * child parts, is considered in collision and tile occupancy.
+ * </p>
+ */
 public class CollisionService {
 
     private final TileMap map;
@@ -19,24 +26,45 @@ public class CollisionService {
         this.map = environment.getMap();
     }
 
+    /**
+     * Moves the entity along one axis and resolves collisions against tiles and other entities.
+     *
+     * @param entity         The entity being moved.
+     * @param xTiles         The current X position in tiles.
+     * @param yTiles         The current Y position in tiles.
+     * @param deltaMoveTiles The attempted delta movement in tiles.
+     * @param horizontal     True if moving horizontally, false if vertically.
+     * @return The adjusted final position along that axis in tile coordinates.
+     */
     public float moveAxis(Entity entity, float xTiles, float yTiles, float deltaMoveTiles, boolean horizontal) {
         float start = horizontal ? xTiles : yTiles;
         float proposed = start + deltaMoveTiles;
+        final float[] adjustedResult = { proposed };
 
-        for (EntityPart part : entity.getParts()) {
+        entity.getRootPart().forEachPart(part -> {
             Rectangle collider = part.getCollider();
-            if (collider == null) continue;
+            if (collider == null) return;
 
-            float partX = horizontal ? (proposed * map.getTileSize() + part.getOffset().x) : (xTiles * map.getTileSize() + part.getOffset().x);
-            float partY = horizontal ? (yTiles * map.getTileSize() + part.getOffset().y) : (proposed * map.getTileSize() + part.getOffset().y);
+            float baseWorldX = part.getWorldX();
+            float baseWorldY = part.getWorldY();
+
+            float partX = horizontal
+                ? baseWorldX + (adjustedResult[0] - xTiles) * map.getTileSize()
+                : baseWorldX;
+            float partY = horizontal
+                ? baseWorldY
+                : baseWorldY + (adjustedResult[0] - yTiles) * map.getTileSize();
 
             Rectangle predicted = new Rectangle(partX, partY, collider.width, collider.height);
 
-            proposed = resolveTileCollision(predicted, horizontal, start, proposed, deltaMoveTiles);
-            proposed = resolveEntityCollision(entity, predicted, horizontal, start, proposed);
-        }
+            float adjusted = adjustedResult[0];
+            adjusted = resolveTileCollision(predicted, horizontal, start, adjusted, deltaMoveTiles);
+            adjusted = resolveEntityCollision(entity, predicted, horizontal, start, adjusted);
 
-        return proposed;
+            adjustedResult[0] = adjusted;
+        });
+
+        return adjustedResult[0];
     }
 
     private float resolveTileCollision(Rectangle predicted, boolean horizontal, float startTiles, float proposedTiles, float deltaMoveTiles) {
@@ -102,8 +130,8 @@ public class CollisionService {
             if (otherCollider == null) continue;
 
             Rectangle otherRect = new Rectangle(otherCollider);
-            float otherX = otherPart.getWorldX() * map.getTileSize();
-            float otherY = otherPart.getWorldY() * map.getTileSize();
+            float otherX = otherPart.getWorldX();
+            float otherY = otherPart.getWorldY();
             otherRect.setPosition(otherX, otherY);
 
             if (predicted.overlaps(otherRect)) {
@@ -143,17 +171,18 @@ public class CollisionService {
         Set<TileCoordinate> oldTiles = entity.getOccupiedTiles();
         Set<TileCoordinate> newTiles = new HashSet<>();
 
-        for (EntityPart part : entity.getParts()) {
+        entity.getRootPart().forEachPart(part -> {
             Rectangle collider = part.getCollider();
-            if (collider == null) continue;
+            if (collider == null) return;
 
-            float worldX = entity.getLocation().x * map.getTileSize() + part.getOffset().x;
-            float worldY = entity.getLocation().y * map.getTileSize() + part.getOffset().y;
+
+            float worldX = part.getWorldX();
+            float worldY = part.getWorldY();
 
             int startX = Math.max(0, (int) (worldX / map.getTileSize()));
-            int endX = Math.min(map.width - 1, (int) ((worldX + collider.width - EPS) / map.getTileSize()));
+            int endX   = Math.min(map.width - 1, (int) ((worldX + collider.width - EPS) / map.getTileSize()));
             int startY = Math.max(0, (int) (worldY / map.getTileSize()));
-            int endY = Math.min(map.height - 1, (int) ((worldY + collider.height - EPS) / map.getTileSize()));
+            int endY   = Math.min(map.height - 1, (int) ((worldY + collider.height - EPS) / map.getTileSize()));
 
             for (int tx = startX; tx <= endX; tx++) {
                 for (int ty = startY; ty <= endY; ty++) {
@@ -162,13 +191,13 @@ public class CollisionService {
                     map.tiles[tx][ty].parts.add(part);
                 }
             }
-        }
+        });
 
         for (TileCoordinate old : oldTiles) {
-            if (!newTiles.contains(old)) {
-                if (old.x >= 0 && old.x < map.width && old.y >= 0 && old.y < map.height) {
-                    map.tiles[old.x][old.y].parts.removeIf(p -> p.getOwner() == entity);
-                }
+            if (!newTiles.contains(old)
+                && old.x >= 0 && old.x < map.width
+                && old.y >= 0 && old.y < map.height) {
+                map.tiles[old.x][old.y].parts.removeIf(p -> p.getOwner() == entity);
             }
         }
 
@@ -176,4 +205,3 @@ public class CollisionService {
         oldTiles.addAll(newTiles);
     }
 }
-

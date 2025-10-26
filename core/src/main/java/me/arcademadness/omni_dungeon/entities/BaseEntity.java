@@ -29,8 +29,8 @@ public abstract class BaseEntity implements Entity {
 
     protected final Set<TileCoordinate> tileCoordinates = new HashSet<>();
 
-    public BaseEntity(int startX, int startY) {
-        this.location = new Location(startX, startY);
+    public BaseEntity() {
+        this.location = new Location();
         this.health = new Health(100);
         this.armor = new Armor(0);
         this.mana = new Mana(50);
@@ -116,9 +116,20 @@ public abstract class BaseEntity implements Entity {
         return maxSpeed;
     }
 
+    protected EntityPart rootPart;
+
     @Override
-    public List<EntityPart> getParts() {
-        return entityParts;
+    public EntityPart getRootPart() {
+        return rootPart;
     }
+
+    @Override
+    public void setRootPart(EntityPart rootPart) {
+        this.rootPart = rootPart;
+        if (!entityParts.contains(rootPart)) {
+            entityParts.add(rootPart);
+        }
+    }
+
 }
 

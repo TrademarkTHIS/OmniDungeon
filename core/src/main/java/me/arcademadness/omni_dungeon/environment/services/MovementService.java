@@ -3,14 +3,15 @@ package me.arcademadness.omni_dungeon.environment.services;
 import com.badlogic.gdx.math.Vector2;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.environment.Environment;
+import me.arcademadness.omni_dungeon.environment.EnvironmentView;
 
 public class MovementService {
-    private final Environment environment;
+    private final EnvironmentView environment;
     private final CollisionService collision;
 
-    public MovementService(Environment environment) {
+    public MovementService(EnvironmentView environment) {
         this.environment = environment;
-        this.collision = environment.getCollisionSystem();
+        this.collision = environment.getCollisionService();
     }
 
     public void move(Entity entity, Vector2 direction, float delta) {

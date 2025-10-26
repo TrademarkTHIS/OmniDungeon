@@ -7,11 +7,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import me.arcademadness.omni_dungeon.environment.Environment;
 import me.arcademadness.omni_dungeon.environment.EnvironmentConfig;
+import me.arcademadness.omni_dungeon.environment.EnvironmentView;
 import me.arcademadness.omni_dungeon.world.TileMap;
 import me.arcademadness.omni_dungeon.entities.Entity;
 
 public class FogRenderer implements RenderLayer {
-    private final Environment environment;
+    private final EnvironmentView environment;
     private final ShapeRenderer shape;
     public final VisibilityState[][] visibility;
     private int radiusTiles;
@@ -21,7 +22,7 @@ public class FogRenderer implements RenderLayer {
 
     private Entity player;
 
-    public FogRenderer(Environment environment, Entity player, ShapeRenderer shape, int radiusTiles) {
+    public FogRenderer(EnvironmentView environment, Entity player, ShapeRenderer shape, int radiusTiles) {
         this.environment = environment;
         this.shape = shape;
         this.radiusTiles = radiusTiles;

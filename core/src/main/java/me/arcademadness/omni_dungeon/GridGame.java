@@ -13,10 +13,12 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import me.arcademadness.omni_dungeon.components.Location;
 import me.arcademadness.omni_dungeon.controllers.*;
 import me.arcademadness.omni_dungeon.entities.*;
 import me.arcademadness.omni_dungeon.environment.Environment;
 import me.arcademadness.omni_dungeon.environment.EnvironmentConfig;
+import me.arcademadness.omni_dungeon.environment.EnvironmentView;
 import me.arcademadness.omni_dungeon.render.*;
 import me.arcademadness.omni_dungeon.ui.menu.InventoryMenu;
 import me.arcademadness.omni_dungeon.ui.menu.MenuManager;
@@ -40,6 +42,7 @@ public class GridGame extends ApplicationAdapter {
     private WorldRenderer worldRenderer;
     private EntityRenderer entityRenderer;
     private FogRenderer fogRenderer;
+    private WeaponSpreadRenderer weaponSpreadRenderer;
 
     // UI
     private MenuManager menuManager;
@@ -73,15 +76,15 @@ public class GridGame extends ApplicationAdapter {
         environment = new Environment(map);
 
         // Player
-        player = new PlayerEntity(map.width / 2, map.height / 2);
+        player = new PlayerEntity();
         playerController = new PlayerController();
         player.setController(playerController);
-        environment.addEntity(player);
+        environment.spawn(player, new Location(map.width / 2, map.height / 2));
 
         // Example mob
-        RedMobEntity redMob = new RedMobEntity(3, 3);
+        RedMobEntity redMob = new RedMobEntity();
         redMob.setController(new MobController(redMob));
-        environment.addEntity(redMob);
+        environment.spawn(redMob, new Location(3,3));
     }
 
 
@@ -103,11 +106,14 @@ public class GridGame extends ApplicationAdapter {
         fogRenderer = new FogRenderer(environment, player, shape, 12);
         worldRenderer = new WorldRenderer(environment, shape, fogRenderer);
         entityRenderer = new EntityRenderer(environment, player, fogRenderer, shape);
+        weaponSpreadRenderer = new WeaponSpreadRenderer(player, shape);
+
 
         layerManager = new LayerManager();
         layerManager.addLayer(worldRenderer);
         layerManager.addLayer(entityRenderer);
         layerManager.addLayer(fogRenderer);
+        layerManager.addLayer(weaponSpreadRenderer);
     }
 
     private void setupUI() {

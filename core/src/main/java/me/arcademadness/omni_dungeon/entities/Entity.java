@@ -34,7 +34,9 @@ public interface Entity {
     // Components
     Inventory getInventory();
     Location getLocation();
-    List<EntityPart> getParts();
+    EntityPart getRootPart();
+    void setRootPart(EntityPart rootPart);
+
 
     Controller getController();
     void setController(Controller controller);

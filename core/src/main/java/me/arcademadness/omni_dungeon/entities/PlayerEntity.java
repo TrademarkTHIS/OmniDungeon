@@ -10,8 +10,8 @@ import me.arcademadness.omni_dungeon.attributes.*;
 
 public class PlayerEntity extends BaseEntity {
 
-    public PlayerEntity(int x, int y) {
-        super(x, y);
+    public PlayerEntity() {
+        super();
 
         this.health = new Health(150);
         this.armor = new Armor(5);
@@ -25,11 +25,10 @@ public class PlayerEntity extends BaseEntity {
         Rectangle bodyCollider = new Rectangle(0, 0, tileSize, tileSize);
         EntityPart bodyPart = new EntityPart(this, bodyVisual, bodyCollider);
 
-        this.getParts().add(bodyPart);
+        setRootPart(bodyPart);
 
         for (int i = 0; i < 7; i++) {
             this.inventory.addItem(new Sword());
         }
     }
 }
-

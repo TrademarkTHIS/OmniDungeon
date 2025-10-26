@@ -4,15 +4,16 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import me.arcademadness.omni_dungeon.environment.Environment;
+import me.arcademadness.omni_dungeon.environment.EnvironmentView;
 import me.arcademadness.omni_dungeon.world.Tile;
 import me.arcademadness.omni_dungeon.world.TileMap;
 
 public class WorldRenderer implements RenderLayer{
-    private final Environment environment;
+    private final EnvironmentView environment;
     private final ShapeRenderer shape;
     private final FogRenderer fog;
 
-    public WorldRenderer(Environment environment, ShapeRenderer shape, FogRenderer fog) {
+    public WorldRenderer(EnvironmentView environment, ShapeRenderer shape, FogRenderer fog) {
         this.environment = environment;
         this.shape = shape;
         this.fog = fog;

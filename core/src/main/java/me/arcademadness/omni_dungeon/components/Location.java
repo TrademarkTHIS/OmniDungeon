@@ -4,8 +4,11 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Location extends Vector2 {
     public Location(float x, float y) {
-        this.x = x;
-        this.y = y;
+        super(x, y);
+    }
+
+    public Location() {
+        super(0,0);
     }
 
     public float getX() { return x; }
@@ -15,4 +18,13 @@ public class Location extends Vector2 {
         this.x += dx;
         this.y += dy;
     }
+
+    public int tileX() { return (int) Math.floor(x); }
+    public int tileY() { return (int) Math.floor(y); }
+
+    public void set(Location loc) {
+        this.x = loc.x;
+        this.y = loc.y;
+    }
 }
+
