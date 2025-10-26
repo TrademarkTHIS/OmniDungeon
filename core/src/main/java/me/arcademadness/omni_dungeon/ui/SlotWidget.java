@@ -1,4 +1,4 @@
-package me.arcademadness.omni_dungeon.ui.menu;
+package me.arcademadness.omni_dungeon.ui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
