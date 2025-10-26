@@ -2,7 +2,6 @@ package me.arcademadness.omni_dungeon.environment.services;
 
 import com.badlogic.gdx.math.Vector2;
 import me.arcademadness.omni_dungeon.entities.Entity;
-import me.arcademadness.omni_dungeon.environment.Environment;
 import me.arcademadness.omni_dungeon.environment.EnvironmentView;
 
 public class MovementService {
@@ -25,8 +24,7 @@ public class MovementService {
 
         float maxSpeed = entity.getMaxSpeed().getFinalValue();
         float speedSq = vx * vx + vy * vy;
-        float maxSpeedSq = maxSpeed * maxSpeed;
-        if (speedSq > maxSpeedSq) {
+        if (speedSq > maxSpeed * maxSpeed) {
             float scale = maxSpeed / (float) Math.sqrt(speedSq);
             vx *= scale;
             vy *= scale;
@@ -34,12 +32,11 @@ public class MovementService {
 
         entity.setVelocity(new Vector2(vx, vy));
 
-        float newX = collision.moveAxis(entity, entity.getLocation().x, entity.getLocation().y, vx * delta, true);
-        float newY = collision.moveAxis(entity, newX, entity.getLocation().y, vy * delta, false);
+        Vector2 newPos = collision.move(entity, entity.getLocation().x, entity.getLocation().y, vx * delta, vy * delta);
 
         float lerpFactor = 0.8f;
-        entity.getLocation().x = lerp(entity.getLocation().x, newX, lerpFactor);
-        entity.getLocation().y = lerp(entity.getLocation().y, newY, lerpFactor);
+        entity.getLocation().x = lerp(entity.getLocation().x, newPos.x, lerpFactor);
+        entity.getLocation().y = lerp(entity.getLocation().y, newPos.y, lerpFactor);
 
         collision.updateEntityPartsInTiles(entity);
     }

@@ -34,7 +34,6 @@ public class BeeController extends AbstractController implements EventListener {
             if (bee.getEnvironment() != null) {
                 bee.getEnvironment().getEventBus().post(beeSting);
             }
-            System.out.println("Bee Sting!");
         }
     }
 

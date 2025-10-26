@@ -36,6 +36,5 @@ public class PartCollisionEvent extends BaseEvent {
     }
 
     protected void execute() {
-        // Optional: define default collision reaction if desired
     }
 }
