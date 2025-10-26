@@ -21,7 +21,7 @@ import me.arcademadness.omni_dungeon.environment.EnvironmentConfig;
 import me.arcademadness.omni_dungeon.render.*;
 import me.arcademadness.omni_dungeon.ui.InventoryMenu;
 import me.arcademadness.omni_dungeon.ui.MenuManager;
-import me.arcademadness.omni_dungeon.world.TileMap;
+import me.arcademadness.omni_dungeon.environment.world.TileMap;
 
 public class GridGame extends ApplicationAdapter {
 
@@ -78,8 +78,11 @@ public class GridGame extends ApplicationAdapter {
         player = new PlayerEntity();
         playerController = new PlayerController();
         player.setController(playerController);
-        environment.spawn(player, new Location(map.width / 2, map.height / 2));
+        environment.spawn(player, new Location(map.width / 2f, map.height / 2f));
 
+        for (int i = 0; i < 15; i++) {
+            environment.spawn(new BeeEntity(), new Location(map.width / 2f + i, map.height / 2f + 5));
+        }
         // Example mob
         RedMobEntity redMob = new RedMobEntity();
         redMob.setController(new MobController(redMob));

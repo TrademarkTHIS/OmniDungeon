@@ -3,7 +3,7 @@ package me.arcademadness.omni_dungeon.controllers;
 import me.arcademadness.omni_dungeon.entities.Entity;
 
 public abstract class AbstractController implements Controller {
-    private Entity entity;
+    protected Entity entity;
     private boolean active = false;
 
     public void bind(Entity entity) {
@@ -24,6 +24,10 @@ public abstract class AbstractController implements Controller {
 
     public boolean isActive() {
         return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
 

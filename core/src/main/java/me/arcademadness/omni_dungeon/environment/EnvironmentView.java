@@ -1,7 +1,7 @@
 package me.arcademadness.omni_dungeon.environment;
 
 import me.arcademadness.omni_dungeon.components.Location;
-import me.arcademadness.omni_dungeon.world.TileMap;
+import me.arcademadness.omni_dungeon.environment.world.TileMap;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.environment.services.CollisionService;
 import me.arcademadness.omni_dungeon.environment.services.MovementService;
@@ -16,4 +16,5 @@ public interface EnvironmentView {
     MovementService getMovementService();
     EventBus getEventBus();
     void spawn(Entity entity, Location location);
+    void despawn(Entity entity);
 }

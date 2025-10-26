@@ -5,6 +5,8 @@ import me.arcademadness.omni_dungeon.attributes.*;
 import me.arcademadness.omni_dungeon.components.*;
 import me.arcademadness.omni_dungeon.controllers.AbstractController;
 import me.arcademadness.omni_dungeon.controllers.Controller;
+import me.arcademadness.omni_dungeon.environment.EnvironmentView;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,6 +22,7 @@ public abstract class BaseEntity implements Entity {
     protected Location location;
     protected Controller controller;
     protected List<EntityPart> entityParts = new ArrayList<>();
+    protected EnvironmentView environment = null;
 
     protected Vector2 velocity = new Vector2();
 
@@ -129,6 +132,25 @@ public abstract class BaseEntity implements Entity {
         if (!entityParts.contains(rootPart)) {
             entityParts.add(rootPart);
         }
+    }
+
+    @Override @Nullable
+    public EnvironmentView getEnvironment() {
+        return environment;
+    }
+
+    @Override
+    public void setEnvironment(EnvironmentView environment) {
+        if (environment == null) {
+            this.environment = null;
+            return;
+        }
+
+        if (!environment.getEntities().contains(this)) {
+            throw new IllegalStateException("Environment does not contain this entity.");
+        }
+
+        this.environment = environment;
     }
 
 }

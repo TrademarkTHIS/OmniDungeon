@@ -5,10 +5,9 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-import me.arcademadness.omni_dungeon.environment.Environment;
 import me.arcademadness.omni_dungeon.environment.EnvironmentConfig;
 import me.arcademadness.omni_dungeon.environment.EnvironmentView;
-import me.arcademadness.omni_dungeon.world.TileMap;
+import me.arcademadness.omni_dungeon.environment.world.TileMap;
 import me.arcademadness.omni_dungeon.entities.Entity;
 
 public class FogRenderer implements RenderLayer {

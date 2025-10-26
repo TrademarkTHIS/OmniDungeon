@@ -1,13 +1,18 @@
 package me.arcademadness.omni_dungeon.environment.services;
 
 import com.badlogic.gdx.math.Rectangle;
-import me.arcademadness.omni_dungeon.world.TileMap;
+import me.arcademadness.omni_dungeon.environment.EnvironmentView;
+import me.arcademadness.omni_dungeon.environment.world.TileMap;
 import me.arcademadness.omni_dungeon.components.EntityPart;
 import me.arcademadness.omni_dungeon.components.TileCoordinate;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.environment.Environment;
+import me.arcademadness.omni_dungeon.events.Event;
+import me.arcademadness.omni_dungeon.events.PartCollisionEvent;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -20,10 +25,12 @@ import java.util.Set;
 public class CollisionService {
 
     private final TileMap map;
+    private final EnvironmentView env;
     private static final float EPS = 0.001f;
 
     public CollisionService(Environment environment) {
-        this.map = environment.getMap();
+        this.env = environment;
+        this.map = env.getMap();
     }
 
     /**
@@ -59,7 +66,7 @@ public class CollisionService {
 
             float adjusted = adjustedResult[0];
             adjusted = resolveTileCollision(predicted, horizontal, start, adjusted, deltaMoveTiles);
-            adjusted = resolveEntityCollision(entity, predicted, horizontal, start, adjusted);
+            adjusted = resolveEntityCollision(part, predicted, horizontal, start, adjusted);
 
             adjustedResult[0] = adjusted;
         });
@@ -107,8 +114,9 @@ public class CollisionService {
         return proposedTiles;
     }
 
-    private float resolveEntityCollision(Entity selfEntity, Rectangle predicted, boolean horizontal, float startTiles, float proposedTiles) {
+    private float resolveEntityCollision(EntityPart movingPart, Rectangle predicted, boolean horizontal, float startTiles, float proposedTiles) {
         Set<EntityPart> nearbyParts = new HashSet<>();
+        List<Event> delayedEvents = new ArrayList<>();
 
         int startX = Math.max(0, Math.min((int) (predicted.x / map.getTileSize()), map.width - 1));
         int endX = Math.max(0, Math.min((int) ((predicted.x + predicted.width - EPS) / map.getTileSize()), map.width - 1));
@@ -124,7 +132,7 @@ public class CollisionService {
         float adjusted = proposedTiles;
 
         for (EntityPart otherPart : nearbyParts) {
-            if (otherPart.getOwner() == selfEntity) continue;
+            if (otherPart.getOwner() == movingPart.getOwner()) continue;
 
             Rectangle otherCollider = otherPart.getCollider();
             if (otherCollider == null) continue;
@@ -135,6 +143,10 @@ public class CollisionService {
             otherRect.setPosition(otherX, otherY);
 
             if (predicted.overlaps(otherRect)) {
+                if (env != null) {
+                    delayedEvents.add(new PartCollisionEvent(movingPart, otherPart, env));
+                }
+
                 float stop = computeEntityCollisionStop(predicted, otherRect, horizontal);
                 if (proposedTiles > startTiles) {
                     if (stop < adjusted) adjusted = stop;
@@ -142,6 +154,10 @@ public class CollisionService {
                     if (stop > adjusted) adjusted = stop;
                 }
             }
+        }
+
+        for (Event e : delayedEvents) {
+            env.getEventBus().post(e);
         }
 
         return adjusted;
@@ -169,12 +185,23 @@ public class CollisionService {
 
     public void updateEntityPartsInTiles(Entity entity) {
         Set<TileCoordinate> oldTiles = entity.getOccupiedTiles();
+
+        // The entity has no environment, we need to remove it from the tiles.
+        if (entity.getEnvironment() == null) {
+            for (TileCoordinate old : oldTiles) {
+                if (old.x >= 0 && old.x < map.width && old.y >= 0 && old.y < map.height) {
+                    map.tiles[old.x][old.y].removePartsOwnedBy(entity);
+                }
+            }
+            oldTiles.clear();
+            return;
+        }
+
         Set<TileCoordinate> newTiles = new HashSet<>();
 
         entity.getRootPart().forEachPart(part -> {
             Rectangle collider = part.getCollider();
             if (collider == null) return;
-
 
             float worldX = part.getWorldX();
             float worldY = part.getWorldY();
@@ -188,16 +215,14 @@ public class CollisionService {
                 for (int ty = startY; ty <= endY; ty++) {
                     TileCoordinate tc = new TileCoordinate(tx, ty);
                     newTiles.add(tc);
-                    map.tiles[tx][ty].parts.add(part);
+                    map.tiles[tx][ty].addPart(part);
                 }
             }
         });
 
         for (TileCoordinate old : oldTiles) {
-            if (!newTiles.contains(old)
-                && old.x >= 0 && old.x < map.width
-                && old.y >= 0 && old.y < map.height) {
-                map.tiles[old.x][old.y].parts.removeIf(p -> p.getOwner() == entity);
+            if (!newTiles.contains(old) && old.x >= 0 && old.x < map.width && old.y >= 0 && old.y < map.height) {
+                map.tiles[old.x][old.y].removePartsOwnedBy(entity);
             }
         }
 

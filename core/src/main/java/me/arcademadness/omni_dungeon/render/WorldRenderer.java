@@ -3,10 +3,9 @@ package me.arcademadness.omni_dungeon.render;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-import me.arcademadness.omni_dungeon.environment.Environment;
 import me.arcademadness.omni_dungeon.environment.EnvironmentView;
-import me.arcademadness.omni_dungeon.world.Tile;
-import me.arcademadness.omni_dungeon.world.TileMap;
+import me.arcademadness.omni_dungeon.environment.world.Tile;
+import me.arcademadness.omni_dungeon.environment.world.TileMap;
 
 public class WorldRenderer implements RenderLayer{
     private final EnvironmentView environment;

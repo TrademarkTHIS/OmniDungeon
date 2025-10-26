@@ -3,8 +3,9 @@ package me.arcademadness.omni_dungeon.environment;
 import me.arcademadness.omni_dungeon.actions.Action;
 import me.arcademadness.omni_dungeon.components.Location;
 import me.arcademadness.omni_dungeon.controllers.ControlIntent;
+import me.arcademadness.omni_dungeon.events.entity.EntityDespawnEvent;
 import me.arcademadness.omni_dungeon.events.entity.EntitySpawnEvent;
-import me.arcademadness.omni_dungeon.world.TileMap;
+import me.arcademadness.omni_dungeon.environment.world.TileMap;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.environment.services.CollisionService;
 import me.arcademadness.omni_dungeon.environment.services.MovementService;
@@ -15,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class Environment implements EnvironmentView {
+public class Environment implements EnvironmentControl {
 
     private final TileMap map;
     private final List<Entity> entities = new ArrayList<>();
@@ -42,11 +43,28 @@ public class Environment implements EnvironmentView {
         eventBus.post(new EntitySpawnEvent(entity, location, this));
     }
 
+    @Override
     public void addEntity(Entity e) {
         entities.add(e);
+        e.setEnvironment(this);
         collisionService.updateEntityPartsInTiles(e);
     }
 
+    @Override
+    public void despawn(Entity entity) {
+        eventBus.post(new EntityDespawnEvent(entity, this));
+    }
+
+
+    @Override
+    public void removeEntity(Entity entity) {
+        if (!entities.remove(entity)) return;
+        entity.setEnvironment(null);
+        collisionService.updateEntityPartsInTiles(entity);
+    }
+
+
+    @Override
     public void tick(float delta) {
         List<Entity> snapshot = new ArrayList<>(entities);
 

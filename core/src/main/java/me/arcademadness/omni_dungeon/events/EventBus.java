@@ -39,7 +39,7 @@ public class EventBus {
     public void post(Event event) {
         List<Handler> eventHandlers = handlers.get(event.getClass());
         if (eventHandlers != null) {
-            for (Handler h : eventHandlers) {
+            for (Handler h : new ArrayList<>(eventHandlers)) {
                 try {
                     h.method.invoke(h.listener, event);
                 } catch (Exception e) {
@@ -48,13 +48,13 @@ public class EventBus {
             }
         }
 
-        if (event instanceof BaseEvent) {
-            BaseEvent bEvent = (BaseEvent) event;
+        if (event instanceof BaseEvent bEvent) {
             if (!bEvent.isCanceled()) {
                 bEvent.execute();
             }
         }
     }
+
 
     private static class Handler {
         final Object listener;

@@ -37,8 +37,14 @@ public class MovementService {
         float newX = collision.moveAxis(entity, entity.getLocation().x, entity.getLocation().y, vx * delta, true);
         float newY = collision.moveAxis(entity, newX, entity.getLocation().y, vy * delta, false);
 
-        entity.getLocation().set(newX, newY);
+        float lerpFactor = 0.8f;
+        entity.getLocation().x = lerp(entity.getLocation().x, newX, lerpFactor);
+        entity.getLocation().y = lerp(entity.getLocation().y, newY, lerpFactor);
 
         collision.updateEntityPartsInTiles(entity);
+    }
+
+    private float lerp(float current, float target, float alpha) {
+        return current + (target - current) * alpha;
     }
 }

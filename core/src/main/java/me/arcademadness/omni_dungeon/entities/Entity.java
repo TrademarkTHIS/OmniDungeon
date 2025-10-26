@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import me.arcademadness.omni_dungeon.attributes.*;
 import me.arcademadness.omni_dungeon.components.*;
 import me.arcademadness.omni_dungeon.controllers.Controller;
+import me.arcademadness.omni_dungeon.environment.EnvironmentView;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
@@ -37,6 +39,8 @@ public interface Entity {
     EntityPart getRootPart();
     void setRootPart(EntityPart rootPart);
 
+    EnvironmentView getEnvironment();
+    void setEnvironment(EnvironmentView environment);
 
     Controller getController();
     void setController(Controller controller);

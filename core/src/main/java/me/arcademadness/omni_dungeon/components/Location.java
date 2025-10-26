@@ -19,8 +19,8 @@ public class Location extends Vector2 {
         this.y += dy;
     }
 
-    public int tileX() { return (int) Math.floor(x); }
-    public int tileY() { return (int) Math.floor(y); }
+    public int getTileX() { return (int) Math.floor(x); }
+    public int getTileY() { return (int) Math.floor(y); }
 
     public void set(Location loc) {
         this.x = loc.x;

@@ -1,4 +1,4 @@
-package me.arcademadness.omni_dungeon.world;
+package me.arcademadness.omni_dungeon.environment.world;
 
 import me.arcademadness.omni_dungeon.environment.EnvironmentConfig;
 
