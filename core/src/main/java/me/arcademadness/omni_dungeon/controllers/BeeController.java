@@ -13,7 +13,7 @@ import me.arcademadness.omni_dungeon.environment.world.TileMap;
 import me.arcademadness.omni_dungeon.events.EventListener;
 import me.arcademadness.omni_dungeon.events.Subscribe;
 import me.arcademadness.omni_dungeon.events.entity.BeeStingEvent;
-import me.arcademadness.omni_dungeon.events.PartCollisionEvent;
+import me.arcademadness.omni_dungeon.events.collision.PartCollisionEvent;
 
 import java.util.List;
 import java.util.Optional;

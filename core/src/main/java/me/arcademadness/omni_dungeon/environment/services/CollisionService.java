@@ -3,13 +3,15 @@ package me.arcademadness.omni_dungeon.environment.services;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import me.arcademadness.omni_dungeon.environment.EnvironmentView;
+import me.arcademadness.omni_dungeon.environment.world.Tile;
 import me.arcademadness.omni_dungeon.environment.world.TileMap;
 import me.arcademadness.omni_dungeon.components.EntityPart;
 import me.arcademadness.omni_dungeon.components.TileCoordinate;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.environment.Environment;
 import me.arcademadness.omni_dungeon.events.Event;
-import me.arcademadness.omni_dungeon.events.PartCollisionEvent;
+import me.arcademadness.omni_dungeon.events.collision.PartCollisionEvent;
+import me.arcademadness.omni_dungeon.events.collision.TileCollisionEvent;
 
 import java.util.*;
 
@@ -77,7 +79,7 @@ public class CollisionService {
             Rectangle predicted = new Rectangle(partX, partY, collider.width, collider.height);
 
             float adjusted = adjustedResult[0];
-            adjusted = resolveTileCollision(predicted, horizontal, adjusted, deltaMoveTiles);
+            adjusted = resolveTileCollision(predicted, horizontal, adjusted, deltaMoveTiles, part);
             adjusted = resolveEntityCollision(part, predicted, horizontal, start, adjusted);
 
             adjustedResult[0] = adjusted;
@@ -86,7 +88,7 @@ public class CollisionService {
         return adjustedResult[0];
     }
 
-    private float resolveTileCollision(Rectangle predicted, boolean horizontal, float proposedTiles, float deltaMoveTiles) {
+    private float resolveTileCollision(Rectangle predicted, boolean horizontal, float proposedTiles, float deltaMoveTiles, EntityPart movingPart) {
         int startX = Math.max(0, Math.min((int) (predicted.x / map.getTileSize()), map.width - 1));
         int endX = Math.max(0, Math.min((int) ((predicted.x + predicted.width - EPS) / map.getTileSize()), map.width - 1));
         int startY = Math.max(0, Math.min((int) (predicted.y / map.getTileSize()), map.height - 1));
@@ -94,32 +96,31 @@ public class CollisionService {
 
         boolean movingPositive = deltaMoveTiles > 0f;
 
-        if (horizontal) {
-            if (movingPositive) {
-                for (int ty = startY; ty <= endY; ty++) {
-                    if (!map.tiles[endX][ty].walkable) {
-                        return (endX * map.getTileSize() - predicted.width) / map.getTileSize();
-                    }
+        int primary = horizontal
+            ? (movingPositive ? endX : startX)
+            : (movingPositive ? endY : startY);
+
+        int secStart = horizontal ? startY : startX;
+        int secEnd   = horizontal ? endY   : endX;
+
+        for (int sec = secStart; sec <= secEnd; sec++) {
+            Tile tile = horizontal
+                ? map.tiles[primary][sec]
+                : map.tiles[sec][primary];
+
+            if (!tile.walkable) {
+                if (env != null && movingPart != null) {
+                    env.getEventBus().post(new TileCollisionEvent(movingPart, tile, env));
                 }
-            } else if (deltaMoveTiles < 0f) {
-                for (int ty = startY; ty <= endY; ty++) {
-                    if (!map.tiles[startX][ty].walkable) {
-                        return ((startX + 1f) * map.getTileSize()) / map.getTileSize();
-                    }
-                }
-            }
-        } else {
-            if (movingPositive) {
-                for (int tx = startX; tx <= endX; tx++) {
-                    if (!map.tiles[tx][endY].walkable) {
-                        return (endY * map.getTileSize() - predicted.height) / map.getTileSize();
-                    }
-                }
-            } else if (deltaMoveTiles < 0f) {
-                for (int tx = startX; tx <= endX; tx++) {
-                    if (!map.tiles[tx][startY].walkable) {
-                        return ((startY + 1f) * map.getTileSize()) / map.getTileSize();
-                    }
+
+                if (horizontal) {
+                    return movingPositive
+                        ? (primary * map.getTileSize() - predicted.width) / map.getTileSize()
+                        : ((primary + 1f) * map.getTileSize()) / map.getTileSize();
+                } else {
+                    return movingPositive
+                        ? (primary * map.getTileSize() - predicted.height) / map.getTileSize()
+                        : ((primary + 1f) * map.getTileSize()) / map.getTileSize();
                 }
             }
         }

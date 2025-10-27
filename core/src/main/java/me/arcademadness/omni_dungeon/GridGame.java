@@ -63,6 +63,7 @@ public class GridGame extends ApplicationAdapter {
         setupWorld();
         setupCameras();
         setupRenderers();
+
         setupUI();
         setupInput();
 

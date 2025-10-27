@@ -1,26 +1,20 @@
-package me.arcademadness.omni_dungeon.events;
+package me.arcademadness.omni_dungeon.events.collision;
 
 import me.arcademadness.omni_dungeon.components.EntityPart;
 import me.arcademadness.omni_dungeon.environment.EnvironmentView;
 
 /**
  * Represents a collision between two entity parts.
- * The reaction to the collision is handled by systems listening for this event.
  */
-public class PartCollisionEvent extends BaseEvent {
+public class PartCollisionEvent extends CollisionEvent {
 
-    /** The first part involved in the collision (the moving part). */
     private final EntityPart colliderPart;
-
-    /** The second part involved in the collision (the part being collided with). */
     private final EntityPart collideePart;
 
-    private final EnvironmentView env;
-
     public PartCollisionEvent(EntityPart colliderPart, EntityPart collideePart, EnvironmentView env) {
+        super(env);
         this.colliderPart = colliderPart;
         this.collideePart = collideePart;
-        this.env = env;
     }
 
     public EntityPart getColliderPart() {
@@ -31,10 +25,8 @@ public class PartCollisionEvent extends BaseEvent {
         return collideePart;
     }
 
-    public EnvironmentView getEnvironment() {
-        return env;
-    }
-
+    @Override
     protected void execute() {
+
     }
 }
