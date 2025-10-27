@@ -25,13 +25,12 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build Javadoc
-        run: ./gradlew :core:javadoc --continue
+        run: ./gradlew :core:javadoc
 
       - name: Deploy Javadoc 🚀
-        uses: MathieuSoysal/Javadoc-publisher.yml@v3.0.2
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          javadoc-branch: javadoc
-          java-version: 17
-          target-folder: core/build/docs/javadoc
-          project: gradle
+          branch: javadoc
+          folder: core/build/docs/javadoc
+          clean: true
+          token: ${{ secrets.GITHUB_TOKEN }}
