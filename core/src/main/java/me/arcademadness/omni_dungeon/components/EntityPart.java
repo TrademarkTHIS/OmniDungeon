@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.environment.EnvironmentConfig;
 import me.arcademadness.omni_dungeon.visuals.Visual;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -17,18 +16,17 @@ import java.util.function.Consumer;
  * Represents a visual and physical component of an {@link Entity}.
  * <p>
  * Each EntityPart may have a parent (for hierarchical transforms) and children
- * (for multi-part entities such as humanoids or machines).
- * If no parent is defined, the part’s position is relative to the Entity’s {@link me.arcademadness.omni_dungeon.components.Location}.
+ * (for multi-part entities such as spiders).
+ * If no parent is defined, the part’s position is relative to the Entity’s {@link Location}.
  * </p>
  */
 public class EntityPart implements Iterable<EntityPart> {
 
     private final Entity owner;
-    private final Vector2 offset = new Vector2(0, 0);
+    private final Vector2 offset = new Vector2();
 
     private @Nullable Visual visual;
     private @Nullable Rectangle collider;
-
     private @Nullable EntityPart parent;
     private final List<EntityPart> children = new ArrayList<>();
 
@@ -71,8 +69,8 @@ public class EntityPart implements Iterable<EntityPart> {
         return children;
     }
 
-    public void setLocalPosition(float offsetX, float offsetY) {
-        this.offset.set(offsetX, offsetY);
+    public void setLocalPosition(float x, float y) {
+        offset.set(x, y);
     }
 
     public Vector2 getLocalPosition() {
@@ -92,42 +90,33 @@ public class EntityPart implements Iterable<EntityPart> {
     }
 
     public float getWorldX() {
-        float baseX;
-        if (parent != null) {
-            float radians = (float) Math.toRadians(parent.getWorldRotation());
-            float cos = (float) Math.cos(radians);
-            float sin = (float) Math.sin(radians);
-            float rotatedX = offset.x * cos - offset.y * sin;
-            baseX = parent.getWorldX() + rotatedX;
-        } else {
-            baseX = owner.getLocation().x + offset.x;
-        }
-
+        float baseX = parent != null ? getParentRotatedOffsetX() + parent.getWorldX()
+            : owner.getLocation().x + offset.x;
         return baseX * EnvironmentConfig.get().getTileSize();
     }
 
     public float getWorldY() {
-        float baseY;
-        if (parent != null) {
-            float radians = (float) Math.toRadians(parent.getWorldRotation());
-            float cos = (float) Math.cos(radians);
-            float sin = (float) Math.sin(radians);
-            float rotatedY = offset.x * sin + offset.y * cos;
-            baseY = parent.getWorldY() + rotatedY;
-        } else {
-            baseY = owner.getLocation().y + offset.y;
-        }
-
+        float baseY = parent != null ? getParentRotatedOffsetY() + parent.getWorldY()
+            : owner.getLocation().y + offset.y;
         return baseY * EnvironmentConfig.get().getTileSize();
     }
 
     public float getTileX() {
-        float tileSize = EnvironmentConfig.get().getTileSize();
-        return (getWorldX()/tileSize);
+        return getWorldX() / EnvironmentConfig.get().getTileSize();
     }
+
     public float getTileY() {
-        float tileSize = EnvironmentConfig.get().getTileSize();
-        return (getWorldY()/tileSize);
+        return getWorldY() / EnvironmentConfig.get().getTileSize();
+    }
+
+    private float getParentRotatedOffsetX() {
+        float radians = (float) Math.toRadians(parent.getWorldRotation());
+        return offset.x * (float) Math.cos(radians) - offset.y * (float) Math.sin(radians);
+    }
+
+    private float getParentRotatedOffsetY() {
+        float radians = (float) Math.toRadians(parent.getWorldRotation());
+        return offset.x * (float) Math.sin(radians) + offset.y * (float) Math.cos(radians);
     }
 
     public @Nullable Visual getVisual() {
@@ -142,7 +131,6 @@ public class EntityPart implements Iterable<EntityPart> {
         if (collider == null) return null;
 
         float tileSize = EnvironmentConfig.get().getTileSize();
-
         return new Rectangle(
             getWorldX(),
             getWorldY(),
@@ -154,13 +142,10 @@ public class EntityPart implements Iterable<EntityPart> {
     public @Nullable Vector2 getColliderCenter() {
         if (collider == null) return null;
 
-        float worldX = getTileX();
-        float worldY = getTileY();
-
-        float centerX = (worldX) + (collider.width) / 2f;
-        float centerY = (worldY) + (collider.height) / 2f;
-
-        return new Vector2(centerX, centerY);
+        return new Vector2(
+            getTileX() + collider.width / 2f,
+            getTileY() + collider.height / 2f
+        );
     }
 
     public void setCollider(@Nullable Rectangle collider) {
@@ -175,9 +160,6 @@ public class EntityPart implements Iterable<EntityPart> {
         return parent;
     }
 
-    /**
-     * Recursively applies an action to this part and all descendants.
-     */
     public void forEachPart(Consumer<EntityPart> action) {
         action.accept(this);
         for (EntityPart child : children) {
@@ -185,7 +167,6 @@ public class EntityPart implements Iterable<EntityPart> {
         }
     }
 
-    @NotNull
     @Override
     public Iterator<EntityPart> iterator() {
         return children.iterator();

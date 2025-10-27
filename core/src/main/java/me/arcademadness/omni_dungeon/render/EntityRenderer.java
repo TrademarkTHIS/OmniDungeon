@@ -3,7 +3,6 @@ package me.arcademadness.omni_dungeon.render;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import me.arcademadness.omni_dungeon.environment.Environment;
 import me.arcademadness.omni_dungeon.environment.EnvironmentConfig;
 import me.arcademadness.omni_dungeon.components.EntityPart;
 import me.arcademadness.omni_dungeon.entities.Entity;
