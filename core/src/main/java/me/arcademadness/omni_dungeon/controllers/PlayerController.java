@@ -5,12 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import me.arcademadness.omni_dungeon.actions.MoveAction;
 import me.arcademadness.omni_dungeon.entities.Entity;
+import me.arcademadness.omni_dungeon.entities.PlayerEntity;
 import me.arcademadness.omni_dungeon.modifiers.AttributeModifier;
 import me.arcademadness.omni_dungeon.modifiers.SprintModifier;
 
 import java.util.Optional;
 
-public class PlayerController extends AbstractController {
+public class PlayerController extends AbstractController<PlayerEntity> {
     private final SprintModifier sprintModifier = new SprintModifier(5);
     private boolean menuOpen = false;
 

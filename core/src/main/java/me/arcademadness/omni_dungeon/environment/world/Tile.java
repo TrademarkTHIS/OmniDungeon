@@ -33,4 +33,9 @@ public class Tile {
     public Set<EntityPart> getPartsSnapshot() {
         return new HashSet<>(parts);
     }
+
+    /** Check for if this tile is walkable */
+    public boolean isWalkable() {
+        return walkable;
+    }
 }

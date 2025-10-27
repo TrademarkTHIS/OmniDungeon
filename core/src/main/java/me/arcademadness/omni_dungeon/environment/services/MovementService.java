@@ -15,12 +15,13 @@ public class MovementService {
 
     public void move(Entity entity, Vector2 direction, float delta) {
         float accel = entity.getAcceleration().getFinalValue();
-        float vx = entity.getVelocity().x + direction.x * accel * delta;
-        float vy = entity.getVelocity().y + direction.y * accel * delta;
-
         float friction = entity.getFriction().getFinalValue();
-        vx *= (1 - friction * delta);
-        vy *= (1 - friction * delta);
+        float vx = direction.x * accel;
+        float vy = direction.y * accel;
+
+        vx = entity.getVelocity().x * (1 - friction * delta) + vx * delta;
+        vy = entity.getVelocity().y * (1 - friction * delta) + vy * delta;
+
 
         float maxSpeed = entity.getMaxSpeed().getFinalValue();
         float speedSq = vx * vx + vy * vy;

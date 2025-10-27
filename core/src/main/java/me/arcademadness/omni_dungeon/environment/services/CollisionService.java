@@ -108,7 +108,7 @@ public class CollisionService {
                 ? map.tiles[primary][sec]
                 : map.tiles[sec][primary];
 
-            if (!tile.walkable) {
+            if (!tile.isWalkable()) {
                 if (env != null && movingPart != null) {
                     env.getEventBus().post(new TileCollisionEvent(movingPart, tile, env));
                 }

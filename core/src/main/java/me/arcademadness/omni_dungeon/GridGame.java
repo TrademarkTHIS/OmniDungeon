@@ -94,7 +94,7 @@ public class GridGame extends ApplicationAdapter {
 
         // Example mob
         RedMobEntity redMob = new RedMobEntity();
-        redMob.setController(new MobController(redMob));
+        redMob.setController(new MobController());
         environment.spawn(redMob, new Location(3,3));
     }
 
