@@ -12,12 +12,23 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Deploy JavaDoc 🚀
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Build Javadoc
+        run: ./gradlew javadoc
+
+      - name: Deploy Javadoc 🚀
         uses: MathieuSoysal/Javadoc-publisher.yml@v3.0.2
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           javadoc-branch: javadoc
           java-version: 17
-          target-folder: javadoc
+          target-folder: build/docs/javadoc
           project: gradle
-          custom-command: javadoc -d javadoc -sourcepath core/src/main/java -subpackages me.arcademadness.omni_dungeon
