@@ -224,4 +224,35 @@ public class CollisionService {
         oldTiles.clear();
         oldTiles.addAll(newTiles);
     }
+
+    public void checkImmediateCollisions(Entity entity) {
+        entity.getRootPart().forEachPart(part -> {
+            Rectangle collider = part.getCollider();
+            if (collider == null) return;
+
+            int startX = Math.max(0, (int) (part.getWorldX() / map.getTileSize()));
+            int endX = Math.min(map.width - 1, (int) ((part.getWorldX() + collider.width) / map.getTileSize()));
+            int startY = Math.max(0, (int) (part.getWorldY() / map.getTileSize()));
+            int endY = Math.min(map.height - 1, (int) ((part.getWorldY() + collider.height) / map.getTileSize()));
+
+            Set<EntityPart> nearby = new HashSet<>();
+            for (int tx = startX; tx <= endX; tx++) {
+                for (int ty = startY; ty <= endY; ty++) {
+                    nearby.addAll(map.tiles[tx][ty].parts);
+                }
+            }
+
+            for (EntityPart other : nearby) {
+                if (other.getOwner() == part.getOwner()) continue;
+                Rectangle otherCollider = other.getCollider();
+                if (otherCollider == null) continue;
+
+                Rectangle otherRect = new Rectangle(otherCollider);
+                otherRect.setPosition(other.getWorldX(), other.getWorldY());
+                if (collider.overlaps(otherRect)) {
+                    env.getEventBus().post(new PartCollisionEvent(part, other, env));
+                }
+            }
+        });
+    }
 }

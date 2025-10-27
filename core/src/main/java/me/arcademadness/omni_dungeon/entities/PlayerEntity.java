@@ -2,7 +2,6 @@ package me.arcademadness.omni_dungeon.entities;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
-import me.arcademadness.omni_dungeon.environment.EnvironmentConfig;
 import me.arcademadness.omni_dungeon.components.EntityPart;
 import me.arcademadness.omni_dungeon.items.Sword;
 import me.arcademadness.omni_dungeon.visuals.ShapeVisual;
@@ -13,7 +12,7 @@ public class PlayerEntity extends BaseEntity {
     public PlayerEntity() {
         super();
 
-        this.health = new Health(50);
+        this.health = new Health(175);
         this.armor = new Armor(5);
         this.maxSpeed = new MaxSpeed(50);
         this.acceleration = new Acceleration(50);

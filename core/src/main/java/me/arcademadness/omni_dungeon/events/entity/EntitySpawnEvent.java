@@ -19,5 +19,7 @@ public class EntitySpawnEvent extends EntityEvent {
     protected void execute() {
         entity.getLocation().set(location);
         env.addEntity(entity);
+        env.getCollisionService().updateEntityPartsInTiles(entity);
+        env.getCollisionService().checkImmediateCollisions(entity);
     }
 }
