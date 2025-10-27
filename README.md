@@ -2,15 +2,7 @@
 
 [![Documentation](https://img.shields.io/badge/docs-Javadoc-blue)](https://trademarkthis.github.io/OmniDungeon/)
 
-This is A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
-
-**OmniDungeon** reimagines how traits and abilities are handled in RPGs. Instead of binding your race and class to fixed attributes, **items** become the core source of all traits. These traits include **modifiers** (like boosts to health, speed, or damage) and **actions** (such as attacking or casting spells), which are all provided by items. At the start, you may receive a set of items that define your race or class, but as you progress, you'll collect more items, and your true traits will emerge through what you *choose* to equip.
-
-For example, in a traditional RPG, a “Zombie” race would come with predefined abilities, modifiers, and stats. In OmniDungeon, those traits come from an **item**, such as a Zombie Playing Card. This item would provide specific actions like "Zombie Bite" or "Zombie Lunge" and other modifiers, such as a **half-health** effect. You can equip this Zombie Card to any entity (including the player), and they too will gain the zombie traits. Effectively, this entity will now become part zombie.
-
-Entities (including players) have three types of equipment slots: **Armor**, **Items**, and **Actions**. As the player, you can see these slots while other entities will automatically use them. When you equip an item or piece of armor, it may provide both modifiers (which *do not* take up any slots) and actions (which *do* take up slots in the **Action Bar**). For example, if each slot set has a limit (e.g., 8 slots), equipping an item that provides two actions will take up two of those slots. If all items provide two actions and both the **Item Bar** and **Action Bar** each have a size of 8, you'll only be able to equip 4 items. This forces you to prioritize items based on their overall **slot weight**.
-
-Notably, your inventory will be infinite, so you'll never have to worry about running out of space for your items. If you're a collector, you can experiment with different combinations. You might discover that an item you found earlier is suddenly the perfect fit for your build.
+**OmniDungeon** is a [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff) that builds on traditional RPG systems. Its Event and Entity structures create a highly dynamic and flexible game world. Rather than locking characters into fixed races or classes, traits and abilities come from items, allowing gameplay to evolve organically based on what you choose to equip. This approach encourages experimentation, rewarding players who collect and combine items in creative ways.
 
 ## Platforms
 
