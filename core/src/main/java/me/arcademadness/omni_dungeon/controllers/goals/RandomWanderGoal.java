@@ -39,10 +39,9 @@ public class RandomWanderGoal<T extends Entity> implements Goal<T> {
         TileMap map = env.getMap();
         Location loc = entity.getLocation();
 
-        // Pick a new target if we don't have one or we've reached the current target
         if (targetTile == null || path == null || path.isEmpty()) {
             targetTile = pickRandomWalkableTile(map);
-            if (targetTile == null) return Optional.empty(); // No walkable tile found
+            if (targetTile == null) return Optional.empty();
 
             path = AStar.findPath(
                 map,
@@ -50,14 +49,12 @@ public class RandomWanderGoal<T extends Entity> implements Goal<T> {
                 targetTile.x, targetTile.y
             );
 
-            // If pathfinding failed, try another tile next frame
             if (path.isEmpty()) {
                 targetTile = null;
                 return Optional.empty();
             }
         }
 
-        // Move along the first step of the path
         Vector2 next = path.remove(0);
         Vector2 dir = new Vector2(next.x - loc.getX(), next.y - loc.getY()).nor();
 
@@ -67,13 +64,13 @@ public class RandomWanderGoal<T extends Entity> implements Goal<T> {
     }
 
     private Vector2 pickRandomWalkableTile(TileMap map) {
-        int attempts = 20; // Try up to 20 times to find a walkable tile
+        int attempts = 20;
         for (int i = 0; i < attempts; i++) {
             int x = random.nextInt(map.width);
             int y = random.nextInt(map.height);
             Tile tile = map.tiles[x][y];
 
-            if (tile.isWalkable() && tile.parts.isEmpty()) { // or any other check for occupancy
+            if (tile.isWalkable() && tile.parts.isEmpty()) {
                 return new Vector2(x, y);
             }
         }
