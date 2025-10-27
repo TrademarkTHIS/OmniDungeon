@@ -105,10 +105,16 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#move(me.arcademadness.omni_dungeon.entities.Entity,com.badlogic.gdx.math.Vector2,float)" class="member-name-link">move</a><wbr>(<a href="../../entities/Entity.html" title="interface in me.arcademadness.omni_dungeon.entities">Entity</a>&nbsp;entity,
- com.badlogic.gdx.math.Vector2&nbsp;direction,
- float&nbsp;delta)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#move(me.arcademadness.omni_dungeon.entities.Entity,com.badlogic.gdx.math.Vector2)" class="member-name-link">move</a><wbr>(<a href="../../entities/Entity.html" title="interface in me.arcademadness.omni_dungeon.entities">Entity</a>&nbsp;entity,
+ com.badlogic.gdx.math.Vector2&nbsp;direction)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Queue a movement request for this entity.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tick(float)" class="member-name-link">tick</a><wbr>(float&nbsp;delta)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Process movement for all entities every game tick.</div>
+</div>
 </div>
 </div>
 </div>
@@ -141,11 +147,19 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="move(me.arcademadness.omni_dungeon.entities.Entity,com.badlogic.gdx.math.Vector2,float)">
+<section class="detail" id="move(me.arcademadness.omni_dungeon.entities.Entity,com.badlogic.gdx.math.Vector2)">
 <h3>move</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">move</span><wbr><span class="parameters">(<a href="../../entities/Entity.html" title="interface in me.arcademadness.omni_dungeon.entities">Entity</a>&nbsp;entity,
- com.badlogic.gdx.math.Vector2&nbsp;direction,
- float&nbsp;delta)</span></div>
+ com.badlogic.gdx.math.Vector2&nbsp;direction)</span></div>
+<div class="block">Queue a movement request for this entity.
+ If already queued, it will override the previous request.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="tick(float)">
+<h3>tick</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">tick</span><wbr><span class="parameters">(float&nbsp;delta)</span></div>
+<div class="block">Process movement for all entities every game tick.</div>
 </section>
 </li>
 </ul>

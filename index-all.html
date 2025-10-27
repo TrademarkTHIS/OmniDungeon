@@ -298,7 +298,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="me/arcademadness/omni_dungeon/events/entity/EntityMoveEvent.html" class="type-name-link" title="class in me.arcademadness.omni_dungeon.events.entity">EntityMoveEvent</a> - Class in <a href="me/arcademadness/omni_dungeon/events/entity/package-summary.html">me.arcademadness.omni_dungeon.events.entity</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="me/arcademadness/omni_dungeon/events/entity/EntityMoveEvent.html#%3Cinit%3E(me.arcademadness.omni_dungeon.environment.Environment,me.arcademadness.omni_dungeon.entities.Entity,com.badlogic.gdx.math.Vector2,float)" class="member-name-link">EntityMoveEvent(Environment, Entity, Vector2, float)</a> - Constructor for class me.arcademadness.omni_dungeon.events.entity.<a href="me/arcademadness/omni_dungeon/events/entity/EntityMoveEvent.html" title="class in me.arcademadness.omni_dungeon.events.entity">EntityMoveEvent</a></dt>
+<dt><a href="me/arcademadness/omni_dungeon/events/entity/EntityMoveEvent.html#%3Cinit%3E(me.arcademadness.omni_dungeon.environment.Environment,me.arcademadness.omni_dungeon.entities.Entity,com.badlogic.gdx.math.Vector2)" class="member-name-link">EntityMoveEvent(Environment, Entity, Vector2)</a> - Constructor for class me.arcademadness.omni_dungeon.events.entity.<a href="me/arcademadness/omni_dungeon/events/entity/EntityMoveEvent.html" title="class in me.arcademadness.omni_dungeon.events.entity">EntityMoveEvent</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="me/arcademadness/omni_dungeon/components/EntityPart.html" class="type-name-link" title="class in me.arcademadness.omni_dungeon.components">EntityPart</a> - Class in <a href="me/arcademadness/omni_dungeon/components/package-summary.html">me.arcademadness.omni_dungeon.components</a></dt>
 <dd>
@@ -398,6 +398,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="me/arcademadness/omni_dungeon/attributes/Friction.html" class="type-name-link" title="class in me.arcademadness.omni_dungeon.attributes">Friction</a> - Class in <a href="me/arcademadness/omni_dungeon/attributes/package-summary.html">me.arcademadness.omni_dungeon.attributes</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="me/arcademadness/omni_dungeon/attributes/Friction.html#%3Cinit%3E(float)" class="member-name-link">Friction(float)</a> - Constructor for class me.arcademadness.omni_dungeon.attributes.<a href="me/arcademadness/omni_dungeon/attributes/Friction.html" title="class in me.arcademadness.omni_dungeon.attributes">Friction</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="me/arcademadness/omni_dungeon/attributes/Friction.html#%3Cinit%3E(me.arcademadness.omni_dungeon.attributes.MaxSpeed,float)" class="member-name-link">Friction(MaxSpeed, float)</a> - Constructor for class me.arcademadness.omni_dungeon.attributes.<a href="me/arcademadness/omni_dungeon/attributes/Friction.html" title="class in me.arcademadness.omni_dungeon.attributes">Friction</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="me/arcademadness/omni_dungeon/attributes/AttributeType.html#FRICTION" class="member-name-link">FRICTION</a> - Enum constant in enum class me.arcademadness.omni_dungeon.attributes.<a href="me/arcademadness/omni_dungeon/attributes/AttributeType.html" title="enum class in me.arcademadness.omni_dungeon.attributes">AttributeType</a></dt>
 <dd>&nbsp;</dd>
@@ -898,8 +900,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Moves an entity by deltaX and deltaY in tiles, resolving collisions against tiles and other entities.</div>
 </dd>
-<dt><a href="me/arcademadness/omni_dungeon/environment/services/MovementService.html#move(me.arcademadness.omni_dungeon.entities.Entity,com.badlogic.gdx.math.Vector2,float)" class="member-name-link">move(Entity, Vector2, float)</a> - Method in class me.arcademadness.omni_dungeon.environment.services.<a href="me/arcademadness/omni_dungeon/environment/services/MovementService.html" title="class in me.arcademadness.omni_dungeon.environment.services">MovementService</a></dt>
-<dd>&nbsp;</dd>
+<dt><a href="me/arcademadness/omni_dungeon/environment/services/MovementService.html#move(me.arcademadness.omni_dungeon.entities.Entity,com.badlogic.gdx.math.Vector2)" class="member-name-link">move(Entity, Vector2)</a> - Method in class me.arcademadness.omni_dungeon.environment.services.<a href="me/arcademadness/omni_dungeon/environment/services/MovementService.html" title="class in me.arcademadness.omni_dungeon.environment.services">MovementService</a></dt>
+<dd>
+<div class="block">Queue a movement request for this entity.</div>
+</dd>
 <dt><a href="me/arcademadness/omni_dungeon/actions/MoveAction.html" class="type-name-link" title="class in me.arcademadness.omni_dungeon.actions">MoveAction</a> - Class in <a href="me/arcademadness/omni_dungeon/actions/package-summary.html">me.arcademadness.omni_dungeon.actions</a></dt>
 <dd>
 <div class="block">An <a href="me/arcademadness/omni_dungeon/actions/Action.html" title="interface in me.arcademadness.omni_dungeon.actions"><code>Action</code></a> that moves an entity in a given direction.</div>
@@ -1167,6 +1171,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="me/arcademadness/omni_dungeon/environment/EnvironmentControl.html#tick(float)" class="member-name-link">tick(float)</a> - Method in interface me.arcademadness.omni_dungeon.environment.<a href="me/arcademadness/omni_dungeon/environment/EnvironmentControl.html" title="interface in me.arcademadness.omni_dungeon.environment">EnvironmentControl</a></dt>
 <dd>
 <div class="block">Updates the environment state based on the elapsed time.</div>
+</dd>
+<dt><a href="me/arcademadness/omni_dungeon/environment/services/MovementService.html#tick(float)" class="member-name-link">tick(float)</a> - Method in class me.arcademadness.omni_dungeon.environment.services.<a href="me/arcademadness/omni_dungeon/environment/services/MovementService.html" title="class in me.arcademadness.omni_dungeon.environment.services">MovementService</a></dt>
+<dd>
+<div class="block">Process movement for all entities every game tick.</div>
 </dd>
 <dt><a href="me/arcademadness/omni_dungeon/environment/world/Tile.html" class="type-name-link" title="class in me.arcademadness.omni_dungeon.environment.world">Tile</a> - Class in <a href="me/arcademadness/omni_dungeon/environment/world/package-summary.html">me.arcademadness.omni_dungeon.environment.world</a></dt>
 <dd>&nbsp;</dd>
