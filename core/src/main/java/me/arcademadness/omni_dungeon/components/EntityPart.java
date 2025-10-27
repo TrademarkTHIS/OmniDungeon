@@ -71,11 +71,11 @@ public class EntityPart implements Iterable<EntityPart> {
         return children;
     }
 
-    public void setOffset(float offsetX, float offsetY) {
+    public void setLocalPosition(float offsetX, float offsetY) {
         this.offset.set(offsetX, offsetY);
     }
 
-    public Vector2 getOffset() {
+    public Vector2 getLocalPosition() {
         return offset;
     }
 
@@ -121,6 +121,15 @@ public class EntityPart implements Iterable<EntityPart> {
         return baseY * EnvironmentConfig.get().getTileSize();
     }
 
+    public float getTileX() {
+        float tileSize = EnvironmentConfig.get().getTileSize();
+        return (getWorldX()/tileSize);
+    }
+    public float getTileY() {
+        float tileSize = EnvironmentConfig.get().getTileSize();
+        return (getWorldY()/tileSize);
+    }
+
     public @Nullable Visual getVisual() {
         return visual;
     }
@@ -131,7 +140,27 @@ public class EntityPart implements Iterable<EntityPart> {
 
     public @Nullable Rectangle getCollider() {
         if (collider == null) return null;
-        return new Rectangle(getWorldX(), getWorldY(), collider.width, collider.height);
+
+        float tileSize = EnvironmentConfig.get().getTileSize();
+
+        return new Rectangle(
+            getWorldX(),
+            getWorldY(),
+            collider.width * tileSize,
+            collider.height * tileSize
+        );
+    }
+
+    public @Nullable Vector2 getColliderCenter() {
+        if (collider == null) return null;
+
+        float worldX = getTileX();
+        float worldY = getTileY();
+
+        float centerX = (worldX) + (collider.width) / 2f;
+        float centerY = (worldY) + (collider.height) / 2f;
+
+        return new Vector2(centerX, centerY);
     }
 
     public void setCollider(@Nullable Rectangle collider) {

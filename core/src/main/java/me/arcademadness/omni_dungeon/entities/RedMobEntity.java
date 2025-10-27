@@ -15,10 +15,8 @@ public class RedMobEntity extends MobEntity {
         this.maxSpeed = new MaxSpeed(50);
         this.acceleration = new Acceleration(50);
 
-        int tileSize = EnvironmentConfig.get().getTileSize();
-
         ShapeVisual visual = new ShapeVisual(Color.RED);
-        Rectangle collider = new Rectangle(0, 0, tileSize, tileSize);
+        Rectangle collider = new Rectangle(0, 0, 0.75f, 0.75f);
         EntityPart part = new EntityPart(this, visual, collider);
 
         setRootPart(part);

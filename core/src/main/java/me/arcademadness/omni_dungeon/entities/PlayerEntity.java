@@ -19,10 +19,8 @@ public class PlayerEntity extends BaseEntity {
         this.acceleration = new Acceleration(50);
         this.friction = new Friction(10);
 
-        int tileSize = EnvironmentConfig.get().getTileSize();
-
         ShapeVisual bodyVisual = new ShapeVisual(Color.CYAN);
-        Rectangle bodyCollider = new Rectangle(0, 0, tileSize, tileSize);
+        Rectangle bodyCollider = new Rectangle(0, 0, 1, 1);
         EntityPart bodyPart = new EntityPart(this, bodyVisual, bodyCollider);
 
         setRootPart(bodyPart);

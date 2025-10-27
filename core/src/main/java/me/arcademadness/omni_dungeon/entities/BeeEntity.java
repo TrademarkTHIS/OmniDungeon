@@ -25,10 +25,8 @@ public class BeeEntity extends BaseEntity {
         this.acceleration = new Acceleration(r.nextInt(max - min + 1) + min);
         this.health = new Health(1);
 
-        int tileSize = EnvironmentConfig.get().getTileSize();
-
         ShapeVisual visual = new ShapeVisual(Color.YELLOW);
-        Rectangle collider = new Rectangle(0, 0, tileSize/4f, tileSize/4f);
+        Rectangle collider = new Rectangle(0, 0, 0.25f, 0.25f);
         EntityPart part = new EntityPart(this, visual, collider);
 
         setRootPart(part);

@@ -11,7 +11,7 @@ public class InventoryMenu extends MenuScreen {
 
     private Entity player;
 
-    static final int SLOT_SIZE = 48;
+    static final int SLOT_SIZE = 32;
     private static final int INVENTORY_VISIBLE_ROWS = 6;
     private static final int ARMOR_VISIBLE_ROWS = 2;
     private static final int ITEMS_VISIBLE_ROWS = 2;
@@ -110,7 +110,23 @@ public class InventoryMenu extends MenuScreen {
         inventorySection.setSlots(slots);
     }
 
+    public void resizeForScreen(float screenWidth, float screenHeight) {
+        float baseWidth = 1920f;
+        float baseHeight = 1080f;
 
+        float scaleX = screenWidth / baseWidth;
+        float scaleY = screenHeight / baseHeight;
+        float uiScale = Math.min(scaleX, scaleY);
+
+        int scaledSlotSize = Math.round(SLOT_SIZE * uiScale);
+
+        inventorySection = new SectionWidget(COLUMNS, scaledSlotSize, Color.valueOf("#577590"), getSkin());
+        armorSection     = new SectionWidget(COLUMNS, scaledSlotSize, Color.valueOf("#F9C74F"), getSkin());
+        itemsSection     = new SectionWidget(COLUMNS, scaledSlotSize, Color.valueOf("#43AA8B"), getSkin());
+        actionsSection   = new SectionWidget(COLUMNS, scaledSlotSize, Color.valueOf("#FFADAD"), getSkin());
+
+        populate();
+    }
 
     private void populateCappedSection(SectionWidget section, int maxSlots, int visibleRows) {
         Skin skin = getSkin();

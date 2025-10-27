@@ -1,11 +1,12 @@
 package me.arcademadness.omni_dungeon.environment.world;
 
+import com.badlogic.gdx.math.Vector2;
 import java.awt.Point;
 import java.util.*;
 
 /**
- * Simple A* pathfinding over a TileMap.
- * Uses Manhattan distance and supports 4-directional movement.
+ * A* pathfinding that supports float coordinates for precise start/goal positions.
+ * Uses Manhattan + diagonal movement.
  */
 public class AStar {
 
@@ -14,29 +15,36 @@ public class AStar {
         { 1, 1 }, { 1, -1 }, { -1, 1 }, { -1, -1 }
     };
 
+    /**
+     * Finds a path between two points in tile coordinates (floats allowed).
+     * The returned path is a list of Vector2 tile positions (can include .5 centers).
+     */
+    public static List<Vector2> findPath(TileMap map, float startX, float startY, float goalX, float goalY) {
+        int startTileX = (int) Math.floor(startX);
+        int startTileY = (int) Math.floor(startY);
+        int goalTileX  = (int) Math.floor(goalX);
+        int goalTileY  = (int) Math.floor(goalY);
 
-    public static List<Point> findPath(TileMap map, int startX, int startY, int goalX, int goalY) {
-        // Basic bounds check
-        if (!inBounds(map, startX, startY) || !inBounds(map, goalX, goalY))
+        if (!inBounds(map, startTileX, startTileY) || !inBounds(map, goalTileX, goalTileY))
             return Collections.emptyList();
 
-        Tile start = map.tiles[startX][startY];
-        Tile goal = map.tiles[goalX][goalY];
+        Tile start = map.tiles[startTileX][startTileY];
+        Tile goal = map.tiles[goalTileX][goalTileY];
         if (!start.walkable || !goal.walkable)
             return Collections.emptyList();
 
         PriorityQueue<Node> open = new PriorityQueue<>(Comparator.comparingDouble(n -> n.fCost));
         Map<Point, Node> allNodes = new HashMap<>();
 
-        Node startNode = new Node(startX, startY, null, 0, heuristic(startX, startY, goalX, goalY));
+        Node startNode = new Node(startTileX, startTileY, null, 0, heuristic(startTileX, startTileY, goalTileX, goalTileY));
         open.add(startNode);
-        allNodes.put(new Point(startX, startY), startNode);
+        allNodes.put(new Point(startTileX, startTileY), startNode);
 
         while (!open.isEmpty()) {
             Node current = open.poll();
 
-            if (current.x == goalX && current.y == goalY) {
-                return reconstructPath(current);
+            if (current.x == goalTileX && current.y == goalTileY) {
+                return reconstructPath(current, goalX, goalY);
             }
 
             current.closed = true;
@@ -54,7 +62,7 @@ public class AStar {
 
                 Node neighbor = allNodes.get(key);
                 if (neighbor == null) {
-                    neighbor = new Node(nx, ny, current, gCost, heuristic(nx, ny, goalX, goalY));
+                    neighbor = new Node(nx, ny, current, gCost, heuristic(nx, ny, goalTileX, goalTileY));
                     allNodes.put(key, neighbor);
                     open.add(neighbor);
                 } else if (gCost < neighbor.gCost) {
@@ -62,7 +70,6 @@ public class AStar {
                     neighbor.gCost = gCost;
                     neighbor.fCost = gCost + neighbor.hCost;
                     if (!neighbor.closed) {
-                        // Reinsert to update priority (simpler than decrease-key)
                         open.remove(neighbor);
                         open.add(neighbor);
                     }
@@ -70,16 +77,16 @@ public class AStar {
             }
         }
 
-        // No path found
         return Collections.emptyList();
     }
 
-    private static List<Point> reconstructPath(Node node) {
-        LinkedList<Point> path = new LinkedList<>();
+    private static List<Vector2> reconstructPath(Node node, float goalX, float goalY) {
+        LinkedList<Vector2> path = new LinkedList<>();
         while (node.parent != null) {
-            path.addFirst(new Point(node.x, node.y));
+            path.addFirst(new Vector2(node.x + 0.5f, node.y + 0.5f));
             node = node.parent;
         }
+        path.add(new Vector2(goalX, goalY));
         return path;
     }
 
@@ -109,19 +116,6 @@ public class AStar {
             this.gCost = gCost;
             this.hCost = hCost;
             this.fCost = gCost + hCost;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (!(obj instanceof Node)) return false;
-            Node other = (Node) obj;
-            return x == other.x && y == other.y;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(x, y);
         }
     }
 }

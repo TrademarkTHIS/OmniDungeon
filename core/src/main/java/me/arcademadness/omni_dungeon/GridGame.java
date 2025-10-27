@@ -80,8 +80,8 @@ public class GridGame extends ApplicationAdapter {
         player.setController(playerController);
         environment.spawn(player, new Location(map.width / 2f, map.height / 2f));
 
-        for (int i = 0; i < 15; i++) {
-            environment.spawn(new BeeEntity(), new Location(map.width / 2f + i, map.height / 2f + 5));
+        for (int i = 0; i < 75; i++) {
+            environment.spawn(new BeeEntity(), new Location(map.width / 2f + (i/4f), map.height / 2f + 5));
         }
         // Example mob
         RedMobEntity redMob = new RedMobEntity();
@@ -198,6 +198,7 @@ public class GridGame extends ApplicationAdapter {
     public void resize(int width, int height) {
         worldViewport.update(width, height, true);
         uiViewport.update(width, height, true);
+        inventoryMenu.resizeForScreen(width,height);
     }
 
     @Override

@@ -15,7 +15,6 @@ import me.arcademadness.omni_dungeon.events.Subscribe;
 import me.arcademadness.omni_dungeon.events.entity.BeeStingEvent;
 import me.arcademadness.omni_dungeon.events.PartCollisionEvent;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,17 +47,20 @@ public class BeeController extends AbstractController implements EventListener {
         Entity closest = findClosestEntity(map, entity, SCAN_RADIUS);
         if (closest == null) return Optional.empty();
 
-        List<Point> path = AStar.findPath(
-            map,
-            loc.getTileX(), loc.getTileY(),
-            closest.getLocation().getTileX(), closest.getLocation().getTileY()
-        );
+        EntityPart rootPart = closest.getRootPart();
+        Vector2 targetCenter = rootPart != null ? rootPart.getColliderCenter() : null;
+        if (targetCenter == null) return Optional.empty();
 
+        List<Vector2> path = AStar.findPath(
+            map,
+            loc.getX(), loc.getY(),
+            targetCenter.x, targetCenter.y
+        );
 
         if (path.isEmpty()) return Optional.empty();
 
-        Point next = path.get(0);
-        Vector2 dir = new Vector2(next.x - loc.getTileX(), next.y - loc.getTileY()).nor();
+        Vector2 next = path.get(0);
+        Vector2 dir = new Vector2(next.x - loc.getX(), next.y - loc.getY()).nor();
 
         ControlIntent intent = new ControlIntent();
         intent.addAction(new MoveAction(dir));
