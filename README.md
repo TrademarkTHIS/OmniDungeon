@@ -1,5 +1,7 @@
 # OmniDungeon
 
+[![Documentation](https://img.shields.io/badge/docs-Javadoc-blue)](https://trademarkthis.github.io/OmniDungeon/)
+
 This is A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
 **OmniDungeon** reimagines how traits and abilities are handled in RPGs. Instead of binding your race and class to fixed attributes, **items** become the core source of all traits. These traits include **modifiers** (like boosts to health, speed, or damage) and **actions** (such as attacking or casting spells), which are all provided by items. At the start, you may receive a set of items that define your race or class, but as you progress, you'll collect more items, and your true traits will emerge through what you *choose* to equip.
