@@ -14,9 +14,10 @@ public class PlayerEntity extends BaseEntity {
 
         this.health = new Health(175);
         this.armor = new Armor(5);
-        this.maxSpeed = new MaxSpeed(50);
-        this.acceleration = new Acceleration(50);
-        this.friction = new Friction(10);
+        this.maxSpeed = new MaxSpeed(10);
+        this.acceleration = new Acceleration(20);
+        this.friction = new Friction(maxSpeed, 2f);
+
 
         ShapeVisual bodyVisual = new ShapeVisual(Color.CYAN);
         Rectangle bodyCollider = new Rectangle(0, 0, 1, 1);

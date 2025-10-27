@@ -51,8 +51,8 @@ public class GridGame extends ApplicationAdapter {
     private float cameraZoom = 1f;
     private float targetZoom = 1f;
     private static final float MIN_ZOOM = 0.5f;
-    private static final float MAX_ZOOM = 5f;
-    private static final float ZOOM_SPEED = 0.2f;
+    private static final float MAX_ZOOM = 10f;
+    private static final float ZOOM_SPEED = 0.4f;
     private static final float ZOOM_LERP = 0.15f;
     private static final float CAMERA_LERP = 0.2f;
 
@@ -72,7 +72,7 @@ public class GridGame extends ApplicationAdapter {
 
     private void setupWorld() {
         EnvironmentConfig.initialize(32);
-        TileMap map = new TileMap(40, 30);
+        TileMap map = new TileMap(100, 100);
         environment = new Environment(map);
 
         // Player
@@ -81,14 +81,14 @@ public class GridGame extends ApplicationAdapter {
         player.setController(playerController);
         environment.spawn(player, new Location(map.width / 2f, map.height / 2f));
 
-        int gridSize = 15;
+        int gridSize = 10;
         float spacing = 0.3f;
 
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
                 float xOffset = (i - gridSize / 2f) * spacing;
                 float yOffset = (j - gridSize / 2f) * spacing;
-                environment.spawn(new BeeEntity(), new Location((map.width / 2f) + 5 + xOffset, (map.height / 2f) + 5 + yOffset));
+                environment.spawn(new BeeEntity(), new Location((map.width / 2f) + 25 + xOffset, (map.height / 2f) + 25 + yOffset));
             }
         }
 
@@ -100,21 +100,21 @@ public class GridGame extends ApplicationAdapter {
 
 
     private void setupCameras() {
-        TileMap map = environment.getMap();
         worldCamera = new OrthographicCamera();
-        worldViewport = new ExtendViewport(
-            map.width * map.getTileSize(),
-            map.height * map.getTileSize(),
-            worldCamera
-        );
+
+        float virtualWidth = 16 * environment.getMap().getTileSize();
+        float virtualHeight = 16 * environment.getMap().getTileSize();
+
+        worldViewport = new ExtendViewport(virtualWidth, virtualHeight, worldCamera);
 
         uiCamera = new OrthographicCamera();
         uiViewport = new ScreenViewport(uiCamera);
         uiStage = new Stage(uiViewport);
     }
 
+
     private void setupRenderers() {
-        fogRenderer = new FogRenderer(environment, player, shape, 12);
+        fogRenderer = new FogRenderer(environment, player, shape, 32);
         worldRenderer = new WorldRenderer(environment, shape, fogRenderer);
         entityRenderer = new EntityRenderer(environment, player, fogRenderer, shape);
         weaponSpreadRenderer = new WeaponSpreadRenderer(player, shape);

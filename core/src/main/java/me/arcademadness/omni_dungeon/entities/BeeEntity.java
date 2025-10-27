@@ -3,11 +3,11 @@ package me.arcademadness.omni_dungeon.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import me.arcademadness.omni_dungeon.attributes.Acceleration;
+import me.arcademadness.omni_dungeon.attributes.Friction;
 import me.arcademadness.omni_dungeon.attributes.Health;
 import me.arcademadness.omni_dungeon.attributes.MaxSpeed;
 import me.arcademadness.omni_dungeon.components.EntityPart;
 import me.arcademadness.omni_dungeon.controllers.BeeController;
-import me.arcademadness.omni_dungeon.environment.EnvironmentConfig;
 import me.arcademadness.omni_dungeon.environment.EnvironmentView;
 import me.arcademadness.omni_dungeon.visuals.ShapeVisual;
 
@@ -19,10 +19,13 @@ public class BeeEntity extends BaseEntity {
     public BeeEntity() {
         super();
         Random r = new Random();
-        int min = 75;
-        int max = 125;
-        this.maxSpeed = new MaxSpeed(r.nextInt(max - min + 1) + min);
-        this.acceleration = new Acceleration(r.nextInt(max - min + 1) + min);
+        int min = 10;
+        int max = 20;
+        int speed = r.nextInt(max - min + 1) + min;
+        int accel = r.nextInt(max - min + 1) + min;
+        this.maxSpeed = new MaxSpeed(speed);
+        this.acceleration = new Acceleration(accel);
+        this.friction = new Friction(maxSpeed, 0.1f);
         this.health = new Health(1);
 
         ShapeVisual visual = new ShapeVisual(Color.YELLOW);

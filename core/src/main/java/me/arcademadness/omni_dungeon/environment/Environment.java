@@ -80,5 +80,7 @@ public class Environment implements EnvironmentControl {
                 }
             }
         }
+
+        movementService.tick(delta);
     }
 }

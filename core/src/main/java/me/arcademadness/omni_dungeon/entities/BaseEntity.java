@@ -27,8 +27,8 @@ public abstract class BaseEntity implements Entity {
     protected Vector2 velocity = new Vector2();
 
     protected Acceleration acceleration = new Acceleration(10);
-    protected Friction friction = new Friction(10);
     protected MaxSpeed maxSpeed = new MaxSpeed(5);
+    protected Friction friction = new Friction(maxSpeed, 2);
 
     protected final Set<TileCoordinate> tileCoordinates = new HashSet<>();
 
