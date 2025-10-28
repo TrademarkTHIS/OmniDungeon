@@ -13,7 +13,7 @@ import me.arcademadness.omni_dungeon.visuals.ShapeVisual;
 
 import java.util.Random;
 
-public class BeeEntity extends BaseEntity {
+public class BeeEntity extends MobEntity {
     private final BeeController controller = new BeeController();
 
     public BeeEntity() {

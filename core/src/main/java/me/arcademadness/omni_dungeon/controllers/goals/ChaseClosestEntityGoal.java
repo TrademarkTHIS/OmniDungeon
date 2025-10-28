@@ -51,7 +51,7 @@ public class ChaseClosestEntityGoal<T extends Entity> implements Goal<T> {
             map,
             loc.getX(), loc.getY(),
             targetCenter.x, targetCenter.y
-        );
+        ,8);
 
         if (path.isEmpty()) return Optional.empty();
 

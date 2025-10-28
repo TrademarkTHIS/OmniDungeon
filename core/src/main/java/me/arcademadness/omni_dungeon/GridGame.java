@@ -81,22 +81,20 @@ public class GridGame extends ApplicationAdapter {
         player.setController(playerController);
         environment.spawn(player, new Location(map.width / 2f, map.height / 2f));
 
-        int gridSize = 25;
+        int beesToGrid = 15;
         float spacing = 0.3f;
 
-        for (int i = 0; i < gridSize; i++) {
-            for (int j = 0; j < gridSize; j++) {
-                float xOffset = (i - gridSize / 2f) * spacing;
-                float yOffset = (j - gridSize / 2f) * spacing;
+        for (int i = 0; i < beesToGrid; i++) {
+            for (int j = 0; j < beesToGrid; j++) {
+                float xOffset = (i - beesToGrid / 2f) * spacing;
+                float yOffset = (j - beesToGrid / 2f) * spacing;
                 environment.spawn(new BeeEntity(), new Location((map.width / 2f) + 25 + xOffset, (map.height / 2f) + 25 + yOffset));
             }
         }
 
         RedMobEntity redMob = new RedMobEntity();
-        redMob.setController(new MobController());
         environment.spawn(redMob, new Location(3,3));
     }
-
 
     private void setupCameras() {
         worldCamera = new OrthographicCamera();

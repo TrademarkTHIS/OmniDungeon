@@ -47,7 +47,7 @@ public class RandomWanderGoal<T extends Entity> implements Goal<T> {
                 map,
                 loc.getX(), loc.getY(),
                 targetTile.x, targetTile.y
-            );
+            ,8);
 
             if (path.isEmpty()) {
                 targetTile = null;

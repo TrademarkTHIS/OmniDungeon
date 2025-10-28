@@ -3,7 +3,7 @@ package me.arcademadness.omni_dungeon.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import me.arcademadness.omni_dungeon.attributes.Friction;
-import me.arcademadness.omni_dungeon.environment.EnvironmentConfig;
+import me.arcademadness.omni_dungeon.controllers.MobController;
 import me.arcademadness.omni_dungeon.attributes.Acceleration;
 import me.arcademadness.omni_dungeon.attributes.MaxSpeed;
 import me.arcademadness.omni_dungeon.components.EntityPart;
@@ -22,5 +22,7 @@ public class RedMobEntity extends MobEntity {
         EntityPart part = new EntityPart(this, visual, collider);
 
         setRootPart(part);
+
+        setController(new MobController());
     }
 }

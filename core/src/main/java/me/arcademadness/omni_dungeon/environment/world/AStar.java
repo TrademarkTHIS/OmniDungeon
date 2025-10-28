@@ -17,7 +17,7 @@ public class AStar {
         { 1, 1 }, { 1, -1 }, { -1, 1 }, { -1, -1 }
     };
 
-    public static List<Vector2> findPath(TileMap map, float startX, float startY, float goalX, float goalY) {
+    public static List<Vector2> findPath(TileMap map, float startX, float startY, float goalX, float goalY, int chunkSize) {
         int startTileX = (int) Math.floor(startX);
         int startTileY = (int) Math.floor(startY);
         int goalTileX  = (int) Math.floor(goalX);
@@ -31,12 +31,21 @@ public class AStar {
         if (!start.walkable || !goal.walkable)
             return Collections.emptyList();
 
+        // Find in chunk
+        int halfChunk = chunkSize / 2;
+        int minX = Math.max(0, startTileX - halfChunk);
+        int maxX = Math.min(map.width - 1, startTileX + halfChunk);
+        int minY = Math.max(0, startTileY - halfChunk);
+        int maxY = Math.min(map.height - 1, startTileY + halfChunk);
+
         BinaryHeap<Node> open = new BinaryHeap<>();
         Map<Point, Node> allNodes = new HashMap<>();
 
         Node startNode = new Node(startTileX, startTileY, null, 0, heuristic(startTileX, startTileY, goalTileX, goalTileY));
         open.add(startNode);
         allNodes.put(new Point(startTileX, startTileY), startNode);
+
+        Node bestNode = startNode;
 
         while (open.size > 0) {
             Node current = open.pop();
@@ -50,6 +59,8 @@ public class AStar {
             for (int[] dir : DIRECTIONS) {
                 int nx = current.x + dir[0];
                 int ny = current.y + dir[1];
+
+                if (nx < minX || nx > maxX || ny < minY || ny > maxY) continue;
                 if (!inBounds(map, nx, ny)) continue;
 
                 Tile tile = map.tiles[nx][ny];
@@ -67,7 +78,15 @@ public class AStar {
                     neighbor.updateCosts(current, gCost);
                     open.setValue(neighbor, (float) neighbor.fCost);
                 }
+
+                if (heuristic(nx, ny, goalTileX, goalTileY) < heuristic(bestNode.x, bestNode.y, goalTileX, goalTileY)) {
+                    bestNode = neighbor;
+                }
             }
+        }
+
+        if (bestNode != null && bestNode != startNode) {
+            return reconstructPath(bestNode, bestNode.x + 0.5f, bestNode.y + 0.5f);
         }
 
         return Collections.emptyList();
