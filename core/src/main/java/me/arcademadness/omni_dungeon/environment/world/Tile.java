@@ -38,4 +38,9 @@ public class Tile {
     public boolean isWalkable() {
         return walkable;
     }
+
+    /** Check if this tile has an entity part in it */
+    public boolean hasEntity() {
+        return !parts.isEmpty();
+    }
 }
