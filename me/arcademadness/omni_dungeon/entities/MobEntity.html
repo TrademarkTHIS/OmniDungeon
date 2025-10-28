@@ -15,7 +15,11 @@
 <script type="text/javascript" src="../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var pathtoroot = "../../../../";
+<script type="text/javascript">var evenRowColor = "even-row-color";
+var oddRowColor = "odd-row-color";
+var tableTab = "table-tab";
+var activeTableTab = "active-table-tab";
+var pathtoroot = "../../../../";
 loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -48,7 +52,7 @@ loadScripts(document, 'script');</script>
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method-detail">Method</a></li>
 </ul>
 </div>
 <div class="nav-list-search"><label for="search-input">SEARCH:</label>
@@ -78,10 +82,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
-<dd><code><a href="RedMobEntity.html" title="class in me.arcademadness.omni_dungeon.entities">RedMobEntity</a></code></dd>
+<dd><code><a href="BeeEntity.html" title="class in me.arcademadness.omni_dungeon.entities">BeeEntity</a></code>, <code><a href="RedMobEntity.html" title="class in me.arcademadness.omni_dungeon.entities">RedMobEntity</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">MobEntity</span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">MobEntity</span>
 <span class="extends-implements">extends <a href="BaseEntity.html" title="class in me.arcademadness.omni_dungeon.entities">BaseEntity</a></span></div>
 </section>
 <section class="summary">
@@ -112,6 +116,22 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
+<div id="method-summary-table">
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Entity.html" title="interface in me.arcademadness.omni_dungeon.entities">Entity</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTarget()" class="member-name-link">getTarget</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTarget(me.arcademadness.omni_dungeon.entities.Entity)" class="member-name-link">setTarget</a><wbr>(<a href="Entity.html" title="interface in me.arcademadness.omni_dungeon.entities">Entity</a>&nbsp;target)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+</div>
+</div>
+</div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-me.arcademadness.omni_dungeon.entities.BaseEntity">Methods inherited from class&nbsp;me.arcademadness.omni_dungeon.entities.<a href="BaseEntity.html" title="class in me.arcademadness.omni_dungeon.entities">BaseEntity</a></h3>
 <code><a href="BaseEntity.html#getAcceleration()">getAcceleration</a>, <a href="BaseEntity.html#getActionPoints()">getActionPoints</a>, <a href="BaseEntity.html#getArmor()">getArmor</a>, <a href="BaseEntity.html#getController()">getController</a>, <a href="BaseEntity.html#getEnvironment()">getEnvironment</a>, <a href="BaseEntity.html#getFriction()">getFriction</a>, <a href="BaseEntity.html#getHealth()">getHealth</a>, <a href="BaseEntity.html#getInventory()">getInventory</a>, <a href="BaseEntity.html#getLocation()">getLocation</a>, <a href="BaseEntity.html#getMana()">getMana</a>, <a href="BaseEntity.html#getMaxSpeed()">getMaxSpeed</a>, <a href="BaseEntity.html#getOccupiedTiles()">getOccupiedTiles</a>, <a href="BaseEntity.html#getRootPart()">getRootPart</a>, <a href="BaseEntity.html#getVelocity()">getVelocity</a>, <a href="BaseEntity.html#setController(me.arcademadness.omni_dungeon.controllers.Controller)">setController</a>, <a href="BaseEntity.html#setEnvironment(me.arcademadness.omni_dungeon.environment.EnvironmentView)">setEnvironment</a>, <a href="BaseEntity.html#setRootPart(me.arcademadness.omni_dungeon.components.EntityPart)">setRootPart</a>, <a href="BaseEntity.html#setVelocity(com.badlogic.gdx.math.Vector2)">setVelocity</a></code></div>
@@ -133,6 +153,26 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;()">
 <h3>MobEntity</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">MobEntity</span>()</div>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<!-- ============ METHOD DETAIL ========== -->
+<li>
+<section class="method-details" id="method-detail">
+<h2>Method Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="getTarget()">
+<h3>getTarget</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entity.html" title="interface in me.arcademadness.omni_dungeon.entities">Entity</a></span>&nbsp;<span class="element-name">getTarget</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setTarget(me.arcademadness.omni_dungeon.entities.Entity)">
+<h3>setTarget</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setTarget</span><wbr><span class="parameters">(<a href="Entity.html" title="interface in me.arcademadness.omni_dungeon.entities">Entity</a>&nbsp;target)</span></div>
 </section>
 </li>
 </ul>
