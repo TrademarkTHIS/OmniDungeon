@@ -81,7 +81,7 @@ public class GridGame extends ApplicationAdapter {
         player.setController(playerController);
         environment.spawn(player, new Location(map.width / 2f, map.height / 2f));
 
-        int gridSize = 10;
+        int gridSize = 25;
         float spacing = 0.3f;
 
         for (int i = 0; i < gridSize; i++) {
@@ -92,7 +92,6 @@ public class GridGame extends ApplicationAdapter {
             }
         }
 
-        // Example mob
         RedMobEntity redMob = new RedMobEntity();
         redMob.setController(new MobController());
         environment.spawn(redMob, new Location(3,3));

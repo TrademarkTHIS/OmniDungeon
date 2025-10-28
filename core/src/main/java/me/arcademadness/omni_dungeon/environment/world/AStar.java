@@ -1,6 +1,8 @@
 package me.arcademadness.omni_dungeon.environment.world;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.BinaryHeap;
+
 import java.awt.Point;
 import java.util.*;
 
@@ -15,10 +17,6 @@ public class AStar {
         { 1, 1 }, { 1, -1 }, { -1, 1 }, { -1, -1 }
     };
 
-    /**
-     * Finds a path between two points in tile coordinates (floats allowed).
-     * The returned path is a list of Vector2 tile positions (can include .5 centers).
-     */
     public static List<Vector2> findPath(TileMap map, float startX, float startY, float goalX, float goalY) {
         int startTileX = (int) Math.floor(startX);
         int startTileY = (int) Math.floor(startY);
@@ -33,15 +31,15 @@ public class AStar {
         if (!start.walkable || !goal.walkable)
             return Collections.emptyList();
 
-        PriorityQueue<Node> open = new PriorityQueue<>(Comparator.comparingDouble(n -> n.fCost));
+        BinaryHeap<Node> open = new BinaryHeap<>();
         Map<Point, Node> allNodes = new HashMap<>();
 
         Node startNode = new Node(startTileX, startTileY, null, 0, heuristic(startTileX, startTileY, goalTileX, goalTileY));
         open.add(startNode);
         allNodes.put(new Point(startTileX, startTileY), startNode);
 
-        while (!open.isEmpty()) {
-            Node current = open.poll();
+        while (open.size > 0) {
+            Node current = open.pop();
 
             if (current.x == goalTileX && current.y == goalTileY) {
                 return reconstructPath(current, goalX, goalY);
@@ -52,8 +50,8 @@ public class AStar {
             for (int[] dir : DIRECTIONS) {
                 int nx = current.x + dir[0];
                 int ny = current.y + dir[1];
-
                 if (!inBounds(map, nx, ny)) continue;
+
                 Tile tile = map.tiles[nx][ny];
                 if (!tile.walkable) continue;
 
@@ -65,14 +63,9 @@ public class AStar {
                     neighbor = new Node(nx, ny, current, gCost, heuristic(nx, ny, goalTileX, goalTileY));
                     allNodes.put(key, neighbor);
                     open.add(neighbor);
-                } else if (gCost < neighbor.gCost) {
-                    neighbor.parent = current;
-                    neighbor.gCost = gCost;
-                    neighbor.fCost = gCost + neighbor.hCost;
-                    if (!neighbor.closed) {
-                        open.remove(neighbor);
-                        open.add(neighbor);
-                    }
+                } else if (!neighbor.closed && gCost < neighbor.gCost) {
+                    neighbor.updateCosts(current, gCost);
+                    open.setValue(neighbor, (float) neighbor.fCost);
                 }
             }
         }
@@ -101,15 +94,16 @@ public class AStar {
         return (dx < dy) ? F * dx + dy : F * dy + dx;
     }
 
-    private static class Node {
+    private static class Node extends BinaryHeap.Node {
         int x, y;
         Node parent;
-        double gCost; // cost so far
-        double hCost; // heuristic cost to goal
-        double fCost; // total = g + h
+        double gCost;
+        double hCost;
+        double fCost;
         boolean closed = false;
 
         Node(int x, int y, Node parent, double gCost, double hCost) {
+            super((float) (gCost + hCost)); // sets internal heap value
             this.x = x;
             this.y = y;
             this.parent = parent;
@@ -117,5 +111,12 @@ public class AStar {
             this.hCost = hCost;
             this.fCost = gCost + hCost;
         }
+
+        void updateCosts(Node parent, double newGCost) {
+            this.parent = parent;
+            this.gCost = newGCost;
+            this.fCost = newGCost + hCost;
+        }
     }
+
 }

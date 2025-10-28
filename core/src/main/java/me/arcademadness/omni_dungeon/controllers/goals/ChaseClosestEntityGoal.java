@@ -18,6 +18,8 @@ public class ChaseClosestEntityGoal<T extends Entity> implements Goal<T> {
     private final int priority;
     private final int scanRadius;
 
+    private Entity cachedTarget;
+
     public ChaseClosestEntityGoal(int priority, int scanRadius) {
         this.priority = priority;
         this.scanRadius = scanRadius;
@@ -34,10 +36,14 @@ public class ChaseClosestEntityGoal<T extends Entity> implements Goal<T> {
         if (env == null) return Optional.empty();
 
         TileMap map = env.getMap();
-        Entity closest = findClosestEntity(map, entity, scanRadius);
-        if (closest == null) return Optional.empty();
 
-        Vector2 targetCenter = closest.getRootPart().getColliderCenter();
+        if (!isValidTarget(cachedTarget)) {
+            cachedTarget = findClosestEntity(map, entity, scanRadius);
+        }
+
+        if (cachedTarget == null) return Optional.empty();
+
+        Vector2 targetCenter = cachedTarget.getRootPart().getColliderCenter();
         if (targetCenter == null) return Optional.empty();
 
         Location loc = entity.getLocation();
@@ -57,6 +63,9 @@ public class ChaseClosestEntityGoal<T extends Entity> implements Goal<T> {
         return Optional.of(intent);
     }
 
+    /**
+     * Finds the closest valid target entity within the given radius.
+     */
     private Entity findClosestEntity(TileMap map, T self, int radius) {
         Location loc = self.getLocation();
         Entity closest = null;
@@ -72,7 +81,9 @@ public class ChaseClosestEntityGoal<T extends Entity> implements Goal<T> {
                 for (var part : tile.parts) {
                     Entity e = part.getOwner();
                     if (e == self) continue;
-                    if (self.getClass().isInstance(e)) continue; // Skip same type (like bees)
+                    if (self.getClass().isInstance(e)) continue; // Skip same type
+
+                    if (!isValidTarget(e)) continue;
 
                     Vector2 pos = e.getLocation();
                     float distSq = loc.dst2(pos);
@@ -84,5 +95,14 @@ public class ChaseClosestEntityGoal<T extends Entity> implements Goal<T> {
             }
         }
         return closest;
+    }
+
+    /**
+     * Checks if the entity is valid (non-null, has health > 0).
+     */
+    private boolean isValidTarget(Entity e) {
+        return e != null
+            && e.getHealth() != null
+            && e.getHealth().getCurrentHealth() > 0;
     }
 }
