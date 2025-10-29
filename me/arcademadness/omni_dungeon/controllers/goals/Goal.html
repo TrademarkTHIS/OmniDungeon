@@ -73,7 +73,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
-<dd><code><a href="ChaseClosestEntityGoal.html" title="class in me.arcademadness.omni_dungeon.controllers.goals">ChaseClosestEntityGoal</a></code>, <code><a href="RandomWanderGoal.html" title="class in me.arcademadness.omni_dungeon.controllers.goals">RandomWanderGoal</a></code></dd>
+<dd><code><a href="ChaseClosestEntityGoal.html" title="class in me.arcademadness.omni_dungeon.controllers.goals">ChaseClosestEntityGoal</a></code>, <code><a href="CreateGroupGoal.html" title="class in me.arcademadness.omni_dungeon.controllers.goals">CreateGroupGoal</a></code>, <code><a href="FindGroupGoal.html" title="class in me.arcademadness.omni_dungeon.controllers.goals">FindGroupGoal</a></code>, <code><a href="FindTargetGoal.html" title="class in me.arcademadness.omni_dungeon.controllers.goals">FindTargetGoal</a></code>, <code><a href="GroupChaseGoal.html" title="class in me.arcademadness.omni_dungeon.controllers.goals">GroupChaseGoal</a></code>, <code><a href="MergeGroupGoal.html" title="class in me.arcademadness.omni_dungeon.controllers.goals">MergeGroupGoal</a></code>, <code><a href="RandomWanderGoal.html" title="class in me.arcademadness.omni_dungeon.controllers.goals">RandomWanderGoal</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">Goal&lt;T extends <a href="../../entities/Entity.html" title="interface in me.arcademadness.omni_dungeon.entities">Entity</a>&gt;</span></div>
@@ -101,6 +101,9 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Lower number = higher priority.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#shouldActivate(T)" class="member-name-link">shouldActivate</a><wbr>(<a href="Goal.html" title="type parameter in Goal">T</a>&nbsp;entity)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -120,6 +123,16 @@ loadScripts(document, 'script');</script>
 <h3>getPriority</h3>
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">getPriority</span>()</div>
 <div class="block">Lower number = higher priority. E.g., 0 = highest.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="shouldActivate(T)">
+<h3 id="shouldActivate(me.arcademadness.omni_dungeon.entities.Entity)">shouldActivate</h3>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">shouldActivate</span><wbr><span class="parameters">(<a href="Goal.html" title="type parameter in Goal">T</a>&nbsp;entity)</span></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>if this goal should be activated</dd>
+</dl>
 </section>
 </li>
 <li>
