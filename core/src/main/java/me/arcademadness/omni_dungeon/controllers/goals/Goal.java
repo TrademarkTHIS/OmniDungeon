@@ -12,6 +12,12 @@ public interface Goal<T extends Entity> {
     int getPriority();
 
     /**
+     *
+     * @return if this goal should be activated
+     */
+    boolean shouldActivate(T entity);
+
+    /**
      * Returns an optional ControlIntent if this goal wants the entity to act.
      */
     Optional<ControlIntent> computeIntent(T entity);

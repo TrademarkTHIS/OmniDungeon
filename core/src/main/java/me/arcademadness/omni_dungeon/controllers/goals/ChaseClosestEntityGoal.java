@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import me.arcademadness.omni_dungeon.controllers.ControlIntent;
 import me.arcademadness.omni_dungeon.actions.MoveAction;
 import me.arcademadness.omni_dungeon.entities.Entity;
+import me.arcademadness.omni_dungeon.entities.MobEntity;
 import me.arcademadness.omni_dungeon.environment.EnvironmentView;
 import me.arcademadness.omni_dungeon.environment.world.AStar;
 import me.arcademadness.omni_dungeon.environment.world.Tile;
@@ -13,12 +14,10 @@ import me.arcademadness.omni_dungeon.components.Location;
 import java.util.List;
 import java.util.Optional;
 
-public class ChaseClosestEntityGoal<T extends Entity> implements Goal<T> {
+public class ChaseClosestEntityGoal<T extends MobEntity> implements Goal<T> {
 
     private final int priority;
     private final int scanRadius;
-
-    private Entity cachedTarget;
 
     public ChaseClosestEntityGoal(int priority, int scanRadius) {
         this.priority = priority;
@@ -31,41 +30,79 @@ public class ChaseClosestEntityGoal<T extends Entity> implements Goal<T> {
     }
 
     @Override
+    public boolean shouldActivate(T entity) {
+        return entity.getGroup() != null;
+    }
+
+    @Override
     public Optional<ControlIntent> computeIntent(T entity) {
         EnvironmentView env = entity.getEnvironment();
         if (env == null) return Optional.empty();
 
         TileMap map = env.getMap();
 
-        if (!isValidTarget(cachedTarget)) {
-            cachedTarget = findClosestEntity(map, entity, scanRadius);
+        // Use entity's internal target instead of cachedTarget
+        Entity target = entity.getTarget();
+        if (!isValidTarget(target)) {
+            target = findClosestEntity(map, entity, scanRadius);
+            entity.setTarget(target); // update mob's internal target
         }
 
-        if (cachedTarget == null) return Optional.empty();
+        if (target == null) return Optional.empty();
 
-        Vector2 targetCenter = cachedTarget.getRootPart().getColliderCenter();
+        Vector2 targetCenter = target.getRootPart().getColliderCenter();
         if (targetCenter == null) return Optional.empty();
 
         Location loc = entity.getLocation();
         List<Vector2> path = AStar.findPath(
             map,
             loc.getX(), loc.getY(),
-            targetCenter.x, targetCenter.y
-        ,8);
+            targetCenter.x, targetCenter.y,
+            4
+        );
 
         if (path.isEmpty()) return Optional.empty();
 
         Vector2 next = path.get(0);
         Vector2 dir = new Vector2(next.x - loc.getX(), next.y - loc.getY()).nor();
 
+        // Separation logic to avoid crowding
+        Vector2 separation = new Vector2();
+        int tileX = loc.getTileX();
+        int tileY = loc.getTileY();
+
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                int tx = tileX + dx;
+                int ty = tileY + dy;
+                if (tx < 0 || ty < 0 || tx >= map.width || ty >= map.height) continue;
+
+                Tile tile = map.tiles[tx][ty];
+                for (var part : tile.parts) {
+                    Entity other = part.getOwner();
+                    if (other == entity) continue;
+                    if (other.getClass().isInstance(entity)) {
+                        Vector2 offset = loc.cpy().sub(other.getLocation());
+                        float distSq = offset.len2();
+                        float minDist = 0.5f;
+                        if (distSq < minDist * minDist && distSq > 0) {
+                            separation.add(offset.nor().scl((minDist - (float)Math.sqrt(distSq))));
+                        }
+                    }
+                }
+            }
+        }
+
+        if (separation.len2() > 0) {
+            separation.nor().scl(0.5f);
+            dir.add(separation).nor();
+        }
+
         ControlIntent intent = new ControlIntent();
         intent.addAction(new MoveAction(dir));
         return Optional.of(intent);
     }
 
-    /**
-     * Finds the closest valid target entity within the given radius.
-     */
     private Entity findClosestEntity(TileMap map, T self, int radius) {
         Location loc = self.getLocation();
         Entity closest = null;
@@ -85,8 +122,7 @@ public class ChaseClosestEntityGoal<T extends Entity> implements Goal<T> {
 
                     if (!isValidTarget(e)) continue;
 
-                    Vector2 pos = e.getLocation();
-                    float distSq = loc.dst2(pos);
+                    float distSq = loc.dst2(e.getLocation());
                     if (distSq < bestDistSq) {
                         bestDistSq = distSq;
                         closest = e;
@@ -97,9 +133,6 @@ public class ChaseClosestEntityGoal<T extends Entity> implements Goal<T> {
         return closest;
     }
 
-    /**
-     * Checks if the entity is valid (non-null, has health > 0).
-     */
     private boolean isValidTarget(Entity e) {
         return e != null
             && e.getHealth() != null

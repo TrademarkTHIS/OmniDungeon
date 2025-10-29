@@ -19,10 +19,13 @@ public abstract class GoalController<T extends Entity> extends AbstractControlle
 
     @Override
     public Optional<ControlIntent> getIntent() {
-        T entity = (T) getEntity();
+        T entity = getEntity();
         for (Goal<T> goal : goals) {
-            Optional<ControlIntent> intent = goal.computeIntent(entity);
-            if (intent.isPresent()) return intent;
+            // Check if this goal should be active.
+            if (goal.shouldActivate(entity)) {
+                Optional<ControlIntent> intent = goal.computeIntent(entity);
+                if (intent.isPresent()) return intent;
+            }
         }
         return Optional.empty();
     }

@@ -81,7 +81,7 @@ public class GridGame extends ApplicationAdapter {
         player.setController(playerController);
         environment.spawn(player, new Location(map.width / 2f, map.height / 2f));
 
-        int beesToGrid = 15;
+        int beesToGrid = 30;
         float spacing = 0.3f;
 
         for (int i = 0; i < beesToGrid; i++) {

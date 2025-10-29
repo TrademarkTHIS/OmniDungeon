@@ -1,7 +1,6 @@
 package me.arcademadness.omni_dungeon.controllers;
 
-import me.arcademadness.omni_dungeon.controllers.goals.ChaseClosestEntityGoal;
-import me.arcademadness.omni_dungeon.controllers.goals.RandomWanderGoal;
+import me.arcademadness.omni_dungeon.controllers.goals.*;
 import me.arcademadness.omni_dungeon.entities.BeeEntity;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.events.EventListener;
@@ -12,9 +11,16 @@ import me.arcademadness.omni_dungeon.events.entity.BeeStingEvent;
 public class BeeController extends GoalController<BeeEntity> implements EventListener {
 
     public BeeController() {
-        addGoal(new ChaseClosestEntityGoal<>(0, 50));
+        addGoal(new FindGroupGoal<>(0, 8));
+        addGoal(new CreateGroupGoal<>(1));
+        addGoal(new MergeGroupGoal<>(2, 8));
+
+        addGoal(new FindTargetGoal<>(3, 8));
+        addGoal(new GroupChaseGoal<>(4));
+
         addGoal(new RandomWanderGoal<>(5));
     }
+
 
     /**
      * Collision handling stays the same. Bees sting non-bees.

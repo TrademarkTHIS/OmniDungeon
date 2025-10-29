@@ -48,7 +48,6 @@ public class CollisionService {
         float newY = yTiles;
 
         newX = moveAxis(entity, newX, newY, deltaX, true);
-
         newY = moveAxis(entity, newX, newY, deltaY, false);
 
         if (deltaX != 0 && newX == xTiles) {
@@ -145,6 +144,7 @@ public class CollisionService {
 
         for (EntityPart otherPart : nearbyParts) {
             if (otherPart.getOwner() == movingPart.getOwner()) continue;
+            if (otherPart.getOwner().getClass() == movingPart.getOwner().getClass()) continue;
 
             Rectangle otherCollider = otherPart.getCollider();
             if (otherCollider == null) continue;
