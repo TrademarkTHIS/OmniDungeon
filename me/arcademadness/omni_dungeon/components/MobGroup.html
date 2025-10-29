@@ -74,9 +74,14 @@ loadScripts(document, 'script');</script>
 <div class="inheritance">me.arcademadness.omni_dungeon.components.MobGroup</div>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="../events/EventListener.html" title="interface in me.arcademadness.omni_dungeon.events">EventListener</a></code></dd>
+</dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">MobGroup</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
+implements <a href="../events/EventListener.html" title="interface in me.arcademadness.omni_dungeon.events">EventListener</a></span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -131,17 +136,29 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../entities/MobEntity.html" title="class in me.arcademadness.omni_dungeon.entities">MobEntity</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMembers()" class="member-name-link">getMembers</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../entities/Entity.html" title="interface in me.arcademadness.omni_dungeon.entities">Entity</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTarget()" class="member-name-link">getTarget</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../entities/MobEntity.html" title="class in me.arcademadness.omni_dungeon.entities">MobEntity</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getQueen()" class="member-name-link">getQueen</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../entities/Entity.html" title="interface in me.arcademadness.omni_dungeon.entities">Entity</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTarget()" class="member-name-link">getTarget</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#merge(me.arcademadness.omni_dungeon.components.MobGroup)" class="member-name-link">merge</a><wbr>(<a href="MobGroup.html" title="class in me.arcademadness.omni_dungeon.components">MobGroup</a>&nbsp;other)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#merge(me.arcademadness.omni_dungeon.components.MobGroup)" class="member-name-link">merge</a><wbr>(<a href="MobGroup.html" title="class in me.arcademadness.omni_dungeon.components">MobGroup</a>&nbsp;other)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onDeath(me.arcademadness.omni_dungeon.events.entity.EntityDeathEvent)" class="member-name-link">onDeath</a><wbr>(<a href="../events/entity/EntityDeathEvent.html" title="class in me.arcademadness.omni_dungeon.events.entity">EntityDeathEvent</a>&nbsp;event)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeMember(me.arcademadness.omni_dungeon.entities.MobEntity)" class="member-name-link">removeMember</a><wbr>(<a href="../entities/MobEntity.html" title="class in me.arcademadness.omni_dungeon.entities">MobEntity</a>&nbsp;mob)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTarget(me.arcademadness.omni_dungeon.entities.Entity)" class="member-name-link">setTarget</a><wbr>(<a href="../entities/Entity.html" title="interface in me.arcademadness.omni_dungeon.entities">Entity</a>&nbsp;target)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setQueen(me.arcademadness.omni_dungeon.entities.MobEntity)" class="member-name-link">setQueen</a><wbr>(<a href="../entities/MobEntity.html" title="class in me.arcademadness.omni_dungeon.entities">MobEntity</a>&nbsp;mob)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTarget(me.arcademadness.omni_dungeon.entities.Entity)" class="member-name-link">setTarget</a><wbr>(<a href="../entities/Entity.html" title="interface in me.arcademadness.omni_dungeon.entities">Entity</a>&nbsp;target)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validateMembers()" class="member-name-link">validateMembers</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
@@ -197,9 +214,21 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="onDeath(me.arcademadness.omni_dungeon.events.entity.EntityDeathEvent)">
+<h3>onDeath</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">onDeath</span><wbr><span class="parameters">(<a href="../events/entity/EntityDeathEvent.html" title="class in me.arcademadness.omni_dungeon.events.entity">EntityDeathEvent</a>&nbsp;event)</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="addMember(me.arcademadness.omni_dungeon.entities.MobEntity)">
 <h3>addMember</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">addMember</span><wbr><span class="parameters">(<a href="../entities/MobEntity.html" title="class in me.arcademadness.omni_dungeon.entities">MobEntity</a>&nbsp;mob)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="setQueen(me.arcademadness.omni_dungeon.entities.MobEntity)">
+<h3>setQueen</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setQueen</span><wbr><span class="parameters">(<a href="../entities/MobEntity.html" title="class in me.arcademadness.omni_dungeon.entities">MobEntity</a>&nbsp;mob)</span></div>
 </section>
 </li>
 <li>
@@ -242,6 +271,18 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="clear()">
 <h3>clear</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">clear</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getQueen()">
+<h3>getQueen</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../entities/MobEntity.html" title="class in me.arcademadness.omni_dungeon.entities">MobEntity</a></span>&nbsp;<span class="element-name">getQueen</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="validateMembers()">
+<h3>validateMembers</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">validateMembers</span>()</div>
 </section>
 </li>
 </ul>

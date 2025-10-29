@@ -123,7 +123,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addGoal(me.arcademadness.omni_dungeon.controllers.goals.Goal)" class="member-name-link">addGoal</a><wbr>(<a href="goals/Goal.html" title="interface in me.arcademadness.omni_dungeon.controllers.goals">Goal</a>&lt;<a href="GoalController.html" title="type parameter in GoalController">T</a>&gt;&nbsp;goal)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="ControlIntent.html" title="class in me.arcademadness.omni_dungeon.controllers">ControlIntent</a>&gt;</code></div>
@@ -131,6 +131,15 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Retrieves the current control intent, if one is available.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;G extends <a href="goals/Goal.html" title="interface in me.arcademadness.omni_dungeon.controllers.goals">Goal</a>&lt;?&gt;&gt;<br>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hasGoal(java.lang.Class)" class="member-name-link">hasGoal</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;G&gt;&nbsp;goalClass)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;G extends <a href="goals/Goal.html" title="interface in me.arcademadness.omni_dungeon.controllers.goals">Goal</a>&lt;?&gt;&gt;<br>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeGoal(java.lang.Class)" class="member-name-link">removeGoal</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;G&gt;&nbsp;goalClass)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeGoal(me.arcademadness.omni_dungeon.controllers.goals.Goal)" class="member-name-link">removeGoal</a><wbr>(<a href="goals/Goal.html" title="interface in me.arcademadness.omni_dungeon.controllers.goals">Goal</a>&lt;<a href="GoalController.html" title="type parameter in GoalController">T</a>&gt;&nbsp;goal)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -168,7 +177,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addGoal(me.arcademadness.omni_dungeon.controllers.goals.Goal)">
 <h3>addGoal</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addGoal</span><wbr><span class="parameters">(<a href="goals/Goal.html" title="interface in me.arcademadness.omni_dungeon.controllers.goals">Goal</a>&lt;<a href="GoalController.html" title="type parameter in GoalController">T</a>&gt;&nbsp;goal)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addGoal</span><wbr><span class="parameters">(<a href="goals/Goal.html" title="interface in me.arcademadness.omni_dungeon.controllers.goals">Goal</a>&lt;<a href="GoalController.html" title="type parameter in GoalController">T</a>&gt;&nbsp;goal)</span></div>
 </section>
 </li>
 <li>
@@ -186,6 +195,24 @@ loadScripts(document, 'script');</script>
 <dd>an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> containing the current <a href="ControlIntent.html" title="class in me.arcademadness.omni_dungeon.controllers"><code>ControlIntent</code></a>,
          or empty if no intent is present</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="hasGoal(java.lang.Class)">
+<h3>hasGoal</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;G extends <a href="goals/Goal.html" title="interface in me.arcademadness.omni_dungeon.controllers.goals">Goal</a>&lt;?&gt;&gt;</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">hasGoal</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;G&gt;&nbsp;goalClass)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="removeGoal(me.arcademadness.omni_dungeon.controllers.goals.Goal)">
+<h3>removeGoal</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">removeGoal</span><wbr><span class="parameters">(<a href="goals/Goal.html" title="interface in me.arcademadness.omni_dungeon.controllers.goals">Goal</a>&lt;<a href="GoalController.html" title="type parameter in GoalController">T</a>&gt;&nbsp;goal)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="removeGoal(java.lang.Class)">
+<h3>removeGoal</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;G extends <a href="goals/Goal.html" title="interface in me.arcademadness.omni_dungeon.controllers.goals">Goal</a>&lt;?&gt;&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">removeGoal</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;G&gt;&nbsp;goalClass)</span></div>
 </section>
 </li>
 </ul>
