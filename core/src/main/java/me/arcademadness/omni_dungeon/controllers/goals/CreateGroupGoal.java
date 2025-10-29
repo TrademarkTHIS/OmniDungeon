@@ -9,9 +9,11 @@ import java.util.Optional;
 public class CreateGroupGoal<T extends MobEntity> implements Goal<T> {
 
     private final int priority;
+    private final int MAX_GROUP_SIZE;
 
-    public CreateGroupGoal(int priority) {
+    public CreateGroupGoal(int priority, int maxGroupSize) {
         this.priority = priority;
+        MAX_GROUP_SIZE = maxGroupSize;
     }
 
     @Override
@@ -27,7 +29,7 @@ public class CreateGroupGoal<T extends MobEntity> implements Goal<T> {
 
     @Override
     public Optional<ControlIntent> computeIntent(T entity) {
-        MobGroup group = new MobGroup();
+        MobGroup group = new MobGroup(MAX_GROUP_SIZE);
         if (entity.getEnvironment()!=null) {
             entity.getEnvironment().getEventBus().register(group);
         }
