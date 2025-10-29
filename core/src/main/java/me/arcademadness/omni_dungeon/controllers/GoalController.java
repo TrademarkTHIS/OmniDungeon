@@ -8,6 +8,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Provides ControlIntents based on {@link Goal}s rather than hard coded logic.
+ * @param <T> the type of mob that will use this controller
+ */
 public abstract class GoalController<T extends Entity> extends AbstractController<T> {
 
     private final List<Goal<T>> goals = new ArrayList<>();

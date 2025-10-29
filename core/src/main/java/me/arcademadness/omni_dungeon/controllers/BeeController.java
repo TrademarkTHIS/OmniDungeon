@@ -23,7 +23,6 @@ public class BeeController extends GoalController<BeeEntity> implements EventLis
         addGoal(new RandomWanderGoal<>(6));
     }
 
-
     /**
      * Collision handling stays the same. Bees sting non-bees.
      */

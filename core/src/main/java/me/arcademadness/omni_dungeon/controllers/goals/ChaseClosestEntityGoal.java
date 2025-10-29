@@ -14,6 +14,11 @@ import me.arcademadness.omni_dungeon.components.Location;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * A Goal which picks a target and then chases them relentlessly
+ * Tries to collide with them by targeting the center of their root {@link me.arcademadness.omni_dungeon.components.EntityPart}
+ * @param <T> the type of mob that will use this goal
+ */
 public class ChaseClosestEntityGoal<T extends MobEntity> implements Goal<T> {
 
     private final int priority;

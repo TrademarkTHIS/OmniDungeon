@@ -6,6 +6,12 @@ import me.arcademadness.omni_dungeon.components.MobGroup;
 
 import java.util.Optional;
 
+/**
+ * A Goal for when a Mob has no group. Makes a new group where the {@link MobEntity} is the Queen.
+ * Should be a lower priority than {@link FindGroupGoal} which attempts to join existing groups.
+ * Should be a higher priority than {@link MergeGroupGoal} which only works when the {@link MobEntity} has a group to merge.
+ * @param <T> the type of mob that will use this goal
+ */
 public class CreateGroupGoal<T extends MobEntity> implements Goal<T> {
 
     private final int priority;
