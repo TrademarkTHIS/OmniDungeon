@@ -28,8 +28,11 @@ public class CreateGroupGoal<T extends MobEntity> implements Goal<T> {
     @Override
     public Optional<ControlIntent> computeIntent(T entity) {
         MobGroup group = new MobGroup();
+        if (entity.getEnvironment()!=null) {
+            entity.getEnvironment().getEventBus().register(group);
+        }
         group.addMember(entity);
         entity.setGroup(group);
-        return Optional.empty(); // group creation is purely internal
+        return Optional.empty();
     }
 }

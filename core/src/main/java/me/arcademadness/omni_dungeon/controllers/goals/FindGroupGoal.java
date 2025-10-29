@@ -35,11 +35,12 @@ public class FindGroupGoal<T extends MobEntity> implements Goal<T> {
         MobGroup foundGroup = findNearbyGroup(entity, map);
 
         if (foundGroup != null) {
-            foundGroup.addMember(entity);
-            entity.setGroup(foundGroup);
+            if (foundGroup.addMember(entity)) {
+                entity.setGroup(foundGroup);
+            }
         }
 
-        return Optional.empty(); // no movement or action needed for just finding a group
+        return Optional.empty();
     }
 
     private MobGroup findNearbyGroup(T self, TileMap map) {

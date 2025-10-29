@@ -12,7 +12,7 @@ public abstract class GoalController<T extends Entity> extends AbstractControlle
 
     private final List<Goal<T>> goals = new ArrayList<>();
 
-    protected void addGoal(Goal<T> goal) {
+    public void addGoal(Goal<T> goal) {
         goals.add(goal);
         goals.sort(Comparator.comparingInt(Goal::getPriority));
     }
@@ -20,7 +20,8 @@ public abstract class GoalController<T extends Entity> extends AbstractControlle
     @Override
     public Optional<ControlIntent> getIntent() {
         T entity = getEntity();
-        for (Goal<T> goal : goals) {
+        List<Goal<T>> copy = new ArrayList<Goal<T>>(goals);
+        for (Goal<T> goal : copy) {
             // Check if this goal should be active.
             if (goal.shouldActivate(entity)) {
                 Optional<ControlIntent> intent = goal.computeIntent(entity);
@@ -29,4 +30,23 @@ public abstract class GoalController<T extends Entity> extends AbstractControlle
         }
         return Optional.empty();
     }
+
+    public <G extends Goal<?>> boolean hasGoal(Class<G> goalClass) {
+        for (Goal<T> goal : goals) {
+            if (goalClass.isInstance(goal)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void removeGoal(Goal<T> goal) {
+        goals.remove(goal);
+        goals.sort(Comparator.comparingInt(Goal::getPriority));
+    }
+
+    public <G extends Goal<?>> void removeGoal(Class<G> goalClass) {
+        goals.removeIf(goalClass::isInstance);
+    }
+
 }

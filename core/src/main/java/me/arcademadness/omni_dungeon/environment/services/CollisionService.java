@@ -144,6 +144,10 @@ public class CollisionService {
 
         for (EntityPart otherPart : nearbyParts) {
             if (otherPart.getOwner() == movingPart.getOwner()) continue;
+            /*
+              This needs to be replaced for more robust checking
+              Maybe completely different types of entities don't need to collide
+             */
             if (otherPart.getOwner().getClass() == movingPart.getOwner().getClass()) continue;
 
             Rectangle otherCollider = otherPart.getCollider();

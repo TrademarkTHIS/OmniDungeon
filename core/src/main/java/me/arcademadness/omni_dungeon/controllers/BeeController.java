@@ -15,10 +15,12 @@ public class BeeController extends GoalController<BeeEntity> implements EventLis
         addGoal(new CreateGroupGoal<>(1));
         addGoal(new MergeGroupGoal<>(2, 8));
 
-        addGoal(new FindTargetGoal<>(3, 8));
+        //Removed in favor of GroupFindTarget JUST for the queen.
+        //addGoal(new FindTargetGoal<>(3, 8));
         addGoal(new GroupChaseGoal<>(4));
+        addGoal(new GroupWanderGoal<>(5));
 
-        addGoal(new RandomWanderGoal<>(5));
+        addGoal(new RandomWanderGoal<>(6));
     }
 
 

@@ -23,6 +23,8 @@ import me.arcademadness.omni_dungeon.ui.InventoryMenu;
 import me.arcademadness.omni_dungeon.ui.MenuManager;
 import me.arcademadness.omni_dungeon.environment.world.TileMap;
 
+import java.util.Random;
+
 public class GridGame extends ApplicationAdapter {
 
     // Rendering
@@ -81,20 +83,26 @@ public class GridGame extends ApplicationAdapter {
         player.setController(playerController);
         environment.spawn(player, new Location(map.width / 2f, map.height / 2f));
 
-        int beesToGrid = 30;
+        int beesToGrid = 35;
         float spacing = 0.3f;
 
+        int x = 0;
         for (int i = 0; i < beesToGrid; i++) {
             for (int j = 0; j < beesToGrid; j++) {
                 float xOffset = (i - beesToGrid / 2f) * spacing;
                 float yOffset = (j - beesToGrid / 2f) * spacing;
                 environment.spawn(new BeeEntity(), new Location((map.width / 2f) + 25 + xOffset, (map.height / 2f) + 25 + yOffset));
+                x++;
             }
         }
+        System.out.println(x + " bees have been summoned.");
 
-        RedMobEntity redMob = new RedMobEntity();
-        environment.spawn(redMob, new Location(3,3));
+        Random r = new Random();
+        for (int i = 0; i < 7; i++) {
+            environment.spawn(new RedMobEntity(), new Location(3+(i*r.nextFloat()),3+(i*1.5f)));
+        }
     }
+
 
     private void setupCameras() {
         worldCamera = new OrthographicCamera();
@@ -111,7 +119,7 @@ public class GridGame extends ApplicationAdapter {
 
 
     private void setupRenderers() {
-        fogRenderer = new FogRenderer(environment, player, shape, 32);
+        fogRenderer = new FogRenderer(environment, player, shape, 32*5);
         worldRenderer = new WorldRenderer(environment, shape, fogRenderer);
         entityRenderer = new EntityRenderer(environment, player, fogRenderer, shape);
         weaponSpreadRenderer = new WeaponSpreadRenderer(player, shape);
