@@ -201,7 +201,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="me/arcademadness/omni_dungeon/components/MobGroup.html#canMerge(me.arcademadness.omni_dungeon.components.MobGroup)" class="member-name-link">canMerge(MobGroup)</a> - Method in class me.arcademadness.omni_dungeon.components.<a href="me/arcademadness/omni_dungeon/components/MobGroup.html" title="class in me.arcademadness.omni_dungeon.components">MobGroup</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="me/arcademadness/omni_dungeon/controllers/goals/ChaseClosestEntityGoal.html" class="type-name-link" title="class in me.arcademadness.omni_dungeon.controllers.goals">ChaseClosestEntityGoal</a>&lt;<a href="me/arcademadness/omni_dungeon/controllers/goals/ChaseClosestEntityGoal.html" title="type parameter in ChaseClosestEntityGoal">T</a> extends <a href="me/arcademadness/omni_dungeon/entities/MobEntity.html" title="class in me.arcademadness.omni_dungeon.entities">MobEntity</a>&gt; - Class in <a href="me/arcademadness/omni_dungeon/controllers/goals/package-summary.html">me.arcademadness.omni_dungeon.controllers.goals</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">A Goal which picks a target and then chases them relentlessly
+ Tries to collide with them by targeting the center of their root <a href="me/arcademadness/omni_dungeon/components/EntityPart.html" title="class in me.arcademadness.omni_dungeon.components"><code>EntityPart</code></a></div>
+</dd>
 <dt><a href="me/arcademadness/omni_dungeon/controllers/goals/ChaseClosestEntityGoal.html#%3Cinit%3E(int,int)" class="member-name-link">ChaseClosestEntityGoal(int, int)</a> - Constructor for class me.arcademadness.omni_dungeon.controllers.goals.<a href="me/arcademadness/omni_dungeon/controllers/goals/ChaseClosestEntityGoal.html" title="class in me.arcademadness.omni_dungeon.controllers.goals">ChaseClosestEntityGoal</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="me/arcademadness/omni_dungeon/environment/services/CollisionService.html#checkImmediateCollisions(me.arcademadness.omni_dungeon.entities.Entity)" class="member-name-link">checkImmediateCollisions(Entity)</a> - Method in class me.arcademadness.omni_dungeon.environment.services.<a href="me/arcademadness/omni_dungeon/environment/services/CollisionService.html" title="class in me.arcademadness.omni_dungeon.environment.services">CollisionService</a></dt>
@@ -269,7 +272,9 @@ loadScripts(document, 'script');</script>
 <dt><a href="me/arcademadness/omni_dungeon/GridGame.html#create()" class="member-name-link">create()</a> - Method in class me.arcademadness.omni_dungeon.<a href="me/arcademadness/omni_dungeon/GridGame.html" title="class in me.arcademadness.omni_dungeon">GridGame</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="me/arcademadness/omni_dungeon/controllers/goals/CreateGroupGoal.html" class="type-name-link" title="class in me.arcademadness.omni_dungeon.controllers.goals">CreateGroupGoal</a>&lt;<a href="me/arcademadness/omni_dungeon/controllers/goals/CreateGroupGoal.html" title="type parameter in CreateGroupGoal">T</a> extends <a href="me/arcademadness/omni_dungeon/entities/MobEntity.html" title="class in me.arcademadness.omni_dungeon.entities">MobEntity</a>&gt; - Class in <a href="me/arcademadness/omni_dungeon/controllers/goals/package-summary.html">me.arcademadness.omni_dungeon.controllers.goals</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">A Goal for when a Mob has no group.</div>
+</dd>
 <dt><a href="me/arcademadness/omni_dungeon/controllers/goals/CreateGroupGoal.html#%3Cinit%3E(int,int)" class="member-name-link">CreateGroupGoal(int, int)</a> - Constructor for class me.arcademadness.omni_dungeon.controllers.goals.<a href="me/arcademadness/omni_dungeon/controllers/goals/CreateGroupGoal.html" title="class in me.arcademadness.omni_dungeon.controllers.goals">CreateGroupGoal</a></dt>
 <dd>&nbsp;</dd>
 </dl>
@@ -753,7 +758,9 @@ loadScripts(document, 'script');</script>
 <dt><a href="me/arcademadness/omni_dungeon/controllers/goals/Goal.html" class="type-name-link" title="interface in me.arcademadness.omni_dungeon.controllers.goals">Goal</a>&lt;<a href="me/arcademadness/omni_dungeon/controllers/goals/Goal.html" title="type parameter in Goal">T</a> extends <a href="me/arcademadness/omni_dungeon/entities/Entity.html" title="interface in me.arcademadness.omni_dungeon.entities">Entity</a>&gt; - Interface in <a href="me/arcademadness/omni_dungeon/controllers/goals/package-summary.html">me.arcademadness.omni_dungeon.controllers.goals</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="me/arcademadness/omni_dungeon/controllers/GoalController.html" class="type-name-link" title="class in me.arcademadness.omni_dungeon.controllers">GoalController</a>&lt;<a href="me/arcademadness/omni_dungeon/controllers/GoalController.html" title="type parameter in GoalController">T</a> extends <a href="me/arcademadness/omni_dungeon/entities/Entity.html" title="interface in me.arcademadness.omni_dungeon.entities">Entity</a>&gt; - Class in <a href="me/arcademadness/omni_dungeon/controllers/package-summary.html">me.arcademadness.omni_dungeon.controllers</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Provides ControlIntents based on <a href="me/arcademadness/omni_dungeon/controllers/goals/Goal.html" title="interface in me.arcademadness.omni_dungeon.controllers.goals"><code>Goal</code></a>s rather than hard coded logic.</div>
+</dd>
 <dt><a href="me/arcademadness/omni_dungeon/controllers/GoalController.html#%3Cinit%3E()" class="member-name-link">GoalController()</a> - Constructor for class me.arcademadness.omni_dungeon.controllers.<a href="me/arcademadness/omni_dungeon/controllers/GoalController.html" title="class in me.arcademadness.omni_dungeon.controllers">GoalController</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="me/arcademadness/omni_dungeon/ui/SectionWidget.html#grid" class="member-name-link">grid</a> - Variable in class me.arcademadness.omni_dungeon.ui.<a href="me/arcademadness/omni_dungeon/ui/SectionWidget.html" title="class in me.arcademadness.omni_dungeon.ui">SectionWidget</a></dt>

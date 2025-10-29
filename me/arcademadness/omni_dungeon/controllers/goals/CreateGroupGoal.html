@@ -75,6 +75,10 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>T</code> - the type of mob that will use this goal</dd>
+</dl>
+<dl class="notes">
 <dt>All Implemented Interfaces:</dt>
 <dd><code><a href="Goal.html" title="interface in me.arcademadness.omni_dungeon.controllers.goals">Goal</a>&lt;T&gt;</code></dd>
 </dl>
@@ -82,6 +86,9 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">CreateGroupGoal&lt;T extends <a href="../../entities/MobEntity.html" title="class in me.arcademadness.omni_dungeon.entities">MobEntity</a>&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="Goal.html" title="interface in me.arcademadness.omni_dungeon.controllers.goals">Goal</a>&lt;T&gt;</span></div>
+<div class="block">A Goal for when a Mob has no group. Makes a new group where the <a href="../../entities/MobEntity.html" title="class in me.arcademadness.omni_dungeon.entities"><code>MobEntity</code></a> is the Queen.
+ Should be a lower priority than <a href="FindGroupGoal.html" title="class in me.arcademadness.omni_dungeon.controllers.goals"><code>FindGroupGoal</code></a> which attempts to join existing groups.
+ Should be a higher priority than <a href="MergeGroupGoal.html" title="class in me.arcademadness.omni_dungeon.controllers.goals"><code>MergeGroupGoal</code></a> which only works when the <a href="../../entities/MobEntity.html" title="class in me.arcademadness.omni_dungeon.entities"><code>MobEntity</code></a> has a group to merge.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
