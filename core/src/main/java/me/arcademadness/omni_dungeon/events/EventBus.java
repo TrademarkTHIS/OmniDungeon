@@ -8,7 +8,7 @@ public class EventBus {
     private final Map<Class<?>, List<Handler>> handlers = new HashMap<>();
 
     public EventBus() {
-        // No singleton — each Environment or system can create its own bus
+        // No longer a singleton, each Environment or system can create its own bus
     }
 
     public void register(EventListener listener) {

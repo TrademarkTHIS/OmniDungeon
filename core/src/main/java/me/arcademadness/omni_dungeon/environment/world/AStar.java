@@ -2,6 +2,7 @@ package me.arcademadness.omni_dungeon.environment.world;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.BinaryHeap;
+import me.arcademadness.omni_dungeon.components.Location;
 
 import java.awt.Point;
 import java.util.*;
@@ -17,13 +18,17 @@ public class AStar {
         { 1, 1 }, { 1, -1 }, { -1, 1 }, { -1, -1 }
     };
 
+    public static List<Vector2> findPath(TileMap map, Location start, Location goal, int chunkSize) {
+        return findPath(map, start.getX(), start.getY(), goal.getX(), goal.getY(), chunkSize);
+    }
+
     public static List<Vector2> findPath(TileMap map, float startX, float startY, float goalX, float goalY, int chunkSize) {
         int startTileX = (int) Math.floor(startX);
         int startTileY = (int) Math.floor(startY);
         int goalTileX  = (int) Math.floor(goalX);
         int goalTileY  = (int) Math.floor(goalY);
 
-        if (!inBounds(map, startTileX, startTileY) || !inBounds(map, goalTileX, goalTileY))
+        if (outOfBounds(map, startTileX, startTileY) || outOfBounds(map, goalTileX, goalTileY))
             return Collections.emptyList();
 
         Tile start = map.tiles[startTileX][startTileY];
@@ -61,7 +66,7 @@ public class AStar {
                 int ny = current.y + dir[1];
 
                 if (nx < minX || nx > maxX || ny < minY || ny > maxY) continue;
-                if (!inBounds(map, nx, ny)) continue;
+                if (outOfBounds(map, nx, ny)) continue;
 
                 Tile tile = map.tiles[nx][ny];
                 if (!tile.walkable) continue;
@@ -85,7 +90,7 @@ public class AStar {
             }
         }
 
-        if (bestNode != null && bestNode != startNode) {
+        if (bestNode != startNode) {
             return reconstructPath(bestNode, bestNode.x + 0.5f, bestNode.y + 0.5f);
         }
 
@@ -102,8 +107,8 @@ public class AStar {
         return path;
     }
 
-    private static boolean inBounds(TileMap map, int x, int y) {
-        return x >= 0 && y >= 0 && x < map.width && y < map.height;
+    private static boolean outOfBounds(TileMap map, int x, int y) {
+        return x < 0 || y < 0 || x >= map.width || y >= map.height;
     }
 
     private static double heuristic(int x, int y, int goalX, int goalY) {

@@ -10,6 +10,7 @@ import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.environment.services.CollisionService;
 import me.arcademadness.omni_dungeon.environment.services.MovementService;
 import me.arcademadness.omni_dungeon.events.EventBus;
+import me.arcademadness.omni_dungeon.util.StableList;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,7 +20,7 @@ import java.util.Optional;
 public class Environment implements EnvironmentControl {
 
     private final TileMap map;
-    private final List<Entity> entities = new ArrayList<>();
+    private final StableList<Entity> entities = new StableList<>();
     private final EventBus eventBus;
 
     private final CollisionService collisionService;
@@ -33,7 +34,10 @@ public class Environment implements EnvironmentControl {
     }
 
     @Override public TileMap getMap() { return map; }
-    @Override public List<Entity> getEntities() { return Collections.unmodifiableList(entities); }
+    @Override
+    public List<Entity> getEntities() {
+        return Collections.unmodifiableList(entities.data());
+    }
     @Override public CollisionService getCollisionService() { return collisionService; }
     @Override public MovementService getMovementService() { return movementService; }
     @Override public EventBus getEventBus() { return eventBus; }
@@ -44,6 +48,12 @@ public class Environment implements EnvironmentControl {
     }
 
     @Override
+    public void despawn(Entity entity) {
+        eventBus.post(new EntityDespawnEvent(entity, this));
+    }
+
+
+    @Override
     public void addEntity(Entity e) {
         entities.add(e);
         e.setEnvironment(this);
@@ -51,14 +61,8 @@ public class Environment implements EnvironmentControl {
     }
 
     @Override
-    public void despawn(Entity entity) {
-        eventBus.post(new EntityDespawnEvent(entity, this));
-    }
-
-
-    @Override
     public void removeEntity(Entity entity) {
-        if (!entities.remove(entity)) return;
+        if (!entities.data().remove(entity)) return;
         entity.setEnvironment(null);
         collisionService.updateEntityPartsInTiles(entity);
     }
@@ -66,12 +70,19 @@ public class Environment implements EnvironmentControl {
 
     @Override
     public void tick(float delta) {
-        List<Entity> snapshot = new ArrayList<>(entities);
+        List<StableList.Handle<Entity>> snapshot = new ArrayList<>();
+        for (int i = 0; i < entities.size(); i++) {
+            long id = entities.getIdAtIndex(i);
+            snapshot.add(entities.createHandle(id));
+        }
 
-        for (Entity entity : snapshot) {
+        for (StableList.Handle<Entity> handle : snapshot) {
+            if (!handle.isValid()) continue;
+            Entity entity = handle.get();
+
             if (entity.getController() == null) continue;
             Optional<ControlIntent> opt = entity.getController().getIntent();
-            if (!opt.isPresent()) continue;
+            if (opt.isEmpty()) continue;
 
             ControlIntent intent = opt.get();
             for (Action action : intent.getActions()) {

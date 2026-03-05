@@ -1,6 +1,5 @@
 package me.arcademadness.omni_dungeon.components;
 
-import me.arcademadness.omni_dungeon.attributes.Attribute;
 import me.arcademadness.omni_dungeon.controllers.GoalController;
 import me.arcademadness.omni_dungeon.controllers.goals.GroupFindTargetGoal;
 import me.arcademadness.omni_dungeon.entities.Entity;

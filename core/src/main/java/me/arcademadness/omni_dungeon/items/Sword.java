@@ -7,7 +7,7 @@ import me.arcademadness.omni_dungeon.actions.MoveAction;
 import me.arcademadness.omni_dungeon.modifiers.SprintModifier;
 import me.arcademadness.omni_dungeon.util.AssetLoader;
 
-public class Sword extends BaseItem{
+public class Sword extends BaseItem {
 
     public Sword() {
         super(
