@@ -2,7 +2,7 @@ package me.arcademadness.omni_dungeon.environment;
 
 import me.arcademadness.omni_dungeon.actions.Action;
 import me.arcademadness.omni_dungeon.components.Location;
-import me.arcademadness.omni_dungeon.controllers.ControlIntent;
+import me.arcademadness.omni_dungeon.controllers.Controller;
 import me.arcademadness.omni_dungeon.events.entity.EntityDespawnEvent;
 import me.arcademadness.omni_dungeon.events.entity.EntitySpawnEvent;
 import me.arcademadness.omni_dungeon.environment.world.TileMap;
@@ -12,10 +12,8 @@ import me.arcademadness.omni_dungeon.environment.services.MovementService;
 import me.arcademadness.omni_dungeon.events.EventBus;
 import me.arcademadness.omni_dungeon.util.StableList;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class Environment implements EnvironmentControl {
 
@@ -73,7 +71,7 @@ public class Environment implements EnvironmentControl {
         for (int i = data.size() - 1; i >= 0; i--) {
             Entity entity = data.get(i);
 
-            var controller = entity.getController();
+            Controller controller = entity.getController();
             if (controller == null) continue;
 
             controller.getIntent().ifPresent(intent -> {
