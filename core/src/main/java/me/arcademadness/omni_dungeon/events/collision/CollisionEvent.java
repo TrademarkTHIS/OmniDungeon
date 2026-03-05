@@ -5,6 +5,7 @@ import me.arcademadness.omni_dungeon.events.BaseEvent;
 
 /**
  * Base event for all types of collisions in the environment.
+ * Does not currently cause collision logic. Rather, it acts as an alert for a collision.
  */
 public abstract class CollisionEvent extends BaseEvent {
 

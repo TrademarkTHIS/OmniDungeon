@@ -70,15 +70,8 @@ public class Environment implements EnvironmentControl {
 
     @Override
     public void tick(float delta) {
-        List<StableList.Handle<Entity>> snapshot = new ArrayList<>();
-        for (int i = 0; i < entities.size(); i++) {
-            long id = entities.getIdAtIndex(i);
-            snapshot.add(entities.createHandle(id));
-        }
-
-        for (StableList.Handle<Entity> handle : snapshot) {
-            if (!handle.isValid()) continue;
-            Entity entity = handle.get();
+        for (int i = entities.size() - 1; i >= 0; i--) {
+            Entity entity = entities.data().get(i);
 
             if (entity.getController() == null) continue;
             Optional<ControlIntent> opt = entity.getController().getIntent();
@@ -91,7 +84,6 @@ public class Environment implements EnvironmentControl {
                 }
             }
         }
-
         movementService.tick(delta);
     }
 }
