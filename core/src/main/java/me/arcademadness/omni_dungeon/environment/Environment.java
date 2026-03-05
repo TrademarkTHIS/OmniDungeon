@@ -70,20 +70,24 @@ public class Environment implements EnvironmentControl {
 
     @Override
     public void tick(float delta) {
-        for (int i = entities.size() - 1; i >= 0; i--) {
-            Entity entity = entities.data().get(i);
+        var data = entities.data();
+        for (int i = data.size() - 1; i >= 0; i--) {
+            Entity entity = data.get(i);
 
-            if (entity.getController() == null) continue;
-            Optional<ControlIntent> opt = entity.getController().getIntent();
-            if (opt.isEmpty()) continue;
+            var controller = entity.getController();
+            if (controller == null) continue;
 
-            ControlIntent intent = opt.get();
-            for (Action action : intent.getActions()) {
+            if (controller.getIntent().isEmpty()) continue;
+            ControlIntent intent = controller.getIntent().get();
+
+            List<Action> actions = intent.getActions();
+            for (Action action : actions) {
                 if (action.canExecute(this, entity)) {
                     action.execute(this, entity, delta);
                 }
             }
         }
+
         movementService.tick(delta);
     }
 }
