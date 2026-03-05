@@ -67,7 +67,6 @@ public class Environment implements EnvironmentControl {
         collisionService.updateEntityPartsInTiles(entity);
     }
 
-
     @Override
     public void tick(float delta) {
         var data = entities.data();
@@ -77,15 +76,14 @@ public class Environment implements EnvironmentControl {
             var controller = entity.getController();
             if (controller == null) continue;
 
-            if (controller.getIntent().isEmpty()) continue;
-            ControlIntent intent = controller.getIntent().get();
-
-            List<Action> actions = intent.getActions();
-            for (Action action : actions) {
-                if (action.canExecute(this, entity)) {
-                    action.execute(this, entity, delta);
+            controller.getIntent().ifPresent(intent -> {
+                List<Action> actions = intent.getActions();
+                for (Action action : actions) {
+                    if (action.canExecute(this, entity)) {
+                        action.execute(this, entity, delta);
+                    }
                 }
-            }
+            });
         }
 
         movementService.tick(delta);
