@@ -9,8 +9,11 @@ import me.arcademadness.omni_dungeon.attributes.MaxSpeed;
 import me.arcademadness.omni_dungeon.components.EntityPart;
 import me.arcademadness.omni_dungeon.controllers.BeeController;
 import me.arcademadness.omni_dungeon.environment.EnvironmentView;
+import me.arcademadness.omni_dungeon.events.EventBus;
 import me.arcademadness.omni_dungeon.visuals.ShapeVisual;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class BeeEntity extends MobEntity {
@@ -37,17 +40,22 @@ public class BeeEntity extends MobEntity {
         setController(controller);
     }
 
+    private List<EventBus.Registration> registrations = new ArrayList<>();
+
     @Override
     public void setEnvironment(EnvironmentView environment) {
         EnvironmentView oldEnv = getEnvironment();
         if (oldEnv != null && oldEnv != environment) {
-            oldEnv.getEventBus().unregister(controller);
+            for (EventBus.Registration r : registrations) {
+                oldEnv.getEventBus().unregister(r);
+            }
+            registrations.clear();
         }
 
         super.setEnvironment(environment);
 
         if (environment != null) {
-            environment.getEventBus().register(controller);
+            registrations = environment.getEventBus().register(controller);
         }
     }
 }
