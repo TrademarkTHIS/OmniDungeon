@@ -13,9 +13,11 @@ import java.util.*;
  */
 public class AStar {
 
+    private static final PathStore PATH_CACHE = new PathStore();
+
     private static final int[][] DIRECTIONS = {
-        { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 },
-        { 1, 1 }, { 1, -1 }, { -1, 1 }, { -1, -1 }
+        {1,0},{-1,0},{0,1},{0,-1},
+        {1,1},{1,-1},{-1,1},{-1,-1}
     };
 
     public static List<Vector2> findPath(TileMap map, Location start, Location goal, int chunkSize) {
@@ -23,6 +25,16 @@ public class AStar {
     }
 
     public static List<Vector2> findPath(TileMap map, float startX, float startY, float goalX, float goalY, int chunkSize) {
+
+        Vector2 startVec = new Vector2(startX, startY);
+        Vector2 goalVec = new Vector2(goalX, goalY);
+
+        // Try cached path first
+        List<Vector2> cached = PATH_CACHE.getSubpath(startVec, goalVec);
+        if (!cached.isEmpty()) {
+            return cached;
+        }
+
         int startTileX = (int) Math.floor(startX);
         int startTileY = (int) Math.floor(startY);
         int goalTileX  = (int) Math.floor(goalX);
@@ -56,7 +68,13 @@ public class AStar {
             Node current = open.pop();
 
             if (current.x == goalTileX && current.y == goalTileY) {
-                return reconstructPath(current, goalX, goalY);
+
+                List<Vector2> path = reconstructPath(current, goalX, goalY);
+
+                if (!path.isEmpty())
+                    PATH_CACHE.addPath(path);
+
+                return path;
             }
 
             current.closed = true;
@@ -91,7 +109,14 @@ public class AStar {
         }
 
         if (bestNode != startNode) {
-            return reconstructPath(bestNode, bestNode.x + 0.5f, bestNode.y + 0.5f);
+
+            List<Vector2> path =
+                reconstructPath(bestNode, bestNode.x + 0.5f, bestNode.y + 0.5f);
+
+            if (!path.isEmpty())
+                PATH_CACHE.addPath(path);
+
+            return path;
         }
 
         return Collections.emptyList();
@@ -142,5 +167,4 @@ public class AStar {
             this.fCost = newGCost + hCost;
         }
     }
-
 }
