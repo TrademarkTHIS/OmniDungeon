@@ -30,7 +30,7 @@ public class AStar {
         Vector2 goalVec = new Vector2(goalX, goalY);
 
         // Try cached path first
-        List<Vector2> cached = PATH_CACHE.getSubpath(startVec, goalVec);
+        List<Vector2> cached = PATH_CACHE.getPath(startVec, goalVec);
         if (!cached.isEmpty()) {
             return cached;
         }
