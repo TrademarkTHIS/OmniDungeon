@@ -16,30 +16,39 @@ public class AStar {
     private static final PathStore PATH_CACHE = new PathStore();
     private static final double DIAGONAL_COST = Math.sqrt(2.0);
 
-    public static List<Vector2> findPath(Floor map, Location start, Location goal, int chunkRadiusTiles) {
-        return findPath(map, start.getX(), start.getY(), goal.getX(), goal.getY(), chunkRadiusTiles);
+    /**
+     * Really lame version of the other one. Do not use this.
+     * @param map
+     * @param startX
+     * @param startY
+     * @param goalX
+     * @param goalY
+     * @param chunkRadiusTiles
+     * @return
+     */
+    public static List<Vector2> findPath(Floor map, float startX, float startY, float goalX, float goalY, int chunkRadiusTiles ) {
+     return findPath(map, new Vector2(startX, startY), new Vector2(goalX, goalY), chunkRadiusTiles);
     }
 
-    public static List<Vector2> findPath(
-        Floor map,
-        float startX,
-        float startY,
-        float goalX,
-        float goalY,
-        int chunkRadiusTiles
-    ) {
-        Vector2 startVec = new Vector2(startX, startY);
-        Vector2 goalVec = new Vector2(goalX, goalY);
-
+    /**
+     * Find a path from vector A to B (Uses A*)
+     * Replace with a flow field pathfinding system later pls
+     * @param map The current floor we're pathing through
+     * @param startVec The starting vector
+     * @param goalVec The goal vector
+     * @param chunkRadiusTiles The radius of tiles to look through for a path
+     * @return A list (our path) to the goal vector
+     */
+    public static List<Vector2> findPath(Floor map, Vector2 startVec, Vector2 goalVec, int chunkRadiusTiles) {
         List<Vector2> cached = PATH_CACHE.getPath(startVec, goalVec);
         if (!cached.isEmpty()) {
             return cached;
         }
 
-        int startTileX = map.worldToTileX(startX);
-        int startTileY = map.worldToTileY(startY);
-        int goalTileX = map.worldToTileX(goalX);
-        int goalTileY = map.worldToTileY(goalY);
+        int startTileX = map.worldToTileX(startVec.x);
+        int startTileY = map.worldToTileY(startVec.y);
+        int goalTileX = map.worldToTileX(goalVec.x);
+        int goalTileY = map.worldToTileY(goalVec.y);
 
         if (!map.inBounds(startTileX, startTileY) || !map.inBounds(goalTileX, goalTileY)) {
             return Collections.emptyList();
@@ -79,7 +88,7 @@ public class AStar {
             }
 
             if (current.x == goalTileX && current.y == goalTileY) {
-                List<Vector2> path = reconstructPath(map, current, goalX, goalY);
+                List<Vector2> path = reconstructPath(map, current, goalVec.x, goalVec.y);
                 if (!path.isEmpty()) {
                     PATH_CACHE.addPath(path);
                 }
@@ -90,11 +99,12 @@ public class AStar {
 
             final Node currentNode = current;
             map.forEachNeighbor8(current.x, current.y, (nx, ny, tile) -> {
-                if (currentNode.closed && (nx < minX || nx > maxX || ny < minY || ny > maxY)) {
+                boolean b = nx < minX || nx > maxX || ny < minY || ny > maxY;
+                if (currentNode.closed && b) {
                     return;
                 }
 
-                if (nx < minX || nx > maxX || ny < minY || ny > maxY) {
+                if (b) {
                     return;
                 }
 

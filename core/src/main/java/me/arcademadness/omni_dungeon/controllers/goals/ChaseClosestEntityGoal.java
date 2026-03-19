@@ -61,8 +61,8 @@ public class ChaseClosestEntityGoal<T extends MobEntity> implements Goal<T> {
         Location loc = entity.getLocation();
         List<Vector2> path = AStar.findPath(
             map,
-            loc.getX(), loc.getY(),
-            targetCenter.x, targetCenter.y,
+            loc,
+            targetCenter,
             4
         );
 

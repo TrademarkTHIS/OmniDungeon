@@ -57,9 +57,7 @@ public class GroupWanderGoal<T extends MobEntity> implements Goal<T> {
 
         // Find a short path toward the queen
         List<Vector2> path = AStar.findPath(
-            map,
-            loc.getX(), loc.getY(),
-            queenLoc.getX(), queenLoc.getY(),
+            map, loc, queenLoc,
             6
         );
 

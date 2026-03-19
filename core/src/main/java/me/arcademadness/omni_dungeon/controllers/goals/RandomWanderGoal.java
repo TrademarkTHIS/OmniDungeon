@@ -50,8 +50,8 @@ public class RandomWanderGoal<T extends Entity> implements Goal<T> {
 
             path = AStar.findPath(
                 map,
-                loc.getX(), loc.getY(),
-                targetTile.x, targetTile.y
+                loc,
+                targetTile
             ,8);
 
             if (path.isEmpty()) {

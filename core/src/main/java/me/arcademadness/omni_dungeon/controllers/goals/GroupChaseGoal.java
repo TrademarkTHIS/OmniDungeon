@@ -56,8 +56,8 @@ public class GroupChaseGoal<T extends MobEntity> implements Goal<T> {
         // Compute path using A*
         List<Vector2> path = AStar.findPath(
             map,
-            loc.getX(), loc.getY(),
-            targetCenter.x, targetCenter.y,
+            loc,
+            targetCenter,
             4
         );
 
