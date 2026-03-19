@@ -2,7 +2,7 @@ package me.arcademadness.omni_dungeon.items;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import me.arcademadness.omni_dungeon.actions.Action;
-import me.arcademadness.omni_dungeon.modifiers.AttributeModifier;
+import me.arcademadness.omni_dungeon.attributes.modifiers.AttributeModifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ public abstract class BaseItem implements Item {
 
     private final List<AttributeModifier<?>> modifiers = new ArrayList<>();
     private final List<Action> actions = new ArrayList<>();
-    
+
     protected BaseItem(String name, String description, TextureRegion icon) {
         this.name = name;
         this.description = description;

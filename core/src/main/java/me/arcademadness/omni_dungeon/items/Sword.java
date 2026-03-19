@@ -1,10 +1,9 @@
 package me.arcademadness.omni_dungeon.items;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import me.arcademadness.omni_dungeon.actions.MoveAction;
-import me.arcademadness.omni_dungeon.modifiers.SprintModifier;
+import me.arcademadness.omni_dungeon.attributes.modifiers.SprintModifier;
 import me.arcademadness.omni_dungeon.util.AssetLoader;
 
 public class Sword extends BaseItem {

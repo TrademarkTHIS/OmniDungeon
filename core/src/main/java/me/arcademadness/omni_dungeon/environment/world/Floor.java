@@ -10,6 +10,7 @@ public class Floor {
     public final Tile[][] tiles;
     public final int width;
     public final int height;
+    public final Pathfinder pathfinder = new Pathfinder(this);
 
     public Floor(int width, int height) {
         this.width = width;
@@ -68,6 +69,10 @@ public class Floor {
 
     public int getHeight() {
         return height;
+    }
+
+    public Pathfinder getPathfinder() {
+        return pathfinder;
     }
 
     // ----------------------------------------------------------------

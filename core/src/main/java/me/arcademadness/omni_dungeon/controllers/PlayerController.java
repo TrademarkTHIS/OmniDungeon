@@ -6,8 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 import me.arcademadness.omni_dungeon.actions.MoveAction;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.entities.PlayerEntity;
-import me.arcademadness.omni_dungeon.modifiers.AttributeModifier;
-import me.arcademadness.omni_dungeon.modifiers.SprintModifier;
+import me.arcademadness.omni_dungeon.attributes.modifiers.AttributeModifier;
+import me.arcademadness.omni_dungeon.attributes.modifiers.SprintModifier;
 
 import java.util.Optional;
 

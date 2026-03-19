@@ -2,7 +2,7 @@ package me.arcademadness.omni_dungeon.items;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import me.arcademadness.omni_dungeon.actions.Action;
-import me.arcademadness.omni_dungeon.modifiers.AttributeModifier;
+import me.arcademadness.omni_dungeon.attributes.modifiers.AttributeModifier;
 
 import java.util.List;
 

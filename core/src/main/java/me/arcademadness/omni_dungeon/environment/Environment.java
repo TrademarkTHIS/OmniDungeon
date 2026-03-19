@@ -3,7 +3,6 @@ package me.arcademadness.omni_dungeon.environment;
 import me.arcademadness.omni_dungeon.actions.Action;
 import me.arcademadness.omni_dungeon.components.Location;
 import me.arcademadness.omni_dungeon.controllers.Controller;
-import me.arcademadness.omni_dungeon.environment.world.FlowFieldManager;
 import me.arcademadness.omni_dungeon.events.entity.EntityDespawnEvent;
 import me.arcademadness.omni_dungeon.events.entity.EntitySpawnEvent;
 import me.arcademadness.omni_dungeon.environment.world.Floor;
@@ -19,7 +18,6 @@ import java.util.List;
 public class Environment implements EnvironmentControl {
 
     private final Floor map;
-    private final FlowFieldManager flowFieldManager;
     private final StableList<Entity> entities = new StableList<>();
     private final EventBus eventBus;
 
@@ -28,7 +26,6 @@ public class Environment implements EnvironmentControl {
 
     public Environment(Floor map) {
         this.map = map;
-        this.flowFieldManager = new FlowFieldManager();
         this.collisionService = new CollisionService(this);
         this.movementService = new MovementService(this);
         this.eventBus = new EventBus();
@@ -42,7 +39,6 @@ public class Environment implements EnvironmentControl {
     @Override public CollisionService getCollisionService() { return collisionService; }
     @Override public MovementService getMovementService() { return movementService; }
     @Override public EventBus getEventBus() { return eventBus; }
-    @Override public FlowFieldManager getFlowFieldManager() { return flowFieldManager; }
 
     @Override
     public void spawn(Entity entity, Location location) {

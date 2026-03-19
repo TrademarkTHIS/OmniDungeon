@@ -1,6 +1,6 @@
 package me.arcademadness.omni_dungeon.attributes;
 
-import me.arcademadness.omni_dungeon.modifiers.AttributeModifier;
+import me.arcademadness.omni_dungeon.attributes.modifiers.AttributeModifier;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package me.arcademadness.omni_dungeon.modifiers;
+package me.arcademadness.omni_dungeon.attributes.modifiers;
 
 import me.arcademadness.omni_dungeon.attributes.AttributeType;
 

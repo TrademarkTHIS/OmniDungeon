@@ -1,7 +1,6 @@
 package me.arcademadness.omni_dungeon.environment;
 
 import me.arcademadness.omni_dungeon.components.Location;
-import me.arcademadness.omni_dungeon.environment.world.FlowFieldManager;
 import me.arcademadness.omni_dungeon.environment.world.Floor;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.environment.services.CollisionService;
@@ -61,8 +60,6 @@ public interface EnvironmentView {
      * @return the {@link EventBus} of the environment
      */
     EventBus getEventBus();
-
-    FlowFieldManager getFlowFieldManager();
 
     /**
      * Spawns an entity at the specified location in the environment.

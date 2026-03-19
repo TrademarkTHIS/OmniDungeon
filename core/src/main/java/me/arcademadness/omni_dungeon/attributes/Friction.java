@@ -1,6 +1,6 @@
 package me.arcademadness.omni_dungeon.attributes;
 
-import me.arcademadness.omni_dungeon.modifiers.AttributeModifier;
+import me.arcademadness.omni_dungeon.attributes.modifiers.AttributeModifier;
 
 public final class Friction extends SimpleAttribute<Float> {
     public Friction(float value) {
