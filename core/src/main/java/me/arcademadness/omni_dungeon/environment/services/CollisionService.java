@@ -100,11 +100,11 @@ public class CollisionService {
         boolean movingPositive = deltaMoveTiles > 0f;
 
         int primary = horizontal
-            ? (movingPositive ? bounds.maxXInclusive : bounds.minX)
-            : (movingPositive ? bounds.maxYInclusive : bounds.minY);
+            ? (movingPositive ? bounds.maxXInclusive() : bounds.minX())
+            : (movingPositive ? bounds.maxYInclusive() : bounds.minY());
 
-        int secStart = horizontal ? bounds.minY : bounds.minX;
-        int secEnd = horizontal ? bounds.maxYInclusive : bounds.maxXInclusive;
+        int secStart = horizontal ? bounds.minY() : bounds.minX();
+        int secEnd = horizontal ? bounds.maxYInclusive() : bounds.maxXInclusive();
 
         for (int sec = secStart; sec <= secEnd; sec++) {
             Tile tile = horizontal
@@ -137,8 +137,8 @@ public class CollisionService {
 
         Floor.TileBounds bounds = map.getTileBoundsForRect(predicted.x, predicted.y, predicted.width, predicted.height, EPS);
 
-        for (int tx = bounds.minX; tx <= bounds.maxXInclusive; tx++) {
-            for (int ty = bounds.minY; ty <= bounds.maxYInclusive; ty++) {
+        for (int tx = bounds.minX(); tx <= bounds.maxXInclusive(); tx++) {
+            for (int ty = bounds.minY(); ty <= bounds.maxYInclusive(); ty++) {
                 Tile tile = map.getTile(tx, ty);
                 if (tile != null) {
                     nearbyParts.addAll(tile.parts);
