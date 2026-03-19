@@ -8,7 +8,7 @@ import me.arcademadness.omni_dungeon.entities.MobEntity;
 import me.arcademadness.omni_dungeon.environment.EnvironmentView;
 import me.arcademadness.omni_dungeon.environment.world.AStar;
 import me.arcademadness.omni_dungeon.environment.world.Tile;
-import me.arcademadness.omni_dungeon.environment.world.TileMap;
+import me.arcademadness.omni_dungeon.environment.world.Floor;
 import me.arcademadness.omni_dungeon.components.Location;
 
 import java.util.List;
@@ -44,7 +44,7 @@ public class ChaseClosestEntityGoal<T extends MobEntity> implements Goal<T> {
         EnvironmentView env = entity.getEnvironment();
         if (env == null) return Optional.empty();
 
-        TileMap map = env.getMap();
+        Floor map = env.getMap();
 
         // Use entity's internal target instead of cachedTarget
         Entity target = entity.getTarget();
@@ -108,7 +108,7 @@ public class ChaseClosestEntityGoal<T extends MobEntity> implements Goal<T> {
         return Optional.of(intent);
     }
 
-    private Entity findClosestEntity(TileMap map, T self, int radius) {
+    private Entity findClosestEntity(Floor map, T self, int radius) {
         Location loc = self.getLocation();
         Entity closest = null;
         float bestDistSq = Float.MAX_VALUE;

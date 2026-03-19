@@ -9,7 +9,7 @@ import me.arcademadness.omni_dungeon.entities.MobEntity;
 import me.arcademadness.omni_dungeon.environment.EnvironmentView;
 import me.arcademadness.omni_dungeon.environment.world.AStar;
 import me.arcademadness.omni_dungeon.environment.world.Tile;
-import me.arcademadness.omni_dungeon.environment.world.TileMap;
+import me.arcademadness.omni_dungeon.environment.world.Floor;
 import me.arcademadness.omni_dungeon.components.Location;
 
 import java.util.List;
@@ -47,7 +47,7 @@ public class GroupChaseGoal<T extends MobEntity> implements Goal<T> {
 
         EnvironmentView env = self.getEnvironment();
         if (env == null) return Optional.empty();
-        TileMap map = env.getMap();
+        Floor map = env.getMap();
 
         Location loc = self.getLocation();
         Vector2 targetCenter = target.getRootPart().getColliderCenter();

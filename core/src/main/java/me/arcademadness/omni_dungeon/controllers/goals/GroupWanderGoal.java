@@ -10,7 +10,7 @@ import me.arcademadness.omni_dungeon.entities.MobEntity;
 import me.arcademadness.omni_dungeon.environment.EnvironmentView;
 import me.arcademadness.omni_dungeon.environment.world.AStar;
 import me.arcademadness.omni_dungeon.environment.world.Tile;
-import me.arcademadness.omni_dungeon.environment.world.TileMap;
+import me.arcademadness.omni_dungeon.environment.world.Floor;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +45,7 @@ public class GroupWanderGoal<T extends MobEntity> implements Goal<T> {
         EnvironmentView env = self.getEnvironment();
         if (env == null) return Optional.empty();
 
-        TileMap map = env.getMap();
+        Floor map = env.getMap();
         Location loc = self.getLocation();
         Location queenLoc = queen.getLocation();
 

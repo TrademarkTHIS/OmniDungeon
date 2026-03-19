@@ -8,7 +8,7 @@ import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.environment.EnvironmentView;
 import me.arcademadness.omni_dungeon.environment.world.AStar;
 import me.arcademadness.omni_dungeon.environment.world.Tile;
-import me.arcademadness.omni_dungeon.environment.world.TileMap;
+import me.arcademadness.omni_dungeon.environment.world.Floor;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +41,7 @@ public class RandomWanderGoal<T extends Entity> implements Goal<T> {
         EnvironmentView env = entity.getEnvironment();
         if (env == null) return Optional.empty();
 
-        TileMap map = env.getMap();
+        Floor map = env.getMap();
         Location loc = entity.getLocation();
 
         if (targetTile == null || path == null || path.isEmpty()) {
@@ -99,7 +99,7 @@ public class RandomWanderGoal<T extends Entity> implements Goal<T> {
         return Optional.of(intent);
     }
 
-    private Vector2 pickRandomWalkableTile(TileMap map) {
+    private Vector2 pickRandomWalkableTile(Floor map) {
         int attempts = 20;
         for (int i = 0; i < attempts; i++) {
             int x = random.nextInt(map.width);

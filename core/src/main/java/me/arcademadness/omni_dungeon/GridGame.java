@@ -17,11 +17,10 @@ import me.arcademadness.omni_dungeon.components.Location;
 import me.arcademadness.omni_dungeon.controllers.*;
 import me.arcademadness.omni_dungeon.entities.*;
 import me.arcademadness.omni_dungeon.environment.Environment;
-import me.arcademadness.omni_dungeon.environment.EnvironmentConfig;
 import me.arcademadness.omni_dungeon.render.*;
 import me.arcademadness.omni_dungeon.ui.InventoryMenu;
 import me.arcademadness.omni_dungeon.ui.MenuManager;
-import me.arcademadness.omni_dungeon.environment.world.TileMap;
+import me.arcademadness.omni_dungeon.environment.world.Floor;
 
 import java.util.Random;
 
@@ -73,8 +72,7 @@ public class GridGame extends ApplicationAdapter {
     }
 
     private void setupWorld() {
-        EnvironmentConfig.initialize(32);
-        TileMap map = new TileMap(100, 100);
+        Floor map = new Floor(100, 100);
         environment = new Environment(map);
 
         // Player
@@ -83,7 +81,7 @@ public class GridGame extends ApplicationAdapter {
         player.setController(playerController);
         environment.spawn(player, new Location(map.width / 2f, map.height / 2f));
 
-        int beesToGrid = 30;
+        int beesToGrid = 40;
         float spacing = 0.3f;
 
         int x = 0;
@@ -182,7 +180,7 @@ public class GridGame extends ApplicationAdapter {
     }
 
     private void updateCamera(float delta) {
-        TileMap map = environment.getMap();
+        Floor map = environment.getMap();
         cameraZoom += (targetZoom - cameraZoom) * ZOOM_LERP;
         worldCamera.zoom = cameraZoom;
 
@@ -193,7 +191,7 @@ public class GridGame extends ApplicationAdapter {
     }
 
     private void centerCameraOnPlayer() {
-        TileMap map = environment.getMap();
+        Floor map = environment.getMap();
         float px = player.getLocation().getX() * (map.getTileSize()*2) / 2f;
         float py = player.getLocation().getY() * (map.getTileSize()*2) / 2f;
         worldCamera.position.set(px, py, 0);

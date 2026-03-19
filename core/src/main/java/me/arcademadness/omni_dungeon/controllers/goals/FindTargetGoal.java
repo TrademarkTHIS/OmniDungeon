@@ -4,7 +4,7 @@ import me.arcademadness.omni_dungeon.controllers.ControlIntent;
 import me.arcademadness.omni_dungeon.entities.MobEntity;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.components.MobGroup;
-import me.arcademadness.omni_dungeon.environment.world.TileMap;
+import me.arcademadness.omni_dungeon.environment.world.Floor;
 import me.arcademadness.omni_dungeon.components.Location;
 
 import java.util.Optional;
@@ -33,7 +33,7 @@ public class FindTargetGoal<T extends MobEntity> implements Goal<T> {
     @Override
     public Optional<ControlIntent> computeIntent(T entity) {
         MobGroup group = entity.getGroup();
-        TileMap map = entity.getEnvironment().getMap();
+        Floor map = entity.getEnvironment().getMap();
 
         Entity target = findClosestEnemy(entity, map, scanRadius);
         group.setTarget(target);
@@ -41,7 +41,7 @@ public class FindTargetGoal<T extends MobEntity> implements Goal<T> {
         return Optional.empty();
     }
 
-    private Entity findClosestEnemy(T self, TileMap map, int radius) {
+    private Entity findClosestEnemy(T self, Floor map, int radius) {
         Location loc = self.getLocation();
         Entity closest = null;
         float bestDistSq = Float.MAX_VALUE;

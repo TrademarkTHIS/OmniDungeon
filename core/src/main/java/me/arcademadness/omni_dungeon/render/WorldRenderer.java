@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import me.arcademadness.omni_dungeon.environment.EnvironmentView;
 import me.arcademadness.omni_dungeon.environment.world.Tile;
-import me.arcademadness.omni_dungeon.environment.world.TileMap;
+import me.arcademadness.omni_dungeon.environment.world.Floor;
 
 public class WorldRenderer implements RenderLayer{
     private final EnvironmentView environment;
@@ -22,7 +22,7 @@ public class WorldRenderer implements RenderLayer{
         shape.setProjectionMatrix(camera.combined);
         shape.begin(ShapeRenderer.ShapeType.Filled);
 
-        TileMap map = environment.getMap();
+        Floor map = environment.getMap();
         int tileSize = map.getTileSize();
         for (int x = 0; x < map.width; x++) {
             for (int y = 0; y < map.height; y++) {

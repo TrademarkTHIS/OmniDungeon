@@ -20,11 +20,11 @@ public class AStar {
         {1,1},{1,-1},{-1,1},{-1,-1}
     };
 
-    public static List<Vector2> findPath(TileMap map, Location start, Location goal, int chunkSize) {
+    public static List<Vector2> findPath(Floor map, Location start, Location goal, int chunkSize) {
         return findPath(map, start.getX(), start.getY(), goal.getX(), goal.getY(), chunkSize);
     }
 
-    public static List<Vector2> findPath(TileMap map, float startX, float startY, float goalX, float goalY, int chunkSize) {
+    public static List<Vector2> findPath(Floor map, float startX, float startY, float goalX, float goalY, int chunkSize) {
 
         Vector2 startVec = new Vector2(startX, startY);
         Vector2 goalVec = new Vector2(goalX, goalY);
@@ -132,7 +132,7 @@ public class AStar {
         return path;
     }
 
-    private static boolean outOfBounds(TileMap map, int x, int y) {
+    private static boolean outOfBounds(Floor map, int x, int y) {
         return x < 0 || y < 0 || x >= map.width || y >= map.height;
     }
 

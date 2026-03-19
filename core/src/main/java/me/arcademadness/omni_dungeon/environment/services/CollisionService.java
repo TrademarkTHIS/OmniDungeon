@@ -2,18 +2,21 @@ package me.arcademadness.omni_dungeon.environment.services;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import me.arcademadness.omni_dungeon.environment.EnvironmentView;
-import me.arcademadness.omni_dungeon.environment.world.Tile;
-import me.arcademadness.omni_dungeon.environment.world.TileMap;
 import me.arcademadness.omni_dungeon.components.EntityPart;
-import me.arcademadness.omni_dungeon.components.TileCoordinate;
+import me.arcademadness.omni_dungeon.environment.world.TileCoordinate;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.environment.Environment;
+import me.arcademadness.omni_dungeon.environment.EnvironmentView;
+import me.arcademadness.omni_dungeon.environment.world.Floor;
+import me.arcademadness.omni_dungeon.environment.world.Tile;
 import me.arcademadness.omni_dungeon.events.Event;
 import me.arcademadness.omni_dungeon.events.collision.PartCollisionEvent;
 import me.arcademadness.omni_dungeon.events.collision.TileCollisionEvent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Handles entity–tile and entity–entity collision resolution.
@@ -24,7 +27,7 @@ import java.util.*;
  */
 public class CollisionService {
 
-    private final TileMap map;
+    private final Floor map;
     private final EnvironmentView env;
     private static final float EPS = 0.001f;
 
@@ -63,7 +66,7 @@ public class CollisionService {
     float moveAxis(Entity entity, float xTiles, float yTiles, float deltaMoveTiles, boolean horizontal) {
         float start = horizontal ? xTiles : yTiles;
         float proposed = start + deltaMoveTiles;
-        final float[] adjustedResult = { proposed };
+        final float[] adjustedResult = {proposed};
 
         entity.getRootPart().forEachPart(part -> {
             Rectangle collider = part.getCollider();
@@ -72,8 +75,13 @@ public class CollisionService {
             float baseWorldX = part.getWorldX();
             float baseWorldY = part.getWorldY();
 
-            float partX = horizontal ? baseWorldX + (adjustedResult[0] - xTiles) * map.getTileSize() : baseWorldX;
-            float partY = horizontal ? baseWorldY : baseWorldY + (adjustedResult[0] - yTiles) * map.getTileSize();
+            float partX = horizontal
+                ? baseWorldX + (adjustedResult[0] - xTiles) * map.getTileSize()
+                : baseWorldX;
+
+            float partY = horizontal
+                ? baseWorldY
+                : baseWorldY + (adjustedResult[0] - yTiles) * map.getTileSize();
 
             Rectangle predicted = new Rectangle(partX, partY, collider.width, collider.height);
 
@@ -88,26 +96,22 @@ public class CollisionService {
     }
 
     private float resolveTileCollision(Rectangle predicted, boolean horizontal, float proposedTiles, float deltaMoveTiles, EntityPart movingPart) {
-        int startX = Math.max(0, Math.min((int) (predicted.x / map.getTileSize()), map.width - 1));
-        int endX = Math.max(0, Math.min((int) ((predicted.x + predicted.width - EPS) / map.getTileSize()), map.width - 1));
-        int startY = Math.max(0, Math.min((int) (predicted.y / map.getTileSize()), map.height - 1));
-        int endY = Math.max(0, Math.min((int) ((predicted.y + predicted.height - EPS) / map.getTileSize()), map.height - 1));
-
+        Floor.TileBounds bounds = map.getTileBoundsForRect(predicted.x, predicted.y, predicted.width, predicted.height, EPS);
         boolean movingPositive = deltaMoveTiles > 0f;
 
         int primary = horizontal
-            ? (movingPositive ? endX : startX)
-            : (movingPositive ? endY : startY);
+            ? (movingPositive ? bounds.maxXInclusive : bounds.minX)
+            : (movingPositive ? bounds.maxYInclusive : bounds.minY);
 
-        int secStart = horizontal ? startY : startX;
-        int secEnd   = horizontal ? endY   : endX;
+        int secStart = horizontal ? bounds.minY : bounds.minX;
+        int secEnd = horizontal ? bounds.maxYInclusive : bounds.maxXInclusive;
 
         for (int sec = secStart; sec <= secEnd; sec++) {
             Tile tile = horizontal
-                ? map.tiles[primary][sec]
-                : map.tiles[sec][primary];
+                ? map.getTile(primary, sec)
+                : map.getTile(sec, primary);
 
-            if (!tile.isWalkable()) {
+            if (tile != null && !tile.isWalkable()) {
                 if (env != null && movingPart != null) {
                     env.getEventBus().post(new TileCollisionEvent(movingPart, tile, env));
                 }
@@ -123,6 +127,7 @@ public class CollisionService {
                 }
             }
         }
+
         return proposedTiles;
     }
 
@@ -130,13 +135,14 @@ public class CollisionService {
         Set<EntityPart> nearbyParts = new HashSet<>();
         List<Event> delayedEvents = new ArrayList<>();
 
-        int startX = Math.max(0, Math.min((int) (predicted.x / map.getTileSize()), map.width - 1));
-        int endX = Math.max(0, Math.min((int) ((predicted.x + predicted.width - EPS) / map.getTileSize()), map.width - 1));
-        int startY = Math.max(0, Math.min((int) (predicted.y / map.getTileSize()), map.height - 1));
-        int endY = Math.max(0, Math.min((int) ((predicted.y + predicted.height - EPS) / map.getTileSize()), map.height - 1));
-        for (int tx = startX; tx <= endX; tx++) {
-            for (int ty = startY; ty <= endY; ty++) {
-                nearbyParts.addAll(map.tiles[tx][ty].parts);
+        Floor.TileBounds bounds = map.getTileBoundsForRect(predicted.x, predicted.y, predicted.width, predicted.height, EPS);
+
+        for (int tx = bounds.minX; tx <= bounds.maxXInclusive; tx++) {
+            for (int ty = bounds.minY; ty <= bounds.maxYInclusive; ty++) {
+                Tile tile = map.getTile(tx, ty);
+                if (tile != null) {
+                    nearbyParts.addAll(tile.parts);
+                }
             }
         }
 
@@ -144,6 +150,7 @@ public class CollisionService {
 
         for (EntityPart otherPart : nearbyParts) {
             if (otherPart.getOwner() == movingPart.getOwner()) continue;
+
             /*
               This needs to be replaced for more robust checking
               Maybe completely different types of entities don't need to collide
@@ -162,13 +169,16 @@ public class CollisionService {
                 }
 
                 float stop = computeEntityCollisionStop(predicted, otherRect, horizontal);
-                if (proposedTiles > startTiles) adjusted = Math.min(adjusted, stop);
-                else if (proposedTiles < startTiles) adjusted = Math.max(adjusted, stop);
+                if (proposedTiles > startTiles) {
+                    adjusted = Math.min(adjusted, stop);
+                } else if (proposedTiles < startTiles) {
+                    adjusted = Math.max(adjusted, stop);
+                }
             }
         }
 
-        for (Event e : delayedEvents) {
-            env.getEventBus().post(e);
+        for (Event event : delayedEvents) {
+            env.getEventBus().post(event);
         }
 
         return adjusted;
@@ -188,8 +198,9 @@ public class CollisionService {
         // The entity has no environment, we need to remove it from the tiles.
         if (entity.getEnvironment() == null) {
             for (TileCoordinate old : oldTiles) {
-                if (old.x >= 0 && old.x < map.width && old.y >= 0 && old.y < map.height) {
-                    map.tiles[old.x][old.y].removePartsOwnedBy(entity);
+                Tile tile = map.getTile(old.x, old.y);
+                if (tile != null) {
+                    tile.removePartsOwnedBy(entity);
                 }
             }
             oldTiles.clear();
@@ -205,23 +216,19 @@ public class CollisionService {
             float worldX = part.getWorldX();
             float worldY = part.getWorldY();
 
-            int startX = Math.max(0, (int) (worldX / map.getTileSize()));
-            int endX   = Math.min(map.width - 1, (int) ((worldX + collider.width - EPS) / map.getTileSize()));
-            int startY = Math.max(0, (int) (worldY / map.getTileSize()));
-            int endY   = Math.min(map.height - 1, (int) ((worldY + collider.height - EPS) / map.getTileSize()));
-
-            for (int tx = startX; tx <= endX; tx++) {
-                for (int ty = startY; ty <= endY; ty++) {
-                    TileCoordinate tc = new TileCoordinate(tx, ty);
-                    newTiles.add(tc);
-                    map.tiles[tx][ty].addPart(part);
-                }
-            }
+            map.forEachTileInRect(worldX, worldY, collider.width, collider.height, EPS, (tx, ty, tile) -> {
+                TileCoordinate tc = new TileCoordinate(tx, ty);
+                newTiles.add(tc);
+                tile.addPart(part);
+            });
         });
 
         for (TileCoordinate old : oldTiles) {
-            if (!newTiles.contains(old) && old.x >= 0 && old.x < map.width && old.y >= 0 && old.y < map.height) {
-                map.tiles[old.x][old.y].removePartsOwnedBy(entity);
+            if (!newTiles.contains(old)) {
+                Tile tile = map.getTile(old.x, old.y);
+                if (tile != null) {
+                    tile.removePartsOwnedBy(entity);
+                }
             }
         }
 
@@ -234,26 +241,25 @@ public class CollisionService {
             Rectangle collider = part.getCollider();
             if (collider == null) return;
 
-            int startX = Math.max(0, (int) (part.getWorldX() / map.getTileSize()));
-            int endX = Math.min(map.width - 1, (int) ((part.getWorldX() + collider.width) / map.getTileSize()));
-            int startY = Math.max(0, (int) (part.getWorldY() / map.getTileSize()));
-            int endY = Math.min(map.height - 1, (int) ((part.getWorldY() + collider.height) / map.getTileSize()));
+            Rectangle selfRect = new Rectangle(collider);
+            selfRect.setPosition(part.getWorldX(), part.getWorldY());
 
             Set<EntityPart> nearby = new HashSet<>();
-            for (int tx = startX; tx <= endX; tx++) {
-                for (int ty = startY; ty <= endY; ty++) {
-                    nearby.addAll(map.tiles[tx][ty].parts);
-                }
-            }
+
+            map.forEachTileInRect(part.getWorldX(), part.getWorldY(), collider.width, collider.height, EPS, (tx, ty, tile) -> {
+                nearby.addAll(tile.parts);
+            });
 
             for (EntityPart other : nearby) {
                 if (other.getOwner() == part.getOwner()) continue;
+
                 Rectangle otherCollider = other.getCollider();
                 if (otherCollider == null) continue;
 
                 Rectangle otherRect = new Rectangle(otherCollider);
                 otherRect.setPosition(other.getWorldX(), other.getWorldY());
-                if (collider.overlaps(otherRect)) {
+
+                if (selfRect.overlaps(otherRect)) {
                     env.getEventBus().post(new PartCollisionEvent(part, other, env));
                 }
             }

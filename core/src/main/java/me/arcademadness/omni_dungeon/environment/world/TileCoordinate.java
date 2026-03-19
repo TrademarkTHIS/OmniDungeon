@@ -1,4 +1,4 @@
-package me.arcademadness.omni_dungeon.components;
+package me.arcademadness.omni_dungeon.environment.world;
 
 public final class TileCoordinate {
     public final int x;
@@ -15,8 +15,7 @@ public final class TileCoordinate {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TileCoordinate)) return false;
-        TileCoordinate t = (TileCoordinate) o;
+        if (!(o instanceof TileCoordinate t)) return false;
         return x == t.x && y == t.y;
     }
 

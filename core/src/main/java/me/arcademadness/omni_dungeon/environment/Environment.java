@@ -3,9 +3,10 @@ package me.arcademadness.omni_dungeon.environment;
 import me.arcademadness.omni_dungeon.actions.Action;
 import me.arcademadness.omni_dungeon.components.Location;
 import me.arcademadness.omni_dungeon.controllers.Controller;
+import me.arcademadness.omni_dungeon.environment.world.FlowFieldManager;
 import me.arcademadness.omni_dungeon.events.entity.EntityDespawnEvent;
 import me.arcademadness.omni_dungeon.events.entity.EntitySpawnEvent;
-import me.arcademadness.omni_dungeon.environment.world.TileMap;
+import me.arcademadness.omni_dungeon.environment.world.Floor;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.environment.services.CollisionService;
 import me.arcademadness.omni_dungeon.environment.services.MovementService;
@@ -17,21 +18,23 @@ import java.util.List;
 
 public class Environment implements EnvironmentControl {
 
-    private final TileMap map;
+    private final Floor map;
+    private final FlowFieldManager flowFieldManager;
     private final StableList<Entity> entities = new StableList<>();
     private final EventBus eventBus;
 
     private final CollisionService collisionService;
     private final MovementService movementService;
 
-    public Environment(TileMap map) {
+    public Environment(Floor map) {
         this.map = map;
+        this.flowFieldManager = new FlowFieldManager();
         this.collisionService = new CollisionService(this);
         this.movementService = new MovementService(this);
         this.eventBus = new EventBus();
     }
 
-    @Override public TileMap getMap() { return map; }
+    @Override public Floor getMap() { return map; }
     @Override
     public List<Entity> getEntities() {
         return Collections.unmodifiableList(entities.data());
@@ -39,6 +42,7 @@ public class Environment implements EnvironmentControl {
     @Override public CollisionService getCollisionService() { return collisionService; }
     @Override public MovementService getMovementService() { return movementService; }
     @Override public EventBus getEventBus() { return eventBus; }
+    @Override public FlowFieldManager getFlowFieldManager() { return flowFieldManager; }
 
     @Override
     public void spawn(Entity entity, Location location) {

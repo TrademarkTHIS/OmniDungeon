@@ -2,7 +2,7 @@ package me.arcademadness.omni_dungeon.controllers.goals;
 
 import me.arcademadness.omni_dungeon.controllers.ControlIntent;
 import me.arcademadness.omni_dungeon.entities.MobEntity;
-import me.arcademadness.omni_dungeon.environment.world.TileMap;
+import me.arcademadness.omni_dungeon.environment.world.Floor;
 import me.arcademadness.omni_dungeon.components.MobGroup;
 import me.arcademadness.omni_dungeon.components.Location;
 
@@ -31,7 +31,7 @@ public class FindGroupGoal<T extends MobEntity> implements Goal<T> {
 
     @Override
     public Optional<ControlIntent> computeIntent(T entity) {
-        TileMap map = entity.getEnvironment().getMap();
+        Floor map = entity.getEnvironment().getMap();
         MobGroup foundGroup = findNearbyGroup(entity, map);
 
         if (foundGroup != null) {
@@ -43,7 +43,7 @@ public class FindGroupGoal<T extends MobEntity> implements Goal<T> {
         return Optional.empty();
     }
 
-    private MobGroup findNearbyGroup(T self, TileMap map) {
+    private MobGroup findNearbyGroup(T self, Floor map) {
         Location loc = self.getLocation();
 
         for (int dx = -scanRadius; dx <= scanRadius; dx++) {

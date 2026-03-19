@@ -3,7 +3,7 @@ package me.arcademadness.omni_dungeon.controllers.goals;
 import me.arcademadness.omni_dungeon.controllers.ControlIntent;
 import me.arcademadness.omni_dungeon.entities.MobEntity;
 import me.arcademadness.omni_dungeon.components.MobGroup;
-import me.arcademadness.omni_dungeon.environment.world.TileMap;
+import me.arcademadness.omni_dungeon.environment.world.Floor;
 import me.arcademadness.omni_dungeon.components.Location;
 
 import java.util.Optional;
@@ -34,7 +34,7 @@ public class MergeGroupGoal<T extends MobEntity> implements Goal<T> {
         MobGroup group = entity.getGroup();
         if (group == null) return Optional.empty();
 
-        TileMap map = entity.getEnvironment().getMap();
+        Floor map = entity.getEnvironment().getMap();
         Location loc = entity.getLocation();
 
         for (int dx = -scanRadius; dx <= scanRadius; dx++) {

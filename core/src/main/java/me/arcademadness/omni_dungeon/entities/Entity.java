@@ -5,6 +5,7 @@ import me.arcademadness.omni_dungeon.attributes.*;
 import me.arcademadness.omni_dungeon.components.*;
 import me.arcademadness.omni_dungeon.controllers.Controller;
 import me.arcademadness.omni_dungeon.environment.EnvironmentView;
+import me.arcademadness.omni_dungeon.environment.world.TileCoordinate;
 
 import java.util.Set;
 

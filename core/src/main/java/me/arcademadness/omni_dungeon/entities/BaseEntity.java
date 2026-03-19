@@ -6,6 +6,7 @@ import me.arcademadness.omni_dungeon.components.*;
 import me.arcademadness.omni_dungeon.controllers.AbstractController;
 import me.arcademadness.omni_dungeon.controllers.Controller;
 import me.arcademadness.omni_dungeon.environment.EnvironmentView;
+import me.arcademadness.omni_dungeon.environment.world.TileCoordinate;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

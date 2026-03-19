@@ -1,7 +1,8 @@
 package me.arcademadness.omni_dungeon.environment;
 
 import me.arcademadness.omni_dungeon.components.Location;
-import me.arcademadness.omni_dungeon.environment.world.TileMap;
+import me.arcademadness.omni_dungeon.environment.world.FlowFieldManager;
+import me.arcademadness.omni_dungeon.environment.world.Floor;
 import me.arcademadness.omni_dungeon.entities.Entity;
 import me.arcademadness.omni_dungeon.environment.services.CollisionService;
 import me.arcademadness.omni_dungeon.environment.services.MovementService;
@@ -26,10 +27,10 @@ public interface EnvironmentView {
     /**
      * Returns the tile map representing the environment's layout.
      *
-     * @return the {@link TileMap} of the environment
+     * @return the {@link Floor} of the environment
      * @see EnvironmentControl
      */
-    TileMap getMap();
+    Floor getMap();
 
     /**
      * Returns a list of entities currently present in the environment.
@@ -60,6 +61,8 @@ public interface EnvironmentView {
      * @return the {@link EventBus} of the environment
      */
     EventBus getEventBus();
+
+    FlowFieldManager getFlowFieldManager();
 
     /**
      * Spawns an entity at the specified location in the environment.

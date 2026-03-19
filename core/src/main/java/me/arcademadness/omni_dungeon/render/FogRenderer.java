@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import me.arcademadness.omni_dungeon.environment.EnvironmentConfig;
 import me.arcademadness.omni_dungeon.environment.EnvironmentView;
-import me.arcademadness.omni_dungeon.environment.world.TileMap;
+import me.arcademadness.omni_dungeon.environment.world.Floor;
 import me.arcademadness.omni_dungeon.entities.Entity;
 
 public class FogRenderer implements RenderLayer {
@@ -27,7 +27,7 @@ public class FogRenderer implements RenderLayer {
         this.radiusTiles = radiusTiles;
         this.player = player;
 
-        TileMap map = environment.getMap();
+        Floor map = environment.getMap();
         visibility = new VisibilityState[map.width][map.height];
         for (int x = 0; x < map.width; x++) {
             for (int y = 0; y < map.height; y++) {
@@ -42,7 +42,7 @@ public class FogRenderer implements RenderLayer {
         if (player == null) return;
         shape.setProjectionMatrix(camera.combined);
 
-        TileMap map = environment.getMap();
+        Floor map = environment.getMap();
         int playerTileX = (int) player.getLocation().getX();
         int playerTileY = (int) player.getLocation().getY();
 
@@ -91,7 +91,7 @@ public class FogRenderer implements RenderLayer {
     }
 
     public void revealAll() {
-        TileMap map = environment.getMap();
+        Floor map = environment.getMap();
         for (int x = 0; x < map.width; x++) {
             for (int y = 0; y < map.height; y++) {
                 visibility[x][y] = VisibilityState.VISIBLE;
