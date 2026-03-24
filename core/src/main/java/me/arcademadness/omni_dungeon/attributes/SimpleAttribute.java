@@ -3,6 +3,7 @@ package me.arcademadness.omni_dungeon.attributes;
 import me.arcademadness.omni_dungeon.attributes.modifiers.AttributeModifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public abstract class SimpleAttribute<T extends Number> implements Attribute<T> {
 
@@ -65,5 +66,16 @@ public abstract class SimpleAttribute<T extends Number> implements Attribute<T> 
             }
         }
         return null;
+    }
+
+    public <M extends AttributeModifier<T>> M getOrCreateModifier(Class<M> modifierClass, Supplier<M> factory) {
+        M modifier = getFirstModifier(modifierClass);
+        if (modifier != null) {
+            return modifier;
+        }
+
+        M createdModifier = factory.get();
+        addModifier(createdModifier);
+        return createdModifier;
     }
 }
