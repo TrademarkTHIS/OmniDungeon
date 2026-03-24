@@ -19,6 +19,11 @@ public final class Friction extends SimpleAttribute<Float> {
             public AttributeType getAttributeType() {
                 return AttributeType.FRICTION;
             }
+
+            @Override
+            public boolean isExpired() {
+                return false;
+            }
         });
     }
 

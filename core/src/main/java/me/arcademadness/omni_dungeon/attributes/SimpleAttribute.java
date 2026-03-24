@@ -20,10 +20,13 @@ public abstract class SimpleAttribute<T extends Number> implements Attribute<T> 
 
     @Override
     public T getFinalValue() {
+        modifiers.removeIf(AttributeModifier::isExpired);
+
         T finalVal = baseValue;
         for (AttributeModifier<T> modifier : modifiers) {
             finalVal = modifier.modify(finalVal);
         }
+
         return finalVal;
     }
 

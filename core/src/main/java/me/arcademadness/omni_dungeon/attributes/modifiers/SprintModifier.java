@@ -29,5 +29,10 @@ public class SprintModifier implements AttributeModifier<Float> {
 
     @Override
     public AttributeType getAttributeType() { return AttributeType.MAX_SPEED; }
+
+    @Override
+    public boolean isExpired() {
+        return false;
+    }
 }
 
