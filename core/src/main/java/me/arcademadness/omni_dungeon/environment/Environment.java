@@ -17,6 +17,8 @@ import java.util.List;
 
 public class Environment implements EnvironmentControl {
 
+    private long currentTick = 0;
+
     private final Floor map;
     private final StableList<Entity> entities = new StableList<>();
     private final EventBus eventBus;
@@ -67,6 +69,8 @@ public class Environment implements EnvironmentControl {
 
     @Override
     public void tick(float delta) {
+        currentTick++;
+
         var data = entities.data();
         for (int i = data.size() - 1; i >= 0; i--) {
             Entity entity = data.get(i);
@@ -85,5 +89,9 @@ public class Environment implements EnvironmentControl {
         }
 
         movementService.tick(delta);
+    }
+
+    public long getCurrentTick() {
+        return currentTick;
     }
 }

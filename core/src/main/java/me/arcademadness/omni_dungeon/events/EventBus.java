@@ -70,9 +70,13 @@ public class EventBus {
     }
 
     public void post(Event event) {
-        StableList<Handler> list = handlers.get(event.getClass());
+        Class<?> eventClass = event.getClass();
 
-        if (list != null) {
+        for (Map.Entry<Class<?>, StableList<Handler>> entry : handlers.entrySet()) {
+            if (!entry.getKey().isAssignableFrom(eventClass)) continue;
+
+            StableList<Handler> list = entry.getValue();
+
             int size = list.size();
             for (int i = size - 1; i >= 0; i--) {
                 Handler handler = list.data().get(i);

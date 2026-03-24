@@ -8,11 +8,14 @@ public class EntityDamageEvent extends EntityEvent {
 
     public EntityDamageEvent(Entity target, int damage) {
         super(target);
-        this.damage = damage;
+        setDamage(damage);
     }
 
     public int getDamage() { return damage; }
-    public void setDamage(int damage) { this.damage = damage; }
+
+    public void setDamage(int damage) {
+        this.damage = Math.max(damage,0);
+    }
 
     @Override
     protected void execute() {
@@ -26,6 +29,5 @@ public class EntityDamageEvent extends EntityEvent {
             }
         }
     }
-
 }
 

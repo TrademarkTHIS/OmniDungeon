@@ -17,6 +17,7 @@ import me.arcademadness.omni_dungeon.components.Location;
 import me.arcademadness.omni_dungeon.controllers.*;
 import me.arcademadness.omni_dungeon.entities.*;
 import me.arcademadness.omni_dungeon.environment.Environment;
+import me.arcademadness.omni_dungeon.listeners.ArmorListener;
 import me.arcademadness.omni_dungeon.render.*;
 import me.arcademadness.omni_dungeon.ui.InventoryMenu;
 import me.arcademadness.omni_dungeon.ui.MenuManager;
@@ -74,6 +75,7 @@ public class GridGame extends ApplicationAdapter {
     private void setupWorld() {
         Floor map = new Floor(100, 100);
         environment = new Environment(map);
+        environment.getEventBus().register(new ArmorListener());
 
         // Player
         player = new PlayerEntity();
@@ -100,7 +102,6 @@ public class GridGame extends ApplicationAdapter {
             environment.spawn(new RedMobEntity(), new Location(3+(i*r.nextFloat()),3+(i*1.5f)));
         }
     }
-
 
     private void setupCameras() {
         worldCamera = new OrthographicCamera();

@@ -33,4 +33,10 @@ public interface AttributeModifier<T extends Number> {
      * @return the {@link AttributeType} of the attribute being modified
      */
     AttributeType getAttributeType();
+
+    /**
+     * Simple check for weather or not this modifier needs to be removed.
+     * @return true if modifier should be removed
+     */
+    boolean isExpired();
 }

@@ -83,4 +83,10 @@ public interface EnvironmentView {
      * @see EnvironmentControl#removeEntity(Entity)
      */
     void despawn(Entity entity);
+
+    /***
+     * Returns the current game tick
+     * @return the current game tick
+     */
+    long getCurrentTick();
 }
