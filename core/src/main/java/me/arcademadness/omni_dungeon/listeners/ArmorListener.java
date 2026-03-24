@@ -11,7 +11,7 @@ public class ArmorListener implements EventListener {
 
     @Subscribe
     public void onEntityDamage(EntityDamageEvent event) {
-        double armor = event.getEntity().getArmor().getCurrentArmor();
+        double armor = event.getEntity().getArmor().getFinalValue();
         if (armor <= 0) return;
 
         int damage = event.getDamage();

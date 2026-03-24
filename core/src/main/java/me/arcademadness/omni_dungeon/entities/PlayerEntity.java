@@ -13,7 +13,7 @@ public class PlayerEntity extends BaseEntity {
         super();
 
         this.health = new Health(175);
-        this.armor = new Armor(5);
+        this.armor = new Armor(50);
         this.maxSpeed = new MaxSpeed(10);
         this.acceleration = new Acceleration(20);
         this.friction = new Friction(maxSpeed, 2f);

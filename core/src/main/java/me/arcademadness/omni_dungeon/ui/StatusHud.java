@@ -67,8 +67,7 @@ public class StatusHud extends Table {
             new StatProvider() {
                 @Override
                 public double getCurrent() {
-                    // Replace with your actual current armor getter when available.
-                    return StatusHud.this.player.getArmor().getCurrentArmor();
+                    return StatusHud.this.player.getArmor().getFinalValue();
                 }
 
                 @Override
