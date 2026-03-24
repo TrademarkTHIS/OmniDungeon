@@ -11,11 +11,11 @@ public class ArmorListener implements EventListener {
 
     @Subscribe
     public void onEntityDamage(EntityDamageEvent event) {
-        int armor = event.getEntity().getArmor().getFinalValue();
+        double armor = event.getEntity().getArmor().getCurrentArmor();
         if (armor <= 0) return;
 
         int damage = event.getDamage();
-        int newDamage = Math.max(damage - armor, 0);
+        int newDamage = (int) Math.max(damage - armor, 0);
         //System.out.println("Old Damage: " + damage + " | New Damage:" + newDamage);
         event.setDamage(newDamage);
     }

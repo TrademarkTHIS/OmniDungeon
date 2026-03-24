@@ -22,6 +22,7 @@ import me.arcademadness.omni_dungeon.render.*;
 import me.arcademadness.omni_dungeon.ui.InventoryMenu;
 import me.arcademadness.omni_dungeon.ui.MenuManager;
 import me.arcademadness.omni_dungeon.environment.world.Floor;
+import me.arcademadness.omni_dungeon.ui.StatusHud;
 
 import java.util.Random;
 
@@ -31,6 +32,7 @@ public class GridGame extends ApplicationAdapter {
     private ShapeRenderer shape;
     private OrthographicCamera worldCamera, uiCamera;
     private Viewport worldViewport, uiViewport;
+    private StatusHud statusHud;
     private Stage uiStage;
 
     // World
@@ -133,12 +135,19 @@ public class GridGame extends ApplicationAdapter {
 
     private void setupUI() {
         Skin skin = new Skin(Gdx.files.absolute("assets/uiskin.json"));
+
         inventoryMenu = new InventoryMenu(skin, player);
         inventoryMenu.populate();
 
+        statusHud = new StatusHud(skin, player);
+
         Table root = new Table();
         root.setFillParent(true);
-        root.add(inventoryMenu).center();
+
+        // HUD pinned top-left
+        root.top().left();
+        root.add(statusHud).expand().top().left();
+
         uiStage.addActor(root);
 
         menuManager = new MenuManager(uiStage);
@@ -178,6 +187,9 @@ public class GridGame extends ApplicationAdapter {
 
         uiStage.act(delta);
         uiStage.draw();
+
+        statusHud.act(delta);
+        statusHud.update();
     }
 
     private void updateCamera(float delta) {

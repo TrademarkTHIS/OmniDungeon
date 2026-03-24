@@ -10,7 +10,7 @@ public final class Health extends SimpleAttribute<Integer> {
     }
 
     public double getCurrentHealth() {
-        return currentHealth;
+        return Math.min(Math.max(currentHealth,0), getFinalValue());
     }
 
     public void setCurrentHealth(double currentHealth) {
