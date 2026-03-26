@@ -2,7 +2,6 @@ package me.arcademadness.omni_dungeon.environment.world;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.BinaryHeap;
-import me.arcademadness.omni_dungeon.components.Location;
 
 import java.awt.Point;
 import java.util.*;
